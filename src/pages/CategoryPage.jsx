@@ -3,9 +3,9 @@ import { mostPopularCourses } from '../data/tempData';
 import { CourseCard } from '../components/stdComponets/CourseCard';
 import { Footer } from '../components/Footer';
 export const CategoryPage = () => {
-    const path=document.location.href;
-    const arr = path.split("/");
-    const catagory = arr.slice(-1)
+    // const path=document.location.href;
+    // const arr = path.split("/");
+    // const catagory = arr.slice(-1)
     const [mostPopulerFilter,setFilter] = useState(true);
     
     // fetch data and put it in the designated variables 
@@ -18,7 +18,7 @@ export const CategoryPage = () => {
       randomSuggestionCources:[],
 
     })
-
+    setCatagoryData(catagoryData);
     const filterHandler = (e)=>{
       console.log(e.target.innerHTML);
       if(e.target.innerHTML==="New"&&mostPopulerFilter)

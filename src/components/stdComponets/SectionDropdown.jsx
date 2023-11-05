@@ -9,12 +9,12 @@ export const SectionDropdown = ({collapseAll,section}) => {
         setShowLec(false);
     },[collapseAll])
 
-    const [height,setHeight] = useState(`h-[${4*section.lectures.length}rem]`);
+    // const [height,setHeight] = useState(`h-[${4*section.lectures.length}rem]`);
     // useEffect(()=>{
     //     setHeight(`h-[${4*section.lectures.length}rem]`);
     // },[])
 
-    console.log(typeof height)
+    // console.log(typeof height)
   return (
     <div className='duration-500 '>
         <div onClick={clickHandler} className={`text-white flex justify-between items-center px-6 bg-richblack-700 border-[0.5px] border-richblack-500 h-[4rem] border-b-0`}>

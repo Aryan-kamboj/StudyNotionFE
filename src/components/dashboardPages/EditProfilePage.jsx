@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import React, { useState } from 'react'
 import {IoIosArrowBack} from "react-icons/io"
 import {FiTrash2,FiCheck} from 'react-icons/fi'
 import { StdButton } from '../stdComponets/StdButton'
@@ -12,12 +12,12 @@ export const EditProfilePage = ({setEditPage,profileInfo}) => {
     const[fname,setfname]=useState(profileInfo.fname);
     const[profilePhoto,setprofilePhoto]=useState(profileInfo.profilePhoto);
     const[lname,setlname]=useState(profileInfo.lname);
-    const[email,setemail]=useState(profileInfo.email);
     const[phoneNo,setphoneNo]=useState(profileInfo.phoneNo);
     const[gender,setgender]=useState(profileInfo.gender);
     const[bio,setbio]=useState(profileInfo.bio);
     const[DOB,setDOB] =useState( profileInfo.DOB); 
     const [today,setToday] = useState(new Date().toLocaleDateString('fr-ca'));
+    setToday(today);
     const [oldPass,setOldPass] = useState("");
     const [newPass,setNewPass] = useState("");
     const [cnfNewPass,setCnfNewPass] = useState("");
@@ -72,7 +72,7 @@ export const EditProfilePage = ({setEditPage,profileInfo}) => {
                         <InputField required={true} placeholder={lname} setterFn={setlname} label="Last name" type="text"/>
                         <div className='space-y-1'>
                             <label className='text-sm '>Gender</label>
-                            <select className='p-3 text-xl w-[100%] border-b-[1px] border-richblack-300 outline-none bg-richblack-700 text-white rounded-lg'>
+                            <select onChange={(e)=>setgender(e.target.value)} className='p-3 text-xl w-[100%] border-b-[1px] border-richblack-300 outline-none bg-richblack-700 text-white rounded-lg'>
                                 <option selected={gender==="Male"}>
                                     Male
                                 </option>
@@ -99,7 +99,7 @@ export const EditProfilePage = ({setEditPage,profileInfo}) => {
                 <h1 className="text-richblack-25 font-[500] text-lg">Change Password</h1>
                 <form className='space-y-4'>
                     <div className='flex space-x-4'>
-                        <InputField setterFn={setOldPass} placeholder={"Old Password"} label="Old password" type={"password"}/>
+                        <InputField setterFn={setOldPass} value={oldPass} placeholder={"Old Password"} label="Old password" type={"password"}/>
                         <InputField setterFn={setNewPass} placeholder={"New Password"} label="New password" type={"password"}/>
                         <InputField setterFn={setCnfNewPass} placeholder={"Confirm New Password"} label="New password" type={"password"}/>
                     </div>

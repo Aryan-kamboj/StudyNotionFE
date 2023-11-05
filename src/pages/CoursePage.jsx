@@ -24,7 +24,7 @@ export const CoursePage = () => {
     }
     const courseId = document.location.pathname.split("/")[2];
     const courseLink = document.URL;
-    // console.log(courseId);
+    console.log(courseId);
 
     const months= ["January","February","March","April","May","June","July",
                 "August","September","October","November","December"];

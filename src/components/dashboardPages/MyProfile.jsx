@@ -2,7 +2,6 @@ import React, { useState }  from 'react';
 import {testUserProfile} from "../../data/tempData";
 import {StdButton} from "../stdComponets/StdButton";
 import {FaEdit} from "react-icons/fa"
-import { useNavigate } from 'react-router-dom'
 import { EditProfilePage } from './EditProfilePage';
 
 export const MyProfile = () => {
