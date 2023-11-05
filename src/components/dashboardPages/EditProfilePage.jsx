@@ -17,7 +17,6 @@ export const EditProfilePage = ({setEditPage,profileInfo}) => {
     const[bio,setbio]=useState(profileInfo.bio);
     const[DOB,setDOB] =useState( profileInfo.DOB); 
     const [today,setToday] = useState(new Date().toLocaleDateString('fr-ca'));
-    setToday(today);
     const [oldPass,setOldPass] = useState("");
     const [newPass,setNewPass] = useState("");
     const [cnfNewPass,setCnfNewPass] = useState("");
@@ -33,7 +32,7 @@ export const EditProfilePage = ({setEditPage,profileInfo}) => {
 
     }
     const submitHandler = (e)=>{
-
+        setToday(today);
     }
     const deleteAccountHandler = () =>{
         if(checked)
