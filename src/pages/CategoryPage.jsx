@@ -18,7 +18,6 @@ export const CategoryPage = () => {
       randomSuggestionCources:[],
 
     })
-    setCatagoryData(catagoryData);
     const filterHandler = (e)=>{
       console.log(e.target.innerHTML);
       if(e.target.innerHTML==="New"&&mostPopulerFilter)

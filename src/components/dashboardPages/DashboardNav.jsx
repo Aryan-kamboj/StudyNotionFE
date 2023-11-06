@@ -5,15 +5,9 @@ import {RiDashboard2Line} from "react-icons/ri"
 import {AiFillSetting} from "react-icons/ai"
 import { useNavigate } from 'react-router'
 export const DashboardNav = ({setTab,userType,tab}) => {
-    // const DashboardTabs ={
-    //     Student:[["My Profile","Enrolled Cources","Wishlist","Purchase History","Cources"]],
-    //     Instructor:[["Dashboard","My profile"],[ "My Cources" ],[ "Settings" ,"Logout"]]
-    // }
     const navigator = useNavigate();
     const clickHandler = (e)=>{
       e.stopPropagation();
-      // console.log(e.target.innerText);
-      // console.log(e.currentTarget.innerText);
       navigator(`${e.currentTarget.innerText}`);
       setTab(e.currentTarget.innerText);
     }
@@ -23,15 +17,15 @@ export const DashboardNav = ({setTab,userType,tab}) => {
             {(userType==="student")?
             <div className='space-y-2'>
                 <div onClick={clickHandler} className={`flex border-l-4 cursor-pointer items-center space-x-2 px-6 py-2 ${(tab==="My Profile")||(tab==="My%20Profile")?selectedCSS: "border-richblack-800 "}`}><CgProfile/><span>My Profile</span></div>
-                <div onClick={clickHandler} className={`flex border-l-4 cursor-pointer items-center space-x-2 px-6 py-2 ${(tab==="Enrolled Cources")||(tab==="Enrolled%20Cources")?selectedCSS: "border-richblack-800 "}`}><LiaBookSolid/><span>Enrolled Cources</span></div>
+                <div onClick={clickHandler} className={`flex border-l-4 cursor-pointer items-center space-x-2 px-6 py-2 ${(tab==="Enrolled Courses")||(tab==="Enrolled%20Cources")?selectedCSS: "border-richblack-800 "}`}><LiaBookSolid/><span>Enrolled Courses</span></div>
                 <div onClick={clickHandler} className={`flex border-l-4 cursor-pointer items-center space-x-2 px-6 py-2 ${(tab==="Cart")?selectedCSS: "border-richblack-800 "}`}><LiaBookmarkSolid/><span>Cart</span></div>
                 <div onClick={clickHandler} className={`flex border-l-4 cursor-pointer items-center space-x-2 px-6 py-2 ${(tab==="Purchase History")||(tab==="Purchase%20History")?selectedCSS: "border-richblack-800 "}`}><CgShoppingCart/><span>Purchase History</span></div>
-                <div onClick={clickHandler} className={`flex border-l-4 cursor-pointer items-center space-x-2 px-6 py-2 ${(tab==="Cources")?selectedCSS: "border-richblack-800 "}`}><LiaGraduationCapSolid/><span>Cources</span></div>
+                <div onClick={clickHandler} className={`flex border-l-4 cursor-pointer items-center space-x-2 px-6 py-2 ${(tab==="Courses")?selectedCSS: "border-richblack-800 "}`}><LiaGraduationCapSolid/><span>Courses</span></div>
             </div>
             :(userType==="instructor")?
             <div className='space-y-2'>
                 <div onClick={clickHandler} className={`flex border-l-4 cursor-pointer items-center space-x-2 px-6 py-2 ${(tab==="Dashboard")?selectedCSS: "border-richblack-800 "}`}><RiDashboard2Line/><span>Dashboard</span></div>
-                <div onClick={clickHandler} className={`flex border-l-4 cursor-pointer items-center space-x-2 px-6 py-2 ${(tab==="My Cources")||(tab==="My%20Cources")?selectedCSS: "border-richblack-800 "}`}><LiaBookSolid/><span>My Cources</span></div>
+                <div onClick={clickHandler} className={`flex border-l-4 cursor-pointer items-center space-x-2 px-6 py-2 ${(tab==="My Courses")||(tab==="My%20Cources")?selectedCSS: "border-richblack-800 "}`}><LiaBookSolid/><span>My Courses</span></div>
                 <div className='border-b-[1px] mx-2 border-richblack-600'/>
                 <div onClick={clickHandler} className={`flex border-l-4 cursor-pointer items-center space-x-2 px-6 py-2 ${(tab==="My Profile")||(tab==="My%20Profile")?selectedCSS: "border-richblack-800 "}`}><CgProfile/><span>My Profile</span></div>
             </div>

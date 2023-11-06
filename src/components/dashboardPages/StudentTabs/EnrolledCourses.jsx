@@ -1,17 +1,17 @@
 import React from 'react'
-import { EnrolledCourcesData } from '../../../data/tempData'
+import { EnrolledCoursesData } from '../../../data/tempData'
 import { Link, useNavigate } from 'react-router-dom'
 import {BsThreeDotsVertical} from "react-icons/bs"
-export const EnrolledCources = () => {
+export const EnrolledCourses = () => {
   const navigator = useNavigate();
-  navigator("dashboard/Enrolled Cources");
+  navigator("dashboard/Enrolled Courses");
   return (
       <div className='basis-[100%] h-[93vh] overflow-auto'>
           <div className='w-[70%] mx-auto pb-14'>
             <div className='text-sm m-8 space-y-4'>
               <span className='text-richblack-300'>Home / Dashboard /</span>
-              <span className='text-yellow-50'> Enrolled Cources</span>
-              <h1 className='text-3xl '>Enrolled Cources</h1>
+              <span className='text-yellow-50'> Enrolled Courses</span>
+              <h1 className='text-3xl '>Enrolled Courses</h1>
             </div>
             <div>
             <div className="flex text-richblack-50 rounded-t-md bg-richblack-700 p-4">
@@ -20,7 +20,8 @@ export const EnrolledCources = () => {
               <p className='basis-[30%]'>Progress</p>
             </div>
             <div className='border-x-2 border-richblack-700 border-b-2 rounded-b-lg'>
-              {EnrolledCourcesData.map(({courseName,courseThumbnail,courseDesc,courseId,timeSpent,progress})=>{
+            {/* would like to add a filter bar to seperate completed and pending cources */}
+              {EnrolledCoursesData.map(({courseName,courseThumbnail,courseDesc,courseId,timeSpent,progress})=>{
                   const sec = timeSpent%60;
                   timeSpent-=sec;
                   const totalMins = ((timeSpent)/60);
@@ -48,7 +49,7 @@ export const EnrolledCources = () => {
                       <div className='space-y-2 basis-[80%]'>
                         <div className='text-richblack-50 text-xs'>Progress : {progress}%</div>
                         <div className='bg-richblack-700 relative rounded-full'>
-                          <div className={`h-2 w-[${progress}%] rounded-full ${progress<25? " bg-pink-300 ":(progress>=25&&progress<=75)?"bg-blue-100":"bg-caribbeangreen-100"}`}/>
+                          <div style={{width:`${progress}%`}} className={`h-2 rounded-full ${progress<25? " bg-pink-300 ":(progress>=25&&progress<=75)?"bg-blue-100":"bg-caribbeangreen-100"}`}/>
                         </div>
                       </div>
                       {/* 3 dots */}

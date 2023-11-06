@@ -1,5 +1,5 @@
 import { createSlice } from "@reduxjs/toolkit";
-
+import {testCartData} from "../../data/tempData"
 const initialState = {
     fname:"",
     lname:"",
@@ -10,7 +10,7 @@ const initialState = {
     email:"",
     message:"",
     password:"",
-    cart:[],
+    cart:[...testCartData],
   }
 
   const UserDataSlice = createSlice({
@@ -23,8 +23,10 @@ const initialState = {
         state.cart.push(action.payload);
       },
       removeFromCart:(state,action)=>{
+        console.log("action called");
+        console.log(action);
         state.cart = state.cart.filter((item)=>{
-          return(item.id !== action.payload.id);
+          return(item.id !== action.payload);
         });
       },
         setFname: (state,action) => {

@@ -21,7 +21,7 @@ function Headder() {
     const navigator = useNavigate();
     return (
       <div className="h-14 z-[100] w-[100vw] bg-richblack-900 text-rich-black-25  border-solid border-b-[1px] border-richblack-700">
-            {catagoriesVisible?<div onMouseEnter={makeVisible} onMouseLeave={hide} className='rounded-2xl p-3 bg-richblack-5 absolute top-[48px] z-[10] right-[45%] w-[15%] flex flex-col text-richblack-5 '><PiTriangleFill className="text-2xl absolute -top-[18px] right-[41%]" />{catagories.map((catagory,i)=>{
+            {catagoriesVisible?<div onMouseEnter={makeVisible} onMouseLeave={hide} className='rounded-2xl p-3 bg-richblack-5 absolute top-[48px] z-[10000] right-[45%] w-[15%] flex flex-col text-richblack-5 '><PiTriangleFill className="text-2xl absolute -top-[18px] right-[41%]" />{catagories.map((catagory,i)=>{
                 return <Link key={i} to={`catalog/${catagory}`} className='text-black font-[500] text-lg p-4 text-center hover:bg-richblack-100 rounded-2xl'>{catagory}</Link>
             })}</div>:<p className='w-[15%]'></p>}
 

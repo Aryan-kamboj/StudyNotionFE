@@ -21,10 +21,11 @@ export const EditProfilePage = ({setEditPage,profileInfo}) => {
     const [newPass,setNewPass] = useState("");
     const [cnfNewPass,setCnfNewPass] = useState("");
     const [passChangeAllowed,setLock] = useState(false);
-    // console.log(today);
+
+    // setToday needs to be removed
+
     const imageChangeHandler = (e) => {
         const image = e.target.files[0];
-        // console.log(image);
         image?setprofilePhoto(URL.createObjectURL(image)):
         console.log(URL.createObjectURL(image));
     }
@@ -32,6 +33,7 @@ export const EditProfilePage = ({setEditPage,profileInfo}) => {
 
     }
     const submitHandler = (e)=>{
+        // next line setToday needs to be removed but build fas jati hai toh abhi nahi kiya
         setToday(today);
     }
     const deleteAccountHandler = () =>{
