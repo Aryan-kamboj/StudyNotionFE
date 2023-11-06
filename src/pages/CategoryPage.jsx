@@ -19,6 +19,7 @@ export const CategoryPage = () => {
 
     })
     const filterHandler = (e)=>{
+      setCatagoryData(catagoryData)
       console.log(e.target.innerHTML);
       if(e.target.innerHTML==="New"&&mostPopulerFilter)
         setFilter(!mostPopulerFilter)
