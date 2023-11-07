@@ -11,6 +11,7 @@ import { MyCourses } from '../dashboardPages/InstructorTabs/MyCourses'
 import { DashboardNav } from '../dashboardPages/DashboardNav';
 export const Dashboard = () => {
     const path = document.URL.split("/").slice(-1)[0];
+    // console.log(path);
     const [tab,setTab]=useState(path);
     const userType = "student";
   return (

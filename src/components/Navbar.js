@@ -41,7 +41,7 @@ function Headder() {
                 </div>
                 <div className='flex w-[22%] text-2xl text-white justify-evenly py-4  max-tablet:w-[50%] pr-0'>
                     <LuSearch className=''/>
-                    <div onClick={()=>navigator("dashboard/Cart")}><LuShoppingCart/></div>
+                    <div onClick={()=>navigator("dashboard/cart")}><LuShoppingCart/></div>
                     <CgProfile className=''/>
                 </div>
             </div>
