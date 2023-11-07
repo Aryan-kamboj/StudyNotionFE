@@ -16,7 +16,13 @@ export const CoursePage = () => {
     const dispatcher = useDispatch();
     const addToCartHandler=(e)=>{
         console.log("hii");
-        dispatcher(addToCart(id));
+        dispatcher(addToCart({title,
+            price,
+            id,
+            rating,
+            reviewCount,
+            thumbnail,
+            instructorName}));
     }
     const notify = () => {
         console.log("hiiii");
