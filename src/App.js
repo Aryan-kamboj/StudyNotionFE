@@ -13,7 +13,7 @@ import { VerifyEmail } from './pages/VerifyEmail';
 import { CategoryPage } from "./pages/CategoryPage";
 import { CoursePage } from './pages/CoursePage'
 import { catagories } from './data/tempData';
-import { Dashboard } from './components/stdComponets/Dashboard';
+import { Dashboard } from './components/dashboardPages/Dashboard';
 function App() {
   return (
     <div className='bg-richblack-900 overflow-hidden min-h-screen'>

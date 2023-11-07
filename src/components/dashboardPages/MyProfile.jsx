@@ -14,7 +14,7 @@ export const MyProfile = () => {
   bio,DOB} = testUserProfile;  
   const [showEditPage,setEditPage] = useState(false);
   return (
-      <div className='basis-[100%] overflow-auto h-[93vh]'>
+      <div className=' basis-[100%] overflow-auto h-[93vh]'>
         <div className=' mx-auto pb-14'>
         {showEditPage?
         <EditProfilePage profileInfo={testUserProfile} setEditPage={setEditPage}/>
