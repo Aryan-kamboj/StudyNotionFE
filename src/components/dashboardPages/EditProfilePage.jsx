@@ -74,13 +74,13 @@ export const EditProfilePage = ({setEditPage,profileInfo}) => {
                         <div className='space-y-1'>
                             <label className='text-sm '>Gender</label>
                             <select onChange={(e)=>setgender(e.target.value)} className='p-3 text-xl w-[100%] border-b-[1px] border-richblack-300 outline-none bg-richblack-700 text-white rounded-lg'>
-                                <option selected={gender==="Male"}>
+                                <option defaultValue={gender==="Male"}>
                                     Male
                                 </option>
-                                <option selected={gender==="Female"} >
+                                <option defaultValue={gender==="Female"} >
                                     Female
                                 </option>
-                                <option selected={gender==="Others"}>
+                                <option defaultValue={gender==="Others"}>
                                     Others
                                 </option>
                             </select>
@@ -102,7 +102,7 @@ export const EditProfilePage = ({setEditPage,profileInfo}) => {
                     <div className='flex space-x-4'>
                         <InputField setterFn={setOldPass} value={oldPass} placeholder={"Old Password"} label="Old password" type={"password"}/>
                         <InputField setterFn={setNewPass} placeholder={"New Password"} label="New password" type={"password"}/>
-                        <InputField setterFn={setCnfNewPass} placeholder={"Confirm New Password"} label="New password" type={"password"}/>
+                        <InputField setterFn={setCnfNewPass} placeholder={"Confirm New Password"} label="Confirm New password" type={"password"}/>
                     </div>
                     <StdButton disabled={passChangeAllowed?true:false} color="yellow">Change password</StdButton>
                 </form>

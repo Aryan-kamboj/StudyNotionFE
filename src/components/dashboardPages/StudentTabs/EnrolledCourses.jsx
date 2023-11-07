@@ -1,10 +1,8 @@
 import React from 'react'
 import { EnrolledCoursesData } from '../../../data/tempData'
-import { Link, useNavigate } from 'react-router-dom'
+import { Link } from 'react-router-dom'
 import {BsThreeDotsVertical} from "react-icons/bs"
 export const EnrolledCourses = () => {
-  const navigator = useNavigate();
-  navigator("dashboard/Enrolled Courses");
   return (
       <div className='basis-[100%] h-[93vh] overflow-auto'>
           <div className='w-[70%] mx-auto pb-14'>
@@ -21,7 +19,7 @@ export const EnrolledCourses = () => {
             </div>
             <div className='border-x-2 border-richblack-700 border-b-2 rounded-b-lg'>
             {/* would like to add a filter bar to seperate completed and pending cources */}
-              {EnrolledCoursesData.map(({courseName,courseThumbnail,courseDesc,courseId,timeSpent,progress})=>{
+              {EnrolledCoursesData.map(({courseName,courseThumbnail,courseDesc,courseId,timeSpent,progress},i)=>{
                   const sec = timeSpent%60;
                   timeSpent-=sec;
                   const totalMins = ((timeSpent)/60);
@@ -29,7 +27,7 @@ export const EnrolledCourses = () => {
                   const hours = ((totalMins-mins)/60);
                   const timeString = `${hours} h : ${mins} m : ${sec} s`;
               return (
-              <Link to={`${courseId}`}>
+              <Link key={i} to={`${courseId}`}>
               <div className={`p-4  border-richblack-700 border-t-2`}>
               {/* link these to that particular course  */}
                   <div className='h-[4rem] flex items-center '>

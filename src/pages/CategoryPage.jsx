@@ -42,8 +42,8 @@ export const CategoryPage = () => {
               </div>
             </div>
             <div className='flex space-x-5 mt-4 flex-wrap'>
-              {catagoryData.mostPopularCourses.map((course)=>{
-                return (<CourseCard id={course.id} thumbnail={course.thumbnail} title={course.title} price={course.price} reviewCount={course.reviewCount} rating={course.rating}/>)
+              {catagoryData.mostPopularCourses.map((course,i)=>{
+                return (<CourseCard key={i} id={course.id} thumbnail={course.thumbnail} title={course.title} price={course.price} reviewCount={course.reviewCount} rating={course.rating}/>)
               })}
             </div>
         </div>

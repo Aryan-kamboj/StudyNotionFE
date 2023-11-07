@@ -49,7 +49,7 @@ export const Cart = () => {
                         </div>
                       </div>
                       <div className='flex flex-col h-[10rem] justify-between items-center'>
-                        <button onClick={(e)=>{dispatcher(removeFromCart(e.currentTarget.attributes.courseID.value))}} courseID={id} className='space-x-2 flex bg-richblack-800 text-pink-200 items-center p-3 border-richblack-700 border-[1px] rounded-xl'><FiTrash2/><span>Remove</span></button>
+                        <button onClick={(e)=>{dispatcher(removeFromCart(e.currentTarget.attributes.courseid.value))}} courseid={id} className='space-x-2 flex bg-richblack-800 text-pink-200 items-center p-3 border-richblack-700 border-[1px] rounded-xl'><FiTrash2/><span>Remove</span></button>
                         <p className='text-2xl font-[500] text-yellow-100'>Rs.{price}</p>
                       </div>
                     </div>)

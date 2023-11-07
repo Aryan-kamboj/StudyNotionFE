@@ -15,7 +15,7 @@ export const PhoneNumberInput = ({phoneNo,countryCode,label,required,setterFnNum
         <div className='flex space-x-4 appearance-none'>
             <select onChange={countryCodeChangeHandler} className='appearance-none w-[30%] border-b-[1px] border-richblack-300 bg-richblack-700 rounded-lg outline-none text-md text-white p-3'>
             {countrycode.map((country,i)=>{
-             return <option selected={country.code +"-"+country.country===countryCode} key={i}>{country.code +"-"+country.country}</option>
+             return <option defaultValue={country.code +"-"+country.country===countryCode} key={i}>{country.code +"-"+country.country}</option>
             })}
             </select>
         <input value={phoneNo} required={required} type={"number"} placeholder={"Phone Number"} onChange={numberChangeHandler} className={`border-b-[1px] border-richblack-300 w-[100%] bg-richblack-700 rounded-lg outline-none text-md text-white p-3 ${css_to_remove_number_arrows}` }/>

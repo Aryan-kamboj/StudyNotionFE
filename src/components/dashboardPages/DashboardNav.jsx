@@ -12,6 +12,11 @@ export const DashboardNav = ({setTab,userType,tab}) => {
       navigator(`${e.currentTarget.attributes.id.value}`);
       setTab(e.currentTarget.attributes.id.value);
     }
+    const logoutHandler = (e)=>{
+      e.stopPropagation();
+      navigator("/");
+      console.log("log_out");
+    }
     const selectedCSS = "bg-yellow-800 text-yellow-50 border-yellow-50 "
   return (
          <div className=' h-[93vh] w-[20%] top-14 text-richblack-300 space-y-2 font-[500] pt-14  text-md bg-richblack-800 border-x-[1px] border-richblack-700 '>
@@ -34,7 +39,7 @@ export const DashboardNav = ({setTab,userType,tab}) => {
 
             <div className='border-b-[1px] mx-2 border-richblack-600'/>
             <div onClick={clickHandler} id="settings"  className={`flex border-l-4 cursor-pointer items-center space-x-2 px-6 py-2 ${(tab==="settings")?selectedCSS: "border-richblack-800 "}`}><AiFillSetting/><span>Settings</span></div>
-            <div onClick={clickHandler} id="logout"  className={`flex border-l-4 cursor-pointer items-center space-x-2 px-6 py-2 ${(tab==="logout")?selectedCSS: "border-richblack-800 "}`}><CgLogOut/><span>Logout</span></div>
+            <div onClick={logoutHandler} id="logout"  className={`flex border-l-4 cursor-pointer items-center space-x-2 px-6 py-2 ${(tab==="logout")?selectedCSS: "border-richblack-800 "}`}><CgLogOut/><span>Logout</span></div>
         </div>
   )
 }
