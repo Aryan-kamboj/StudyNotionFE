@@ -18,18 +18,18 @@ export const Cart = () => {
     }
     // console.log(cart);
   return (
-    <div className='h-fit '>
-          <div className='ml-8 max-tablet:mx-2 mt-8 '>
-            <div className='text-sm space-y-4 '>
+    <div className='h-fit  '>
+          <div className='ml-8 max-tablet:mx-2 mt-8 max-tablet:mt-1 '>
+            <div className='text-sm space-y-4 max-tablet:space-y-2'>
               <span className='text-richblack-300'>Home / Dashboard /</span>
               <span className='text-yellow-50'> Cart</span>
-              <h1 className='text-3xl pb-4'>My Cart</h1>
+              <h1 className='text-3xl max-tablet:text-lg pb-4 max-tablet:pb-0'>My Cart</h1>
             </div>
             <div className=' text-richblack-300 pb-3 border-b-[1px] border-richblack-700'>
               {cart.length} cources in cart.
             </div>
-            <div style={{height:`75vh`}} className='flex justify-between relative max-tablet:flex-col-reverse'>
-              <div className='basis-[70%] hideScrollBars scroll-smooth overflow-scroll'>
+            <div style={{height:`75vh`}} className='flex justify-between max-tablet:relative max-tablet:-top-2 max-tablet:flex-col-reverse'>
+              <div className='basis-[70%] max-tablet:basis-[90%] hideScrollBars scroll-smooth overflow-scroll'>
                 {cart.map((course,i)=>{
                     const {
                     title,
@@ -55,9 +55,11 @@ export const Cart = () => {
                     </div>)
                   })}
               </div>
-              <div className='w-[14rem] h-[10rem] max-tablet:w-[100%] max-tablet:relative max-tablet:right-0 basis-[20%] rounded-lg flex flex-col justify-evenly bg-richblack-700 p-4 absolute top-6 right-[3.5rem]'>
-                  <h1 className='text-richblack-200'>Total:</h1>
-                  <p className='text-3xl text-yellow-50'>Rs. {total}</p>
+              <div className='w-[14rem] h-[10rem] max-tablet:w-[100%] max-tablet:relative max-tablet:right-0 basis-[20%] rounded-lg flex flex-col justify-evenly bg-richblack-700 p-4 max-tablet:pt-2 absolute top-[15rem] max-tablet:-top-0 right-[3.5rem]'>
+                  <div className='max-tablet:flex justify-between items-center'>
+                    <h1 className='text-richblack-200'>Total:</h1>
+                    <p className='text-3xl text-yellow-50'>Rs. {total}</p>
+                  </div>
                   <StdButton handler={buyNowHandler} width={100} color="yellow" >Buy Now</StdButton>
               </div>
             </div>

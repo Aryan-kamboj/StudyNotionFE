@@ -26,7 +26,7 @@ export const DashboardNav = ({setTab,userType,tab}) => {
     const selectedCSS = "bg-yellow-800 text-yellow-50 border-yellow-50 "
   return (
         <div className={`overflow-hidden transition-all duration-1000 max-tablet:w-[100%] w-[18%] top-14 text-richblack-300  border-b-[1px] ${showTabs?" space-y-2 max-tablet:h-[25rem] ":" max-tablet:h-[6rem] "} font-[500] pt-28 max-tablet:pt-12  text-md bg-richblack-800 border-x-[1px] border-richblack-700 `}>
-        <div className='fixed max-tablet:static top-20 max-tablet:w-[100%] w-[18%]'>
+        <div className='fixed max-tablet:static top-21 max-tablet:w-[100%] w-[18%]'>
           <div className={`pt-2 ${showTabs?" max-tablet:space-y-2 ":""}`}>
             {(userType==="student")?
             <div className={`${showTabs?"space-y-2":""}`}>
