@@ -16,7 +16,7 @@ export const Dashboard = () => {
   return (
         <div className='text-white overflow-y-scroll flex max-tablet:flex-col h-fit'>
             <DashboardNav setTab={setTab} userType={userType} tab={tab}/>
-            <div className=' overflow-y-scroll '>
+            <div className=' overflow-y-scroll basis-[80%] '>
               {/* <DashboardNav setTab={setTab} userType={userType} tab={tab}/> */}
               {(tab==="my-profile")?<MyProfile />
               :tab==="enrolled-courses"?<EnrolledCourses />

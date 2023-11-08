@@ -44,11 +44,11 @@ export const EditProfilePage = ({setEditPage,profileInfo}) => {
     }
   return (
     <div >
-        <div className='text-sm m-8 space-y-4'>
+        <div className='text-sm max-tablet:m-4 m-8 space-y-4'>
             <div onClick={()=>{setEditPage(false)}} className='text-richblack-300 flex items-center space-x-3'><IoIosArrowBack/><span>Back</span></div>
             <h1 className='text-3xl '>My Profile</h1>
         </div>
-        <div className='w-[80%] mx-auto space-y-4'>
+        <div className='max-tablet:w-[90%] w-[80%] mx-auto space-y-4'>
             {/* CHANGE PROFILE PICTURE */}
             <div className="flex space-x-5 p-4 bg-richblack-800 rounded-lg border-richblack-700 border-[1px] ">
                 <img className="rounded-full h-[6rem] w-[6rem] object-cover" alt={fname+" "+lname} src={profilePhoto}/>
@@ -65,10 +65,10 @@ export const EditProfilePage = ({setEditPage,profileInfo}) => {
                 </div>
             </div>
             {/* CHANGE ACCOUNT INFO */}
-            <div className=" space-x-5 p-4 bg-richblack-800 rounded-lg border-richblack-700 border-[1px] space-y-3">
+            <div className="  p-4 max-tablet:p-3 bg-richblack-800 rounded-lg border-richblack-700 border-[1px] space-y-3">
                 <div className="text-richblack-25 font-[500] text-lg">Change Profile Information</div>
                 <form onSubmit={submitHandler}>
-                    <div className='grid grid-cols-2 gap-4 relative'>
+                    <div className='grid grid-cols-2 max-tablet:grid-cols-1 gap-4 relative'>
                         <InputField required={true} placeholder={fname} setterFn={setfname} label="First name" type="text"/>
                         <InputField required={true} placeholder={lname} setterFn={setlname} label="Last name" type="text"/>
                         <div className='space-y-1'>
@@ -85,21 +85,21 @@ export const EditProfilePage = ({setEditPage,profileInfo}) => {
                                 </option>
                             </select>
                         </div>
-                        <InputField placeholder={DOB} setterFn={setDOB} max={today} label={"Date of birth"} type="date"/>
+                        <InputField width={100} placeholder={DOB} setterFn={setDOB} max={today} label={"Date of birth"} type="date"/>
                         <PhoneNumberInput required={true} setterFnNumber={setphoneNo} countryCode={phoneNo.countryCode} phoneNo={phoneNo.number} label={"Phone Number"}/>
                         <InputField placeholder={bio} setterFn={setbio} label={"About"} type={"textarea"}/>
                         {/* <InputField setterFn={setgender} label="Gender" name="gender" type="radio" value={"Male"}/>
                             <InputField setterFn={setgender} name="gender" type="radio" value={"Female"}/>
                             <InputField setterFn={setgender} name="gender" type="radio" value={"Other"}/> */}
-                        <div className="absolute bottom-20 w-[49%]"><StdButton width={100} color={"yellow"}>Update</StdButton></div>
+                        <div className="max-tablet:static max-tablet:w-[100%] absolute bottom-20 w-[49%]"><StdButton width={100} color={"yellow"}>Update</StdButton></div>
                     </div>
                 </form>
             </div>
             {/* CHANGE PASSWORD */}
-            <div className=" space-x-5 p-4 bg-richblack-800 rounded-lg border-richblack-700 border-[1px] space-y-3">
+            <div className=" p-4 bg-richblack-800 rounded-lg border-richblack-700 border-[1px] space-y-3">
                 <h1 className="text-richblack-25 font-[500] text-lg">Change Password</h1>
                 <form className='space-y-4'>
-                    <div className='flex space-x-4'>
+                    <div className='flex space-x-4 max-tablet:flex-col max-tablet:space-x-0 max-tablet:space-y-2'>
                         <InputField setterFn={setOldPass} value={oldPass} placeholder={"Old Password"} label="Old password" type={"password"}/>
                         <InputField setterFn={setNewPass} placeholder={"New Password"} label="New password" type={"password"}/>
                         <InputField setterFn={setCnfNewPass} placeholder={"Confirm New Password"} label="Confirm New password" type={"password"}/>
@@ -110,7 +110,7 @@ export const EditProfilePage = ({setEditPage,profileInfo}) => {
             </div>
 
             {/* DELETE ACCOUNT */}
-            <div className='bg-pink-900 border-[1px] border-pink-700 rounded-lg flex p-6 select-none'>
+            <div className='bg-pink-900 max-tablet:flex-col border-[1px] border-pink-700 rounded-lg flex p-6 select-none'>
                 <div className='basis-[10%] mx-auto items-center flex'>
                     <div onClick={deleteAccountHandler} className={` duration-500 w-[4rem] h-[4rem] justify-center items-center flex rounded-full text-3xl font-[900]  ${checked?" text-pink-200 hover:bg-[#FF0800] bg-pink-700 hover:text-pink-700 cursor-pointer ":" bg-[#414141c6] text-white "}`}>
                         <FiTrash2/>

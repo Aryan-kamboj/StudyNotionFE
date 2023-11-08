@@ -52,12 +52,12 @@ export const PasswordValidation = ({password,cnfPassword,setLock}) => {
     const cssTrue = `text-caribbeangreen-200`
     const cssFalse = `text-pink-400`
   return (
-    <div className='flex flex-wrap '>
-        <p id={"lowercase"} className={`w-[50%] flex items-center ${checkLower?cssTrue:cssFalse}`}>{checkLower?<AiFillCheckCircle className='mr-2'/>:<AiFillCloseCircle className='mr-2'/>} One lowercase character</p>
-        <p id={"uppercase"} className={`w-[50%] flex items-center ${checkUpper?cssTrue:cssFalse}`}>{checkUpper?<AiFillCheckCircle className='mr-2'/>:<AiFillCloseCircle className='mr-2'/>} One uppercase character</p>
-        <p id={"number"} className={`w-[50%] flex items-center ${checkNumber?cssTrue:cssFalse}`}>{checkNumber?<AiFillCheckCircle className='mr-2'/>:<AiFillCloseCircle className='mr-2'/>} One number</p>
-        <p id={"special"} className={`w-[50%] flex items-center ${checkSpecial?cssTrue:cssFalse}`}>{checkSpecial?<AiFillCheckCircle className='mr-2'/>:<AiFillCloseCircle className='mr-2'/>} One special character</p>
-        <p id={"minChars"} className={`w-[50%] flex items-center ${checkMinChars?cssTrue:cssFalse}`}>{checkMinChars?<AiFillCheckCircle className='mr-2'/>:<AiFillCloseCircle className='mr-2'/>} Atleast 8 characters</p>
+    <div className='flex flex-wrap max-tablet:flex-col '>
+        <p id={"lowercase"} className={`max-tablet:w-[100%] w-[50%] flex items-center ${checkLower?cssTrue:cssFalse}`}>{checkLower?<AiFillCheckCircle className='mr-2'/>:<AiFillCloseCircle className='mr-2'/>} One lowercase character</p>
+        <p id={"uppercase"} className={`max-tablet:w-[100%] w-[50%] flex items-center ${checkUpper?cssTrue:cssFalse}`}>{checkUpper?<AiFillCheckCircle className='mr-2'/>:<AiFillCloseCircle className='mr-2'/>} One uppercase character</p>
+        <p id={"number"} className={`max-tablet:w-[100%] w-[50%] flex items-center ${checkNumber?cssTrue:cssFalse}`}>{checkNumber?<AiFillCheckCircle className='mr-2'/>:<AiFillCloseCircle className='mr-2'/>} One number</p>
+        <p id={"special"} className={`max-tablet:w-[100%] w-[50%] flex items-center ${checkSpecial?cssTrue:cssFalse}`}>{checkSpecial?<AiFillCheckCircle className='mr-2'/>:<AiFillCloseCircle className='mr-2'/>} One special character</p>
+        <p id={"minChars"} className={`max-tablet:w-[100%] w-[50%] flex items-center ${checkMinChars?cssTrue:cssFalse}`}>{checkMinChars?<AiFillCheckCircle className='mr-2'/>:<AiFillCloseCircle className='mr-2'/>} Atleast 8 characters</p>
     </div>
   )
 }
