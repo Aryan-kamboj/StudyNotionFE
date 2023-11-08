@@ -19,7 +19,7 @@ export const Cart = () => {
     // console.log(cart);
   return (
     <div className='h-fit '>
-          <div className='ml-8 mt-8 pb-14'>
+          <div className='ml-8 mt-8 '>
             <div className='text-sm space-y-4 '>
               <span className='text-richblack-300'>Home / Dashboard /</span>
               <span className='text-yellow-50'> Cart</span>
@@ -28,7 +28,7 @@ export const Cart = () => {
             <div className=' text-richblack-300 pb-3 border-b-[1px] border-richblack-700'>
               {cart.length} cources in cart.
             </div>
-            <div style={{height:`76vh`}} className=' flex  justify-between relative '>
+            <div style={{height:`75vh`}} className=' flex  justify-between relative '>
               <div className='basis-[70%] hideScrollBars scroll-smooth overflow-scroll'>
                 {cart.map((course,i)=>{
                     const {

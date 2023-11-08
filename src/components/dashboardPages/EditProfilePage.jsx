@@ -6,7 +6,7 @@ import { InputField } from "../stdComponets/InputField"
 import {PhoneNumberInput} from "../stdComponets/PhoneNumberInput"
 import {PasswordValidation} from "../stdComponets/PasswordValidation"
 export const EditProfilePage = ({setEditPage,profileInfo}) => {
-    const [checked,setChecked] = useState(true);
+    const [checked,setChecked] = useState(false);
     // const [profileData,setProfileData] = useState(profileInfo);
     // let profilePhoto,fname,lname,email,phoneNo,gender,bio,DOB;
     const[fname,setfname]=useState(profileInfo.fname);
