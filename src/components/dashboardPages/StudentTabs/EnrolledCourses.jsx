@@ -26,7 +26,6 @@ export const EnrolledCourses = () => {
                   const mins = (totalMins%60);
                   const hours = ((totalMins-mins)/60);
                   const timeString = `${hours} h : ${mins} m : ${sec} s`;
-                  {/* const [showOptions,setShowOptions] = useState(false); */}
               return (
               <Link key={i} to={`${courseId}`}>
               <div className={`p-4 border-richblack-700 border-t-2`}>
