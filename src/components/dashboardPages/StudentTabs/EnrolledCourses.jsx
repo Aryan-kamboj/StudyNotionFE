@@ -4,7 +4,7 @@ import { Link } from 'react-router-dom'
 import {BsThreeDotsVertical} from "react-icons/bs"
 export const EnrolledCourses = () => {
   return (
-      <div className='basis-[100%] h-[93vh] overflow-auto'>
+      <div className='h-fit overflow-auto'>
           <div className='w-[70%] mx-auto pb-14'>
             <div className='text-sm m-8 space-y-4'>
               <span className='text-richblack-300'>Home / Dashboard /</span>

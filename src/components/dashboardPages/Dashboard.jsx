@@ -14,9 +14,9 @@ export const Dashboard = () => {
     const [tab,setTab]=useState(path);
     const userType = "student";
   return (
-        <div className='text-white flex max-tablet:flex-col'>
+        <div className='text-white overflow-y-scroll flex max-tablet:flex-col h-fit'>
             <DashboardNav setTab={setTab} userType={userType} tab={tab}/>
-            <div className='hidden '>
+            <div className=' overflow-y-scroll '>
               {/* <DashboardNav setTab={setTab} userType={userType} tab={tab}/> */}
               {(tab==="my-profile")?<MyProfile />
               :tab==="enrolled-courses"?<EnrolledCourses />

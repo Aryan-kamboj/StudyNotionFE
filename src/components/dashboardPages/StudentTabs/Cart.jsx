@@ -18,7 +18,7 @@ export const Cart = () => {
     }
     // console.log(cart);
   return (
-    <div className='basis-[100%] h-[93vh] '>
+    <div className='h-fit '>
           <div className='ml-8 mt-8 pb-14'>
             <div className='text-sm space-y-4 '>
               <span className='text-richblack-300'>Home / Dashboard /</span>

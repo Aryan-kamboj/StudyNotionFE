@@ -25,11 +25,11 @@ export const DashboardNav = ({setTab,userType,tab}) => {
     }
     const selectedCSS = "bg-yellow-800 text-yellow-50 border-yellow-50 "
   return (
-        <div className='  h-[93vh] max-tablet:w-[100%] w-[20%] top-14 text-richblack-300 space-y-2 font-[500] pt-14  text-md bg-richblack-800 border-x-[1px] border-richblack-700 '>
-          <div className='max-tablet:py-2 '>
+        <div className={`overflow-hidden transition-all duration-1000 min-tablet:h-[100%] max-tablet:w-[100%] w-[20%] top-14 text-richblack-300 ${showTabs?" space-y-2 max-tablet:h-[25rem] ":" max-tablet:h-[6.1rem] "} font-[500] pt-28 max-tablet:pt-12  text-md bg-richblack-800 border-x-[1px] border-richblack-700 `}>
+          <div className={`pt-2 ${showTabs?" max-tablet:space-y-2 ":""}`}>
             {(userType==="student")?
-            <div className='space-y-2'>
-                <div onClick={clickHandler} id="my-profile" className={`border-l-4 ${(tab==="my-profile")?selectedCSS: ` border-richblack-800 ${(showTabs)?"":" max-tablet:hidden "}`} flex items-center justify-between pr-6`}>
+            <div className={`${showTabs?"space-y-2":""}`}>
+                <div onClick={clickHandler} id="my-profile" className={`duration-500 border-l-4 ${(tab==="my-profile")?selectedCSS: ` border-richblack-800 ${(showTabs)?"":" max-tablet:hidden "}`} flex items-center justify-between pr-6`}>
                   <div className='flex cursor-pointer items-center space-x-2 px-6 py-2'>
                     <CgProfile/>
                     <span>
@@ -41,7 +41,7 @@ export const DashboardNav = ({setTab,userType,tab}) => {
                   </div>
                   
                 </div>
-                <div onClick={clickHandler} id="enrolled-courses" className={`border-l-4 ${(tab==="enrolled-courses")?selectedCSS: `border-richblack-800 ${(showTabs)?"":"max-tablet:hidden"}`} flex items-center justify-between pr-6`}>
+                <div onClick={clickHandler} id="enrolled-courses" className={`duration-500 border-l-4 ${(tab==="enrolled-courses")?selectedCSS: `border-richblack-800 ${(showTabs)?"":"max-tablet:hidden"}`} flex items-center justify-between pr-6`}>
                   <div className='flex cursor-pointer items-center space-x-2 px-6 py-2'>
                     <LiaBookSolid/>
                     <span>
@@ -52,7 +52,7 @@ export const DashboardNav = ({setTab,userType,tab}) => {
                     {showTabs?<FaXmark onClick={(e)=>{setShowTabs(false)}}/>:<FaGripLines onClick={(e)=>{e.stopPropagation();setShowTabs(true)}}/>}
                   </div>
                 </div>
-                <div onClick={clickHandler} id="cart" className={`border-l-4 ${(tab==="cart")?selectedCSS: `border-richblack-800 ${(showTabs)?"":"max-tablet:hidden"}`} flex items-center justify-between pr-6`}>
+                <div onClick={clickHandler} id="cart" className={`duration-500 border-l-4 ${(tab==="cart")?selectedCSS: `border-richblack-800 ${(showTabs)?"":"max-tablet:hidden"}`} flex items-center justify-between pr-6`}>
                   <div className='flex cursor-pointer items-center space-x-2 px-6 py-2'>
                     <LiaBookmarkSolid/>
                     <span>
@@ -63,7 +63,7 @@ export const DashboardNav = ({setTab,userType,tab}) => {
                     {showTabs?<FaXmark onClick={(e)=>{setShowTabs(false)}}/>:<FaGripLines onClick={(e)=>{e.stopPropagation();setShowTabs(true)}}/>}
                   </div>
                 </div>
-                <div onClick={clickHandler} id="purchase-history" className={`border-l-4 ${(tab==="purchase-history")?selectedCSS: `border-richblack-800 ${(showTabs)?"":"max-tablet:hidden"}`} flex items-center justify-between pr-6`}>
+                <div onClick={clickHandler} id="purchase-history" className={`duration-500 border-l-4 ${(tab==="purchase-history")?selectedCSS: `border-richblack-800 ${(showTabs)?"":"max-tablet:hidden"}`} flex items-center justify-between pr-6`}>
                   <div className='flex cursor-pointer items-center space-x-2 px-6 py-2'>
                     <CgShoppingCart/>
                     <span>
@@ -74,7 +74,7 @@ export const DashboardNav = ({setTab,userType,tab}) => {
                     {showTabs?<FaXmark onClick={(e)=>{setShowTabs(false)}}/>:<FaGripLines onClick={(e)=>{e.stopPropagation();setShowTabs(true)}}/>}
                   </div>
                 </div>
-                <div onClick={clickHandler} id="courses" className={`border-l-4 ${(tab==="courses")?selectedCSS: `border-richblack-800 ${(showTabs)?"":"max-tablet:hidden"}`} flex items-center justify-between pr-6`}>
+                <div onClick={clickHandler} id="courses" className={`duration-500 border-l-4 ${(tab==="courses")?selectedCSS: `border-richblack-800 ${(showTabs)?"":"max-tablet:hidden"}`} flex items-center justify-between pr-6`}>
                   <div className='flex cursor-pointer items-center space-x-2 px-6 py-2'>
                     <LiaGraduationCapSolid/>
                     <span>
@@ -88,7 +88,7 @@ export const DashboardNav = ({setTab,userType,tab}) => {
             </div>
             :(userType==="instructor")?
             <div className='space-y-2'>
-                <div onClick={clickHandler} id="dashboard" className={`border-l-4 ${(tab==="dashboard")?selectedCSS: `border-richblack-800 ${(showTabs)?"":"max-tablet:hidden"}`} flex items-center justify-between pr-6`}>
+                <div onClick={clickHandler} id="dashboard" className={`duration-500 border-l-4 ${(tab==="dashboard")?selectedCSS: `border-richblack-800 ${(showTabs)?"":"max-tablet:hidden"}`} flex items-center justify-between pr-6`}>
                   <div className='flex cursor-pointer items-center space-x-2 px-6 py-2'>
                     <RiDashboard2Line/>
                     <span>
@@ -99,7 +99,7 @@ export const DashboardNav = ({setTab,userType,tab}) => {
                     {showTabs?<FaXmark onClick={(e)=>{setShowTabs(false)}}/>:<FaGripLines onClick={(e)=>{e.stopPropagation();setShowTabs(true)}}/>}
                   </div>
                 </div>
-                <div onClick={clickHandler} id="my-Courses" className={`border-l-4 ${(tab==="my-courses")?selectedCSS: `border-richblack-800 ${(showTabs)?"":"max-tablet:hidden"}`} flex items-center justify-between pr-6`}>
+                <div onClick={clickHandler} id="my-Courses" className={`duration-500 border-l-4 ${(tab==="my-courses")?selectedCSS: `border-richblack-800 ${(showTabs)?"":"max-tablet:hidden"}`} flex items-center justify-between pr-6`}>
                   <div className='flex cursor-pointer items-center space-x-2 px-6 py-2'>
                     <LiaBookSolid/>
                     <span>
@@ -111,7 +111,7 @@ export const DashboardNav = ({setTab,userType,tab}) => {
                   </div>
                 </div>
                 <div className='border-b-[1px] mx-2 border-richblack-600'/>
-                <div onClick={clickHandler} id="my-profile" className={`border-l-4 ${(tab==="my-profile")?selectedCSS: `border-richblack-800 ${(showTabs)?"":"max-tablet:hidden"}`} flex items-center justify-between pr-6`}>
+                <div onClick={clickHandler} id="my-profile" className={`duration-500 border-l-4 ${(tab==="my-profile")?selectedCSS: `border-richblack-800 ${(showTabs)?"":"max-tablet:hidden"}`} flex items-center justify-between pr-6`}>
                   <div className='flex cursor-pointer items-center space-x-2 px-6 py-2'>
                     <CgProfile/>
                     <span>
@@ -126,7 +126,7 @@ export const DashboardNav = ({setTab,userType,tab}) => {
             :<div>There is some error please log in again</div>}
 
             <div className='border-b-[1px] mx-2 border-richblack-600'/>
-            <div onClick={clickHandler} id="settings"  className={`border-l-4 ${(tab==="settings")?selectedCSS: `border-richblack-800 ${(showTabs)?"":"max-tablet:hidden"}`} flex items-center justify-between pr-6`}>
+            <div onClick={clickHandler} id="settings"  className={`duration-500 border-l-4 ${(tab==="settings")?selectedCSS: `border-richblack-800 ${(showTabs)?"":"max-tablet:hidden"}`} flex items-center justify-between pr-6`}>
               <div className='flex cursor-pointer items-center space-x-2 px-6 py-2'>
                 <AiFillSetting/>
                 <span>
@@ -137,7 +137,7 @@ export const DashboardNav = ({setTab,userType,tab}) => {
                 {showTabs?<FaXmark onClick={(e)=>{setShowTabs(false)}}/>:<FaGripLines onClick={(e)=>{e.stopPropagation();setShowTabs(true)}}/>}
               </div>
             </div>
-            <div onClick={logoutHandler} id="logout"  className={`border-l-4 ${(tab==="logout")?selectedCSS: `border-richblack-800 ${(showTabs)?"":"max-tablet:hidden"}`} flex items-center justify-between pr-6`}>
+            <div onClick={logoutHandler} id="logout"  className={`duration-500 border-l-4 ${(tab==="logout")?selectedCSS: `border-richblack-800 ${(showTabs)?"":"max-tablet:hidden"}`} flex items-center justify-between pr-6`}>
               <div className='flex cursor-pointer items-center space-x-2 px-6 py-2'>
                 <CgLogOut/>
                 <span>
