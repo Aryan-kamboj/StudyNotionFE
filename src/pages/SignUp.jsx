@@ -38,7 +38,7 @@ export const SignUp = () => {
       console.log(form);
   }
   return (
-    <div className='text-white flex my-10 h-full justify-evenly max-tablet:flex-col mx-auto max-tablet:h-[164vh] max-tablet:my-0'>
+    <div className='text-white mt-16 flex my-10 h-full justify-evenly max-tablet:flex-col mx-auto max-tablet:h-[164vh] max-tablet:my-0'>
       <div className='w-[40%] px-16 space-y-2 max-tablet:w-[96%] max-tablet:px-4'>
         <h1 className='text-2xl font-[500] '>Join the millions learning to code with StudyNotion for free</h1>
         <p className='text-richblack-100'>Build skills for today, tomorrow, and beyond.</p>

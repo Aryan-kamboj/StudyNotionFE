@@ -1,6 +1,6 @@
 import React from 'react'
 import { Link } from 'react-router-dom'
-export const StdButton = ({color,children,linkTo,width,type,disabled,handler,textColor}) => {
+export const StdButton = ({color,children,linkTo,width,type,disabled,handler,textColor,form}) => {
     let css = ` flex justify-center gap-2 items-center font-medium rounded-md py-3 px-6 shadow-solid hover:shadow-none transition-all duration-200 max-laptop:text-xs  `;
     if(color==="yellow"){
         if(!disabled)
@@ -15,5 +15,5 @@ export const StdButton = ({color,children,linkTo,width,type,disabled,handler,tex
         css += ` bg-${color} text-${textColor}  `
     }
     width?css+=` w-[${width}%] `:css+=` w-fit `;
-  return (linkTo?<Link to={linkTo}><div className={css} >{children}</div></Link>:<button onClick={handler} type={type} disabled={disabled} className={css}>{children}</button>)
+  return (linkTo?<Link to={linkTo}><div className={css} >{children}</div></Link>:<button form={form} onClick={handler} type={type} disabled={disabled} className={css}>{children}</button>)
 }

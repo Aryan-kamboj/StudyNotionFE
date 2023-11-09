@@ -11,6 +11,62 @@ export const testUserProfile = {
     bio:"no Bio",
     DOB:"Dob string",
 }
+export const myCoursesData = [
+{
+    title:"CourseName1",
+    thumbnail:"https://res.cloudinary.com/studynotion/image/upload/v1688384067/samples/smile.jpg",
+    duration:913543,
+    createdAt:1699461335664,
+    published:true,
+    description:"the undoubtable source. Lorem Ipsum comes from sections 1.10.32 and 1.10.33 of de Finibus Bonorum et Malorum (The Extremes of Good and Evil) by Cicero, written in 45 BC. This book is a treatise on the theory of ethics, very",
+    price:999
+},
+{
+    title:"CourseName2",
+    thumbnail:"https://res.cloudinary.com/studynotion/image/upload/v1688384066/samples/shoe.jpg",
+    duration:64802,
+    createdAt:1699461234567,
+    published:false,
+    description:" If you are going to use a passage of Lorem Ipsum, you need to be sure there isn't anything embarrassing hidden in the middle of text. All the Lorem Ipsum generators on the ",
+    price:1000
+},
+{
+    title:"CourseName3",
+    thumbnail:"https://res.cloudinary.com/studynotion/image/upload/v1688384068/samples/look-up.jpg",
+    duration:43,
+    createdAt:1699460987654,
+    published:true,
+    description:"chunk of Lorem Ipsum used since the 1500s is reproduced below for those interested. Sections 1.10.32 and 1.10.33 from de Finibus Bonorum et Malorum",
+    price:99
+},
+{
+    title:"CourseName4",
+    thumbnail:"https://res.cloudinary.com/studynotion/image/upload/v1688384066/samples/shoe.jpg",
+    duration:59123,
+    createdAt:1699462222222,
+    published:false,
+    description:" If you are going to use a passage of Lorem Ipsum, you need to be sure there isn't anything embarrassing hidden in the middle of text. All the Lorem Ipsum generators on the ",
+    price:9
+},
+{
+    title:"CourseName5",
+    thumbnail:"https://res.cloudinary.com/studynotion/image/upload/v1688384066/samples/balloons.jpg",
+    duration:99943,
+    createdAt:1699467645327,
+    published:true,
+    description:"the undoubtable source. Lorem Ipsum comes from sections 1.10.32 and 1.10.33 of de Finibus Bonorum et Malorum (The Extremes of Good and Evil) by Cicero, written in 45 BC. This book is a treatise on the theory of ethics, very",
+    price:1
+},
+{
+    title:"CourseName6",
+    thumbnail:"https://res.cloudinary.com/studynotion/image/upload/v1688384067/samples/smile.jpg",
+    duration:89123,
+    createdAt:1699461234543,
+    published:false,
+    description:"chunk of Lorem Ipsum used since the 1500s is reproduced below for those interested. Sections 1.10.32 and 1.10.33 from de Finibus Bonorum et Malorum",
+    price:8293
+},
+]
 export const testCartData = [{
     title:"Course 1 title",
     price:100,
@@ -216,7 +272,6 @@ export const mostPopularCourses = [{
     rating:5,
     id:"courseId3",
 }]
-
 export const courseDetails = [{
     thumbnail:"https://res.cloudinary.com/studynotion/image/upload/v1688384067/samples/smile.jpg",
     title:"Course 1 title",

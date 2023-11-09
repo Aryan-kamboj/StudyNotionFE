@@ -27,7 +27,7 @@ const ContactUs = () => {
   const [message,set_ui_message] = useState("");
   return (
     <div>
-      <div className='flex space-x-10 mt-16 justify-center max-tablet:items-center pb-14 max-tablet:flex-col max-tablet:space-y-5 max-tablet:space-x-0'>
+      <div className='flex space-x-10 mt-24 justify-center max-tablet:items-center pb-14 max-tablet:flex-col max-tablet:space-y-5 max-tablet:space-x-0'>
         <div className='text-white w-[35%] max-tablet:w-[96%] space-y-10 h-fit rounded-2xl p-8 bg-richblack-800'>
           <div className='flex space-x-4'>
             <div className='text-richblack-100 text-lg mt-1'><IoChatbubbles/></div>

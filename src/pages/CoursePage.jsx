@@ -42,7 +42,7 @@ export const CoursePage = () => {
     const month = months[dateCreated.getMonth()];
     const year = dateCreated.getFullYear();
     const hours = dateCreated.getHours()%12;
-    const mins = dateCreated.getMinutes();
+    const mins = (dateCreated.getMinutes()<10?`0${dateCreated.getMinutes()}`:dateCreated.getMinutes());
     const am_pm = dateCreated.getHours()/12?"PM":"AM";
     // console.log(mins);
 

@@ -5,14 +5,14 @@ import { Cart } from '../dashboardPages/StudentTabs/Cart'
 import { PurchaseHistory } from '../dashboardPages/StudentTabs/PurchaseHistory'
 import { Courses } from '../dashboardPages/StudentTabs/Courses'
 import { Settings } from '../dashboardPages/Settings'
-import { MyDashboard } from '../dashboardPages/InstructorTabs/MyDashboard'
+import {AddCourse} from "../dashboardPages/InstructorTabs/AddCourse";
 import { MyCourses } from '../dashboardPages/InstructorTabs/MyCourses'
 import { DashboardNav } from '../dashboardPages/DashboardNav';
 export const Dashboard = () => {
     const path = document.URL.split("/").slice(-1)[0];
     // console.log(path);
     const [tab,setTab]=useState(path);
-    const userType = "student";
+    const userType = "instructor";
   return (
         <div className='text-white overflow-y-scroll hideScrollBars flex max-tablet:flex-col h-[100%] min-h-[92vh]'>
             <DashboardNav setTab={setTab} userType={userType} tab={tab}/>
@@ -24,8 +24,8 @@ export const Dashboard = () => {
               :tab==="purchase-history"?<PurchaseHistory />
               :tab==="courses"?<Courses />
               :tab==="dashboard"?<Settings />
-              :tab==="my-Courses"?<MyDashboard />
-              :tab==="my-courses"?<MyCourses />:
+              :tab==="my-courses"?<MyCourses setTab={setTab} />
+              :tab==="add-course"?<AddCourse setTab={setTab} />:
               <div className='text-white'>There has been some error please logIn again</div>
               }
             </div>

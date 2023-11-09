@@ -2,7 +2,7 @@ import React, { useState } from 'react'
 import {LiaBookSolid,LiaBookmarkSolid,LiaGraduationCapSolid} from "react-icons/lia"
 import {CgProfile,CgShoppingCart,CgLogOut} from "react-icons/cg"
 import {RiDashboard2Line} from "react-icons/ri"
-import {AiFillSetting} from "react-icons/ai"
+import {AiFillSetting,AiOutlinePlusCircle} from "react-icons/ai"
 import {FaGripLines} from "react-icons/fa"
 import {FaXmark} from "react-icons/fa6"
 import { useNavigate } from 'react-router'
@@ -100,7 +100,7 @@ export const DashboardNav = ({setTab,userType,tab}) => {
                     {showTabs?<FaXmark onClick={(e)=>{setShowTabs(false)}}/>:<FaGripLines onClick={(e)=>{e.stopPropagation();setShowTabs(true)}}/>}
                   </div>
                 </div>
-                <div onClick={clickHandler} id="my-Courses" className={`duration-500 border-l-4 ${(tab==="my-courses")?selectedCSS: `border-richblack-800 ${(showTabs)?"":"max-tablet:hidden"}`} flex items-center justify-between pr-6`}>
+                <div onClick={clickHandler} id="my-courses" className={`duration-500 border-l-4 ${(tab==="my-courses")?selectedCSS: `border-richblack-800 ${(showTabs)?"":"max-tablet:hidden"}`} flex items-center justify-between pr-6`}>
                   <div className='flex cursor-pointer items-center space-x-2 px-6 py-2'>
                     <LiaBookSolid/>
                     <span>
@@ -108,6 +108,17 @@ export const DashboardNav = ({setTab,userType,tab}) => {
                     </span>
                   </div>
                   <div className={`max-tablet:text-[20px] text-[0px] ${(tab==="my-courses")?"":" hidden "}`}>
+                    {showTabs?<FaXmark onClick={(e)=>{setShowTabs(false)}}/>:<FaGripLines onClick={(e)=>{e.stopPropagation();setShowTabs(true)}}/>}
+                  </div>
+                </div>
+                <div onClick={clickHandler} id="add-course" className={`duration-500 border-l-4 ${(tab==="add-course")?selectedCSS: `border-richblack-800 ${(showTabs)?"":"max-tablet:hidden"}`} flex items-center justify-between pr-6`}>
+                  <div className='flex cursor-pointer items-center space-x-2 px-6 py-2'>
+                    <AiOutlinePlusCircle/>
+                    <span>
+                    Add Course
+                    </span>
+                  </div>
+                  <div className={`max-tablet:text-[20px] text-[0px] ${(tab==="my-profile")?"":" hidden "}`}>
                     {showTabs?<FaXmark onClick={(e)=>{setShowTabs(false)}}/>:<FaGripLines onClick={(e)=>{e.stopPropagation();setShowTabs(true)}}/>}
                   </div>
                 </div>
