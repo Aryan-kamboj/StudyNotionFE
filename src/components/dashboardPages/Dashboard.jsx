@@ -12,7 +12,7 @@ export const Dashboard = () => {
     const path = document.URL.split("/").slice(-1)[0];
     // console.log(path);
     const [tab,setTab]=useState(path);
-    const userType = "instructor";
+    const userType = "student";
   return (
         <div className='text-white overflow-y-scroll hideScrollBars flex max-tablet:flex-col h-[100%] min-h-[92vh]'>
             <DashboardNav setTab={setTab} userType={userType} tab={tab}/>
