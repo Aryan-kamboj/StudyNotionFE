@@ -12,10 +12,10 @@ export const Dashboard = () => {
     const path = document.URL.split("/").slice(-1)[0];
     // console.log(path);
     const [tab,setTab]=useState(path);
-    const userType = "student";
+    const [userType,setUserType] = useState("student");
   return (
         <div className='text-white overflow-y-scroll hideScrollBars flex max-tablet:flex-col h-[100%] min-h-[92vh]'>
-            <DashboardNav setTab={setTab} userType={userType} tab={tab}/>
+            <DashboardNav setTab={setTab} setUserType={setUserType} userType={userType} tab={tab}/>
             <div className=' overflow-y-scroll hideScrollBars basis-[80%] max-tablet:pt-0 pt-[2.9rem] '>
               {/* <DashboardNav setTab={setTab} userType={userType} tab={tab}/> */}
               {(tab==="my-profile")?<MyProfile />

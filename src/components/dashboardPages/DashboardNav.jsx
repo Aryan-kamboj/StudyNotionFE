@@ -6,7 +6,7 @@ import {AiFillSetting,AiOutlinePlusCircle} from "react-icons/ai"
 import {FaGripLines} from "react-icons/fa"
 import {FaXmark} from "react-icons/fa6"
 import { useNavigate } from 'react-router'
-export const DashboardNav = ({setTab,userType,tab}) => {
+export const DashboardNav = ({setTab,userType,setUserType,tab}) => {
     const currentTab = document.URL.split("/").slice(-1)[0];
     console.log(currentTab);
     const [showTabs,setShowTabs] = useState(false);
@@ -23,9 +23,21 @@ export const DashboardNav = ({setTab,userType,tab}) => {
       navigator("/");
       console.log("log_out");
     }
+    const handleUserType = (e)=>
+    {
+      if(userType==="student"){
+        console.log("hii");
+        setUserType("instructor");
+      }
+      else if(userType==="instructor"){
+        setUserType("student");
+        console.log("hii2")
+      }
+    }
     const selectedCSS = "bg-yellow-800 text-yellow-50 border-yellow-50 "
   return (
         <div className={`overflow-hidden transition-all duration-1000 max-tablet:w-[100%] w-[18%] top-14 text-richblack-300  border-b-[1px] ${showTabs?" space-y-2 max-tablet:h-[25rem] ":" max-tablet:h-[6rem] "} font-[500] pt-28 max-tablet:pt-12  text-md bg-richblack-800 border-x-[1px] border-richblack-700 `}>
+        <div className='absolute z-[1000] top-[5rem]'>Under developemnt so <br/> to see tabs use->> <button className='bg-pink-100 text-black' onClick={handleUserType}>{userType} Tabs</button></div>
         <div className='fixed max-tablet:static top-21 max-tablet:w-[100%] w-[18%]'>
           <div className={`pt-2 ${showTabs?" max-tablet:space-y-2 ":""}`}>
             {(userType==="student")?
