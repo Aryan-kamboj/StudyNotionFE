@@ -5,6 +5,7 @@ import { useNavigate } from 'react-router'
 import { InputField } from '../../stdComponets/InputField';
 import { StdButton } from '../../stdComponets/StdButton';
 import { TagsInput } from '../../stdComponets/TagsInput';
+import {RequirementInput} from "../../stdComponets/RequirementInput";
 import {FiUploadCloud} from "react-icons/fi"
 export const AddCourse = ({setTab}) => {
     const [thumbnail,setThumbnail] = useState(undefined)
@@ -22,6 +23,7 @@ export const AddCourse = ({setTab}) => {
         const image = e.target.files[0];
         image?setThumbnail(URL.createObjectURL(image)):setThumbnail(undefined);
         console.log(thumbnail);}
+    const [requirements,setRequirements]=useState([]);
   return (
     <div className='p-8 flex max-tablet:flex-col'>
         <div className='basis-[70%]'>
@@ -48,8 +50,8 @@ export const AddCourse = ({setTab}) => {
                     <span className={`basis-[25%] text-center ${stage===3?" text-yellow-50 ":" text-richblack-500 "} `}>Publish</span>
                 </div>
             </div>
-            <div className='bg-richblack-800 border-[1px] border-richblack-700 p-4 rounded-xl'>
-                <form id={"basicInfo"} onSubmit={submitHandler}>
+            <div className='bg-richblack-800 border-[1px] border-richblack-700 p-4 space-y-4 rounded-xl'>
+                <form className=' space-y-2' id={"basicInfo"} onSubmit={submitHandler}>
                     <InputField label={"Course Title"} required={true} placeholder={"Enter Course Title"} />
                     <InputField label={"Course Short Description"} type="textarea" lines={3} required={true} placeholder={"Enter Course Description"} />
                     <InputField label={"Course Price"} required={true} placeholder={"Enter Course Price"} />
@@ -65,7 +67,8 @@ export const AddCourse = ({setTab}) => {
                     {/* tags */}
                     <TagsInput tags={tags} setTags={setTags} required={true} label={"Tags"} placeholder={"Write a tag and hit Enter"}/>
                     {/* upload thumbnail */}
-                    <label className=''>
+                    <div>
+                    <label>
                         <div className='text-sm pb-2'>Course Thumbnail <span className='text-pink-200'>*</span></div>
                         <div className='bg-richblack-700 max-h-fit border-[1px] border-richblack-600 border-dashed rounded-lg p-8'>
                         {thumbnail?
@@ -85,8 +88,9 @@ export const AddCourse = ({setTab}) => {
                         }
                         </div>
                     </label>
-                    <InputField label={""} required={true} placeholder={""} />
-                    <InputField label={""} required={true} placeholder={""} />
+                    </div>
+                    <RequirementInput requirements={requirements} setRequirements={setRequirements}/>
+                    <InputField type={"textarea"} lines={4} label={"Course Benifits"} required={true} placeholder={"Enter benifits of the course "} />
                 </form>
                 <StdButton form={"basicInfo"} type={"submit"} color="yellow" accept="image/png, image/jpeg, image/jpg, image/">Next<IoIosArrowForward/></StdButton>
             </div>

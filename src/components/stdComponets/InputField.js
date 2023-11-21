@@ -24,7 +24,7 @@ export const InputField = ({type,lines,label,placeholder,required,value,setterFn
     }
     const css = "border-b-[1px] border-richblack-300 w-[100%] bg-richblack-700 rounded-lg outline-none text-md text-white p-3"
   return (
-    <div className='w-[100%]'>
+    <div className='w-[100%] '>
         <div className='text-white text-sm pb-2'>
             {required?<span>{label} <span className='text-pink-200'>*</span></span>:label}
         </div>

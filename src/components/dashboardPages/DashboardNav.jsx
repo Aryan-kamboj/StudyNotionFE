@@ -100,7 +100,7 @@ export const DashboardNav = ({setTab,userType,setUserType,tab}) => {
                 </div>
             </div>
             :(userType==="instructor")?
-            <div className='space-y-2'>
+            <div className='space-y'>
                 <div onClick={clickHandler} id="dashboard" className={`duration-500 border-l-4 ${(tab==="dashboard")?selectedCSS: `border-richblack-800 ${(showTabs)?"":"max-tablet:hidden"}`} flex items-center justify-between pr-6`}>
                   <div className='flex cursor-pointer items-center space-x-2 px-6 py-2'>
                     <RiDashboard2Line/>
@@ -134,18 +134,21 @@ export const DashboardNav = ({setTab,userType,setUserType,tab}) => {
                     {showTabs?<FaXmark onClick={(e)=>{setShowTabs(false)}}/>:<FaGripLines onClick={(e)=>{e.stopPropagation();setShowTabs(true)}}/>}
                   </div>
                 </div>
-                <div className='border-b-[1px] mx-2 border-richblack-600'/>
-                <div onClick={clickHandler} id="my-profile" className={`duration-500 border-l-4 ${(tab==="my-profile")?selectedCSS: `border-richblack-800 ${(showTabs)?"":"max-tablet:hidden"}`} flex items-center justify-between pr-6`}>
-                  <div className='flex cursor-pointer items-center space-x-2 px-6 py-2'>
-                    <CgProfile/>
-                    <span>
-                    My Profile
-                    </span>
-                  </div>
-                  <div className={`max-tablet:text-[20px] text-[0px] ${(tab==="my-profile")?"":" hidden "}`}>
-                    {showTabs?<FaXmark onClick={(e)=>{setShowTabs(false)}}/>:<FaGripLines onClick={(e)=>{e.stopPropagation();setShowTabs(true)}}/>}
+                <div>
+                  <div className='border-b-[1px] mx-2 border-richblack-600'/>
+                  <div onClick={clickHandler} id="my-profile" className={`duration-500 border-l-4 ${(tab==="my-profile")?selectedCSS: `border-richblack-800 ${(showTabs)?"":"max-tablet:hidden"}`} flex items-center justify-between pr-6`}>
+                    <div className='flex cursor-pointer items-center space-x-2 px-6 py-2'>
+                      <CgProfile/>
+                      <span>
+                      My Profile
+                      </span>
+                    </div>
+                    <div className={`max-tablet:text-[20px] text-[0px] ${(tab==="my-profile")?"":" hidden "}`}>
+                      {showTabs?<FaXmark onClick={(e)=>{setShowTabs(false)}}/>:<FaGripLines onClick={(e)=>{e.stopPropagation();setShowTabs(true)}}/>}
+                    </div>
                   </div>
                 </div>
+                
             </div>
             :<div>There is some error please log in again</div>}
 
