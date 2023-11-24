@@ -1,4 +1,4 @@
-import React ,{ useState } from 'react'
+import React ,{ useEffect, useState } from 'react'
 import { InputField } from '../InputField';
 import { StdButton } from '../StdButton';
 import { TagsInput } from '../TagsInput';
@@ -6,6 +6,7 @@ import {RequirementInput} from "../RequirementInput";
 import {FiUploadCloud} from "react-icons/fi"
 import { catagories } from '../../../data/tempData';
 import {IoIosArrowForward} from "react-icons/io"
+import { useDropzone } from 'react-dropzone';
 export const AddCourseBasicInfo = ({submitHandler}) => {
     const [thumbnail,setThumbnail] = useState(undefined)
     const removeThumbnail = (e)=>{
@@ -13,11 +14,14 @@ export const AddCourseBasicInfo = ({submitHandler}) => {
         setThumbnail(undefined);
     }
     const [tags,setTags] = useState([]);
-    const imageChangeHandler = (e)=>{ 
-        const image = e.target.files[0];
-        image?setThumbnail(URL.createObjectURL(image)):setThumbnail(undefined);
-        console.log(thumbnail);}
     const [requirements,setRequirements]=useState([]);
+    const {acceptedFiles, getRootProps, getInputProps} = useDropzone({maxFiles:1});
+    // console.log(acceptedFiles)
+    useEffect(()=>{
+        acceptedFiles.length!==0?setThumbnail(URL.createObjectURL(acceptedFiles[0])):setThumbnail(undefined);
+        console.log(thumbnail);
+    },[acceptedFiles])
+
   return (
     <div className='bg-richblack-800 border-[1px] border-richblack-700 p-4 space-y-4 rounded-xl'>
         <form className=' space-y-2' id={"basicInfo"} onSubmit={submitHandler}>
@@ -45,15 +49,14 @@ export const AddCourseBasicInfo = ({submitHandler}) => {
                     <img src={thumbnail} className='object-cover max-h-[100%] w-[100%] rounded-lg' alt={"There has been some error please upload again"}/>
                     <button onClick={removeThumbnail}>Cancel</button>
                 </div>
-                :
-                    <div className='flex flex-col h-32 justify-between items-center '>
+                :<div {...getRootProps({className: 'dropzone'})} className='flex flex-col h-32 justify-between items-center '>
                         <div className='p-4 bg-richblack-900 text-3xl text-yellow-50 rounded-full w-fit'><FiUploadCloud/></div>
                         <p className='text-richblack-200 text-xs font-[500]'>Drag and drop an image, or <span className='text-yellow-50'>Browse</span> *Max size 6MB</p>
                         <ul className='list-disc w-[60%] text-richblack-200 text-xs font-[500] flex justify-between'>
                             <li>Aspect ratio 16:9</li>
                             <li>Recommended size 1024x576</li>
                         </ul>
-                        <input onChange={imageChangeHandler} id="thumbnail" className='hidden' type="file" />
+                        <input {...getInputProps()} id="thumbnail" required={true} className='hidden' />
                     </div>
                 }
                 </div>
