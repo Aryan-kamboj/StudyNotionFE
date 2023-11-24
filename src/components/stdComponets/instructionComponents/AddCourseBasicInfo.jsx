@@ -20,7 +20,7 @@ export const AddCourseBasicInfo = ({submitHandler}) => {
     useEffect(()=>{
         acceptedFiles.length!==0?setThumbnail(URL.createObjectURL(acceptedFiles[0])):setThumbnail(undefined);
         console.log(thumbnail);
-    },[acceptedFiles])
+    },[acceptedFiles,thumbnail])
 
   return (
     <div className='bg-richblack-800 border-[1px] border-richblack-700 p-4 space-y-4 rounded-xl'>
