@@ -22,12 +22,12 @@ export const RequirementInput = ({requirements,setRequirements}) => {
       <div className='text-sm mb-2'>
         Requirements/Instructions <span className='text-pink-200'>*</span>
       </div>
-      <form className='space-y-2'>
+       <div className='space-y-2'>
         <input id="input" className='p-3 outline-none rounded-lg border-b-[1px] border-richblack-300 w-[100%] bg-richblack-700 placeholder:text-richblack-200' type="text" placeholder='Enter Requirements/Instructions for the course'/>
         <button onClick={addHandler} type={"submit"} className='text-yellow-50 font-bold'>
           + Add
         </button> 
-      </form>
+        </div>
       {requirements.map((requirement,key)=>{
           return <div className='text-white' key={key}><span>{requirement}</span><span onClick={removeHandler} className='text-richblack-300 text-xs cursor-pointer'> clear</span></div>
         })}
