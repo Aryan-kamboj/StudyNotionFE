@@ -16,11 +16,9 @@ export const AddCourseBasicInfo = ({submitHandler}) => {
     const [tags,setTags] = useState([]);
     const [requirements,setRequirements]=useState([]);
     const {acceptedFiles, getRootProps, getInputProps} = useDropzone({maxFiles:1});
-    // console.log(acceptedFiles)
     useEffect(()=>{
         acceptedFiles.length!==0?setThumbnail(URL.createObjectURL(acceptedFiles[0])):setThumbnail(undefined);
-        console.log(thumbnail);
-    },[acceptedFiles,thumbnail])
+    },[acceptedFiles])
 
   return (
     <div className='bg-richblack-800 border-[1px] border-richblack-700 p-4 space-y-4 rounded-xl'>
