@@ -8,6 +8,10 @@ import { catagories } from '../../../data/tempData';
 import {IoIosArrowForward} from "react-icons/io"
 import { useDropzone } from 'react-dropzone';
 export const AddCourseBasicInfo = ({submitHandler}) => {
+    const [courseTitle,setTitle] = useState("");
+    const [desc,setDesc] = useState("");
+    const [price,setPrice] = useState();
+    const [benifits,setBenifits] = useState();
     const [thumbnail,setThumbnail] = useState(undefined)
     const removeThumbnail = (e)=>{
         e.preventDefault();
@@ -23,9 +27,9 @@ export const AddCourseBasicInfo = ({submitHandler}) => {
   return (
     <div className='bg-richblack-800 border-[1px] border-richblack-700 p-4 space-y-4 rounded-xl'>
         <form className=' space-y-2' id={"basicInfo"} onSubmit={submitHandler}>
-            <InputField label={"Course Title"} required={true} placeholder={"Enter Course Title"} />
-            <InputField label={"Course Short Description"} type="textarea" lines={3} required={true} placeholder={"Enter Course Description"} />
-            <InputField label={"Course Price"} required={true} placeholder={"Enter Course Price"} />
+            <InputField value={courseTitle} setterFn={setTitle} label={"Course Title"} required={true} placeholder={"Enter Course Title"} />
+            <InputField value={desc} setterFn={setDesc} label={"Course Short Description"} type="textarea" lines={3} required={true} placeholder={"Enter Course Description"} />
+            <InputField value={price} setterFn={setPrice} label={"Course Price"} required={true} placeholder={"Enter Course Price"} />
             <div>
                 <p className='text-sm pb-2'>Catagory <span className='text-pink-200 pl-[0.1rem]'>*</span></p>
                 <select className='outline-none bg-richblack-700 p-3 rounded-lg border-b-[1px] border-richblack-300 w-[100%]'>
@@ -61,7 +65,7 @@ export const AddCourseBasicInfo = ({submitHandler}) => {
             </label>
             </div>
             <RequirementInput requirements={requirements} setRequirements={setRequirements}/>
-            <InputField type={"textarea"} lines={4} label={"Course Benifits"} required={true} placeholder={"Enter benifits of the course "} />
+            <InputField value={benifits} setterFn={setBenifits} type={"textarea"} lines={4} label={"Course Benifits"} required={true} placeholder={"Enter benifits of the course "} />
         </form>
         <StdButton form={"basicInfo"} type={"submit"} color="yellow" accept="image/png, image/jpeg, image/jpg, image/">Next<IoIosArrowForward/></StdButton>
         </div>

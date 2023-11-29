@@ -7,11 +7,11 @@ export const TagsInput = ({setTags,tags,required,placeholder,label}) => {
         if(!tags.some((tag)=> {
             if(tag===val)
             {
-                console.log("hii");
                 return true;
             }
             return false;
-        })){
+        }))
+        {
             setTags([...tags,val]);
             setVal("");
         }
@@ -20,6 +20,7 @@ export const TagsInput = ({setTags,tags,required,placeholder,label}) => {
     const keyDownHandler = (e)=>{
         if(e.keyCode===13)
         { 
+            // keyCode 13 is ENTER key 
             e.preventDefault();
             addTag(val);
         }
@@ -45,7 +46,7 @@ export const TagsInput = ({setTags,tags,required,placeholder,label}) => {
                 return <div className='px-2 py-1 mr-2 mt-2 bg-yellow-300 text-white rounded-full w-fit flex items-center space-x-2'><span>{tag}</span><FaXmark tag={tag} onClick={removeTag}/></div>
             })}
         </div>
-        <input onKeyDown={keyDownHandler} placeholder={placeholder} val={val} className='w-[100%] bg-richblack-700 mt-2 p-3 text-md text-whtie outline-none rounded-lg border-b-richblack-200 border-b-[1px]'/>
+        <input onKeyDown={keyDownHandler} placeholder={placeholder} value={val} className='w-[100%] bg-richblack-700 mt-2 p-3 text-md text-whtie outline-none rounded-lg border-b-richblack-200 border-b-[1px]'/>
     </div>
   )
 }

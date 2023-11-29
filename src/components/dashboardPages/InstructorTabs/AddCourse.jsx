@@ -2,6 +2,8 @@ import React, { useState } from 'react';
 import {IoIosArrowBack} from "react-icons/io";
 import { useNavigate } from 'react-router';
 import { AddCourseBasicInfo } from '../../stdComponets/instructionComponents/AddCourseBasicInfo';
+import { CourseBuilder } from '../../stdComponets/instructionComponents/CourseBuilder';
+import { PublishCourse } from '../../stdComponets/instructionComponents/PublishCourse';
 
 export const AddCourse = ({setTab}) => {
     const navigator = useNavigate();
@@ -10,8 +12,8 @@ export const AddCourse = ({setTab}) => {
         setStage(2);
     }
   return (
-    <div className='p-8 flex max-tablet:flex-col'>
-        <div className='basis-[70%]'>
+    <div className='p-8 flex max-tablet:flex-col space-x-8'>
+        <div className='basis-[70%] space-y-4'>
             <div className='flex space-x-4 items-center text-richblack-300' onClick={()=>{navigator("my-courses");setTab("my-courses");}}> 
                 <IoIosArrowBack/> Back to Dashboard
             </div>
@@ -35,7 +37,8 @@ export const AddCourse = ({setTab}) => {
                     <span className={`basis-[25%] text-center ${stage===3?" text-yellow-50 ":" text-richblack-500 "} `}>Publish</span>
                 </div>
             </div>
-            <AddCourseBasicInfo submitHandler={submitHandler}/>
+            {stage===1?<AddCourseBasicInfo submitHandler={submitHandler}/>:stage===2?<CourseBuilder/>:stage===3?<PublishCourse/>:<div>There has been some error please reload again or log in again if the error presists </div>}
+            
         </div>
         <div className='basis-[30%] text-richblack-5 bg-richblack-800 border-[1px] border-richblack-700 rounded-lg p-4'>
             <h1 className='text-xl'>&#9889; Course Upload Tips</h1>
