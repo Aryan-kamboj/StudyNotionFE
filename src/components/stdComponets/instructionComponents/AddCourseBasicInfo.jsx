@@ -7,12 +7,32 @@ import {FiUploadCloud} from "react-icons/fi"
 import { catagories } from '../../../data/tempData';
 import {IoIosArrowForward} from "react-icons/io"
 import { useDropzone } from 'react-dropzone';
+import { FieldRequiredText } from './FieldRequiredText';
 export const AddCourseBasicInfo = ({submitHandler}) => {
+    const [requiredTextActive,setRqTxt]=useState(false);
+    const handleSubmit = ()=>{
+        setRqTxt(true);
+        if(courseTitle&&desc&&price&&catagory&&benifits&&thumbnail&&(tags.length!==0)&&(requirements.length!==0)){
+            const basicInfo = {
+                courseTitle:courseTitle,
+                desc:desc,
+                price:price,
+                catagory:catagory,
+                benifits:benifits,
+                thumbnail:thumbnail,
+                tags:tags,
+                requirements:requirements
+            }
+            console.log(basicInfo);
+            submitHandler();
+        }
+    }
     const [courseTitle,setTitle] = useState("");
     const [desc,setDesc] = useState("");
     const [price,setPrice] = useState();
+    const [catagory,setCatagory] = useState("");
     const [benifits,setBenifits] = useState();
-    const [thumbnail,setThumbnail] = useState(undefined)
+    const [thumbnail,setThumbnail] = useState(undefined);
     const removeThumbnail = (e)=>{
         e.preventDefault();
         setThumbnail(undefined);
@@ -28,19 +48,24 @@ export const AddCourseBasicInfo = ({submitHandler}) => {
     <div className='bg-richblack-800 border-[1px] border-richblack-700 p-4 space-y-4 rounded-xl'>
         <form className=' space-y-2' id={"basicInfo"} onSubmit={submitHandler}>
             <InputField value={courseTitle} setterFn={setTitle} label={"Course Title"} required={true} placeholder={"Enter Course Title"} />
+            <FieldRequiredText active={requiredTextActive} data={courseTitle} fieldName={"Course Title"} />
             <InputField value={desc} setterFn={setDesc} label={"Course Short Description"} type="textarea" lines={3} required={true} placeholder={"Enter Course Description"} />
+            <FieldRequiredText active={requiredTextActive} data={desc} fieldName={"Course Description"} />
             <InputField value={price} setterFn={setPrice} label={"Course Price"} required={true} placeholder={"Enter Course Price"} />
+            <FieldRequiredText active={requiredTextActive} data={price} fieldName={"Course Price"} />
             <div>
                 <p className='text-sm pb-2'>Catagory <span className='text-pink-200 pl-[0.1rem]'>*</span></p>
-                <select className='outline-none bg-richblack-700 p-3 rounded-lg border-b-[1px] border-richblack-300 w-[100%]'>
+                <select onChange={(e)=>{setCatagory(e.target.value)}} className='outline-none bg-richblack-700 p-3 rounded-lg border-b-[1px] border-richblack-300 w-[100%]'>
                     <option>Select Catagory</option>
                     {catagories.map((catagory,key)=>{
-                        return <option key={key} val={catagory}>{catagory}</option>
+                        return <option key={key}>{catagory}</option>
                     })}
                 </select>
-            </div>                   
+            </div> 
+            <FieldRequiredText active={requiredTextActive} data={catagory} fieldName={"Course Catagory"} />                  
     {/* tags */}
             <TagsInput tags={tags} setTags={setTags} required={true} label={"Tags"} placeholder={"Write a tag and hit Enter"}/>
+            <FieldRequiredText active={requiredTextActive} data={tags} fieldName={"Course Tag"}/>
     {/* upload thumbnail */}
             <div>
             <label>
@@ -51,23 +76,26 @@ export const AddCourseBasicInfo = ({submitHandler}) => {
                     <img src={thumbnail} className='object-cover max-h-[100%] w-[100%] rounded-lg' alt={"There has been some error please upload again"}/>
                     <button onClick={removeThumbnail}>Cancel</button>
                 </div>
-                :<div {...getRootProps({className: 'dropzone'})} className='flex flex-col h-32 justify-between items-center '>
+                :<div {...getRootProps({className: 'dropzone'})} name="thumbnail" className='flex flex-col h-32 justify-between items-center '>
                         <div className='p-4 bg-richblack-900 text-3xl text-yellow-50 rounded-full w-fit'><FiUploadCloud/></div>
                         <p className='text-richblack-200 text-xs font-[500]'>Drag and drop an image, or <span className='text-yellow-50'>Browse</span> *Max size 6MB</p>
                         <ul className='list-disc w-[60%] text-richblack-200 text-xs font-[500] flex justify-between'>
                             <li>Aspect ratio 16:9</li>
                             <li>Recommended size 1024x576</li>
                         </ul>
-                        <input {...getInputProps()} id="thumbnail" required={true} className='hidden' />
+                        <input {...getInputProps()}  id="thumbnail" required={true} className='' />
                     </div>
                 }
                 </div>
             </label>
+            <FieldRequiredText active={requiredTextActive} data={thumbnail} fieldName={"Course Thumbnail"} />
             </div>
             <RequirementInput requirements={requirements} setRequirements={setRequirements}/>
+            <FieldRequiredText active={requiredTextActive} data={requirements} fieldName={"Course Requirements"} />
             <InputField value={benifits} setterFn={setBenifits} type={"textarea"} lines={4} label={"Course Benifits"} required={true} placeholder={"Enter benifits of the course "} />
+            <FieldRequiredText active={requiredTextActive} data={benifits} fieldName={"Course Benifits"} />
         </form>
-        <StdButton form={"basicInfo"} type={"submit"} color="yellow" accept="image/png, image/jpeg, image/jpg, image/">Next<IoIosArrowForward/></StdButton>
+        <StdButton form={""} type={""} color="yellow" handler={handleSubmit}>Next<IoIosArrowForward/></StdButton>
         </div>
   )
 }

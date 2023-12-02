@@ -23,7 +23,7 @@ export const RequirementInput = ({requirements,setRequirements}) => {
         Requirements/Instructions <span className='text-pink-200'>*</span>
       </div>
        <div className='space-y-2'>
-        <input id="input" className='p-3 outline-none rounded-lg border-b-[1px] border-richblack-300 w-[100%] bg-richblack-700 placeholder:text-richblack-200' type="text" placeholder='Enter Requirements/Instructions for the course'/>
+        <input required={true} id="input" className='p-3 outline-none rounded-lg border-b-[1px] border-richblack-300 w-[100%] bg-richblack-700 placeholder:text-richblack-200' type="text" placeholder='Enter Requirements/Instructions for the course'/>
         <button onClick={addHandler} type={"submit"} className='text-yellow-50 font-bold'>
           + Add
         </button> 

@@ -2,7 +2,6 @@ import React, { useState } from 'react'
 import {FaXmark} from "react-icons/fa6"
 export const TagsInput = ({setTags,tags,required,placeholder,label}) => {
     const [val,setVal] = useState("");
-    console.log(tags);
     const addTag = (val)=>{
         if(!tags.some((tag)=> {
             if(tag===val)
@@ -28,12 +27,11 @@ export const TagsInput = ({setTags,tags,required,placeholder,label}) => {
             setVal(val.slice(0,val.length-1));
         if(e.key.length===1)
             setVal(val+e.key);
-        console.log(e);
     }
     const removeTag = (e)=>{
         e.stopPropagation();
         setTags(tags.filter((tag)=>{
-            return(!(tag===e.currentTarget.attributes.tag.val));
+            return(!(tag===e.currentTarget.attributes.tag.value));
         }))
     }
   return (

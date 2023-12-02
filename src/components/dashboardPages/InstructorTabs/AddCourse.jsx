@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import {IoIosArrowBack} from "react-icons/io";
+import { FaCheck } from 'react-icons/fa6';
 import { useNavigate } from 'react-router';
 import { AddCourseBasicInfo } from '../../stdComponets/instructionComponents/AddCourseBasicInfo';
 import { CourseBuilder } from '../../stdComponets/instructionComponents/CourseBuilder';
@@ -7,8 +8,9 @@ import { PublishCourse } from '../../stdComponets/instructionComponents/PublishC
 
 export const AddCourse = ({setTab}) => {
     const navigator = useNavigate();
-    const [stage,setStage]=useState(1);
+    const [stage,setStage]=useState(2);
     const submitHandler = (e)=>{
+        console.log(e);
         setStage(2);
     }
   return (
@@ -20,13 +22,13 @@ export const AddCourse = ({setTab}) => {
             <div className='flex flex-col mt-4 justify-between '>
                 <div className='flex items-center mx-[10%]'>
                     <div className='flex w-fit flex-col items-center justify-center'>
-                        <span className={`px-4 font-[500] text-lg py-[0.40rem] rounded-full border-[1px] ${stage===1?" text-yellow-50 bg-yellow-900 border-yellow-50 ":" bg-richblack-800 border-richblack-700 text-richblack-500 "}`}>1</span>
+                        {stage>1?<span className={`px-[0.9rem] font-[500] text-lg py-[0.9rem] rounded-full text-richblack-900 bg-yellow-50 "}`}><FaCheck/></span>:<span className={`px-4 font-[500] text-lg py-[0.40rem] rounded-full border-[1px] ${stage===1?" text-yellow-50 bg-yellow-900 border-yellow-50 ":" bg-richblack-800 border-richblack-700 text-richblack-500 "}`}>1</span>}
                     </div>
-                        <div className='border-dashed border-[1px] justify-center w-[42%] border-richblack-700 h-0'></div>
+                        <div className={`border-dashed border-[1px] w-[42%] ${stage>1?"border-yellow-50":"border-richblack-700"} h-0`}></div>
                     <div className='flex  flex-col items-center'>
-                        <span className={`px-4 font-[500] text-lg py-2 rounded-full border-[1px] ${stage===2?" text-yellow-50 bg-yellow-900 border-yellow-50 ":"  bg-richblack-800 border-richblack-700 text-richblack-500 "}`}>2</span>
+                        {stage>2?<span className={`px-[0.9rem] font-[500] text-lg py-[0.9rem] rounded-full text-richblack-900 bg-yellow-50 "}`}><FaCheck/></span>:<span className={`px-4 font-[500] text-lg py-2 rounded-full border-[1px] ${stage===2?" text-yellow-50 bg-yellow-900 border-yellow-50 ":"  bg-richblack-800 border-richblack-700 text-richblack-500 "}`}>2</span>}
                     </div>
-                        <div className='border-dashed border-[1px] w-[42%] border-richblack-700 h-0'></div>
+                        <div className={`border-dashed border-[1px] w-[42%] ${stage>2?"border-yellow-50":"border-richblack-700"} h-0`}></div>
                     <div className='flex  flex-col items-center'>
                         <span className={`px-4 font-[500] text-lg py-2 rounded-full border-[1px] ${stage===3?" text-yellow-50 bg-yellow-900 border-yellow-50 ":"  bg-richblack-800 border-richblack-700 text-richblack-500 "}`}>3</span>
                     </div>
@@ -40,7 +42,7 @@ export const AddCourse = ({setTab}) => {
             {stage===1?<AddCourseBasicInfo submitHandler={submitHandler}/>:stage===2?<CourseBuilder/>:stage===3?<PublishCourse/>:<div>There has been some error please reload again or log in again if the error presists </div>}
             
         </div>
-        <div className='basis-[30%] text-richblack-5 bg-richblack-800 border-[1px] border-richblack-700 rounded-lg p-4'>
+        <div className='basis-[30%] h-fit text-richblack-5 bg-richblack-800 border-[1px] border-richblack-700 rounded-lg p-4'>
             <h1 className='text-xl'>&#9889; Course Upload Tips</h1>
             <ul className='list-disc pl-5 text-sm  w-[100%]'>
                 <li>Set the Course Price option or make it free.</li>
