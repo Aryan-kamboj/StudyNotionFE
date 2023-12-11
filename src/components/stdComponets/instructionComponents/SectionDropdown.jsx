@@ -1,39 +1,43 @@
 import React, { useState } from 'react';
-import { IoMdArrowDropdown } from "react-icons/io";
+import { IoMdArrowDropdown, IoMdArrowDropup } from "react-icons/io";
 import { HiMiniPencil } from "react-icons/hi2";
 import { FaRegTrashAlt } from "react-icons/fa";
 import { TiPlus } from "react-icons/ti";
 import { LectureModal } from './LectureModal';
-export const SectionDropdown = ({section}) => {
+import { Lecture } from './Lecture';
+export const SectionDropdown = ({sectionData,setSections,sectionIdx}) => {
+    // console.log(sectionData);
     const [showLec,setshowLec] = useState(true);
     const [addLectureModal,setAddLectureModal] = useState(false);
-    const [editLectureModal,setEditLectureModal] = useState(false);
+    const [section,setSection]=useState(sectionData);
     const expandSection = (e) =>{
-        console.log(e.currentTarget.innerText);
         setshowLec(!showLec);
     }
     const editSection = (e) => {
-        console.log(e.currentTarget.parentNode.attributes.section.value);
+        // console.log(e.currentTarget.parentNode.attributes.section.value);
     }
     const deleteSection = (e) => {
-        console.log(e.currentTarget.parentNode.attributes.section.value);
+        // console.log(e.currentTarget.parentNode.attributes.section.value);
     }
-    const editLecture = ()=>{
-        console.log("edit lecture");
-        setEditLectureModal(true)
-    }
+
     const addLecture = ()=>{
-        console.log("add lecture")
         setAddLectureModal(true);
-        console.log(addLectureModal);
     }
+    const saveHandler = (lecture)=>{
+        section.lectures.pushBack(lecture);
+    }
+    const editLecture = (index,lecture)=>{
+        let newSection = section;
+        newSection.lectures[index] = lecture;
+        setSections(sectionIdx,newSection);
+    }
+
   return (
         <div className=' mx-4 '>
-            {addLectureModal?<LectureModal setLectureModal={setAddLectureModal} modalType={"Add Lecture"}/>:""}
-            {editLectureModal?<LectureModal setLectureModal={setEditLectureModal} modalType={"Edit Lecture"}/>:""}
+        {addLectureModal?<LectureModal setLectureModal={setAddLectureModal} saveHandlerFn={saveHandler} modalType={"Add Lecture"}/>:""}
             <div className='flex border-b-[1px] py-3  border-richblack-400 items-center justify-between'>
                 <div onClick={expandSection} className='flex items-center space-x-2 w-[100%]'>
-                    <IoMdArrowDropdown />
+                    {showLec?<IoMdArrowDropup/>:<IoMdArrowDropdown/>}
                     <span className='text-richblack-50 text-lg'>{section.name}</span>
                 </div>
                 <div section={section} className='flex items-center w-[7%] justify-between'> 
@@ -43,17 +47,9 @@ export const SectionDropdown = ({section}) => {
             </div>
             {showLec?
             <div>
-                {section.lectures.map((lecture)=>{
+                {section.lectures.map((lecture,i)=>{
                     return (
-                    <div className='flex py-3 justify-between w-[85%] mx-auto border-b-[1px] border-richblack-400 '>
-                        <div>
-                            {lecture.name}
-                        </div>
-                        <div section={section} className='flex items-center w-[7%] justify-between'> 
-                            <HiMiniPencil onClick={editLecture}/>
-                            <FaRegTrashAlt onClick={deleteSection}/>
-                        </div>
-                    </div>
+                    <Lecture lecture={lecture} key = {i} index={i} editLecture = {editLecture}  />
                     )
                 })}
                 <div onClick={addLecture} className='flex py-3 items-center text-xl font-[500] w-[85%] mx-auto text-yellow-50 '>

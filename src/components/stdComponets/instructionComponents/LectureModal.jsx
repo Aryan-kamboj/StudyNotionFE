@@ -5,14 +5,15 @@ import { useDropzone } from 'react-dropzone';
 import { InputField } from '../InputField';
 import { StdButton } from '../StdButton';
 import { FieldRequiredText } from './FieldRequiredText';
-export const LectureModal = ({setLectureModal,modalType}) => {
-    const [lectureFile,setLectureFile] = useState();
-    const [lectureName,setLectureName] = useState("test");
-    const [lectureDesc,setLectureDesc] = useState("something to test this ")
+export const LectureModal = ({showModal,modalType,backendSaveHandlerFn,data}) => {
+    console.log(data);
+    const [lectureFile,setLectureFile] = useState(data.lectureFile);
+    const [lectureName,setLectureName] = useState(data.name);
+    const [lectureDesc,setLectureDesc] = useState(data.desc);
     const [req_check,setCheck] = useState(false);
     const {acceptedFiles, getRootProps, getInputProps} = useDropzone({maxFiles:1});
     useEffect(()=>{
-        acceptedFiles.length!==0?setLectureFile(URL.createObjectURL(acceptedFiles[0])):setLectureFile(undefined);
+        acceptedFiles.length!==0?setLectureFile(URL.createObjectURL(acceptedFiles[0])):setLectureFile(data.lectureFile);
     },[acceptedFiles]);
     const removeLectureFile = (e)=>{
         e.preventDefault();
@@ -27,10 +28,19 @@ export const LectureModal = ({setLectureModal,modalType}) => {
     const closeModal = ()=>{
         console.log("closeModal");
         document.body.style.overflowY="scroll";
-        setLectureModal(false);
+        showModal(false);
     }
-    const saveHandler = ()=>{
+    const saveButtonHandler = ()=>{
         setCheck(true);
+        const lecture = {
+            name:lectureName,
+            desc:lectureDesc,
+            lectureFile:lectureFile,
+        }
+        if(lectureFile&&lectureName&&lectureDesc){
+            backendSaveHandlerFn(lecture);
+            closeModal();
+        }
 
     }
   return (
@@ -41,10 +51,10 @@ export const LectureModal = ({setLectureModal,modalType}) => {
                 <span>{modalType}</span>
                 <FaXmark onClick={closeModal}/>
             </div>
-            <div className='p-4 space-y-6'>
+            <div className='p-4 space-y-4'>
                 <label>
                     <div className='text-sm pb-2'>Course lectureFile <span className='text-pink-200'>*</span></div>
-                    <div className='bg-richblack-700 max-h-fit border-[1px] border-richblack-600 border-dashed rounded-lg p-8'>
+                    <div className='bg-richblack-700 max-h-fit border-[1px] text-white border-richblack-600 border-dashed rounded-lg p-8'>
                     {lectureFile?
                     <div>
                         <img src={lectureFile} className='object-cover max-h-[100%] w-[100%] rounded-lg' alt={"There has been some error please upload again"}/>
@@ -67,7 +77,7 @@ export const LectureModal = ({setLectureModal,modalType}) => {
                 <FieldRequiredText fieldName={"Lecture Title"} active={req_check} data={lectureName} />
                 <InputField required={true} type={"textarea"} lines={4} label={"Lecture Description"} value={lectureDesc} setterFn={setLectureDesc}/>
                 <FieldRequiredText fieldName={"Lecture Description"} active={req_check} data={lectureDesc} />
-                <div className='flex flex-row-reverse'><StdButton color={"yellow"} handler={saveHandler}>Save</StdButton></div>
+                <div className='flex flex-row-reverse'><StdButton color={"yellow"} handler={saveButtonHandler}>Save</StdButton></div>
             </div>
         </div>
     </div>

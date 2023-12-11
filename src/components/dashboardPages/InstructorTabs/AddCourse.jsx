@@ -9,9 +9,19 @@ import { PublishCourse } from '../../stdComponets/instructionComponents/PublishC
 export const AddCourse = ({setTab}) => {
     const navigator = useNavigate();
     const [stage,setStage]=useState(2);
-    const submitHandler = (e)=>{
+    const basicInfoSubmit = (e)=>{
         console.log(e);
         setStage(2);
+    }
+    const courseBuilderSubmit = (e) =>{
+        console.log(e);
+        setStage(3);
+    }
+    const backHandler = (e)=>{
+        setStage(stage-1);
+    }
+    const publishCourseHandler = (e)=>{
+        console.log(e);
     }
   return (
     <div className='p-8 flex max-tablet:flex-col space-x-8'>
@@ -39,7 +49,7 @@ export const AddCourse = ({setTab}) => {
                     <span className={`basis-[25%] text-center ${stage===3?" text-yellow-50 ":" text-richblack-500 "} `}>Publish</span>
                 </div>
             </div>
-            {stage===1?<AddCourseBasicInfo submitHandler={submitHandler}/>:stage===2?<CourseBuilder/>:stage===3?<PublishCourse/>:<div>There has been some error please reload again or log in again if the error presists </div>}
+            {stage===1?<AddCourseBasicInfo submitHandler={basicInfoSubmit}/>:stage===2?<CourseBuilder submitHandler={courseBuilderSubmit} backHandler={backHandler}/>:stage===3?<PublishCourse submitHandler={publishCourseHandler} backHandler={backHandler}/>:<div>There has been some error please reload again or log in again if the error presists </div>}
             
         </div>
         <div className='basis-[30%] h-fit text-richblack-5 bg-richblack-800 border-[1px] border-richblack-700 rounded-lg p-4'>

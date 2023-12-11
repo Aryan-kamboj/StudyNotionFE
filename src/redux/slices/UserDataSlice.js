@@ -18,8 +18,6 @@ const initialState = {
     initialState,
     reducers: {
       addToCart:(state,action)=>{
-        // console.log(action.payload);
-        // console.log(typeof state.cart)
         state.cart.push(action.payload);
       },
       removeFromCart:(state,action)=>{
