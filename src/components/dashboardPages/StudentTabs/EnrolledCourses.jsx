@@ -17,7 +17,7 @@ export const EnrolledCourses = () => {
               <p className='basis-[20%]'>Time </p>
               <p className='basis-[30%]'>Progress</p>
             </div>
-            <div className='border-x-2 border-richblack-700 border-b-2 overflow-scroll h-[75%] rounded-b-lg'>
+            <div className='border-x-2 border-richblack-700 border-b-2 h-[75%] rounded-b-lg'>
             {/* would like to add a filter bar to seperate completed and pending cources */}
               {EnrolledCoursesData.map(({courseName,courseThumbnail,courseDesc,courseId,timeSpent,progress},i)=>{
                   const sec = timeSpent%60;
@@ -27,7 +27,7 @@ export const EnrolledCourses = () => {
                   const hours = ((totalMins-mins)/60);
                   const timeString = `${hours} h : ${mins} m : ${sec} s`;
               return (
-              <Link key={i} to={`${courseId}`}>
+              <Link key={i} to={`/view-course/${courseId}`}>
               <div className={`p-4 border-richblack-700 border-t-2`}>
               {/* link these to that particular course  */}
                   <div className='h-[4rem] max-tablet:h-[9rem] max-tablet:flex-col flex items-start space-y-3 '>

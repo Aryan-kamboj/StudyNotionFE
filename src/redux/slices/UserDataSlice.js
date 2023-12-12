@@ -24,7 +24,7 @@ const initialState = {
         console.log("action called");
         console.log(action);
         state.cart = state.cart.filter((item)=>{
-          return(item.id !== action.payload);
+          return(item.courseId !== action.payload);
         });
       },
         setFname: (state,action) => {

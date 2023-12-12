@@ -4,6 +4,7 @@ import {RatingStars} from "../../stdComponets/RatingStars"
 import { StdButton } from '../../stdComponets/StdButton'
 import {FiTrash2} from 'react-icons/fi'
 import { removeFromCart } from '../../../redux/slices/UserDataSlice'
+import { Link } from 'react-router-dom'
 export const Cart = () => {
     const dispatcher = useDispatch();
 
@@ -34,12 +35,12 @@ export const Cart = () => {
                     const {
                     title,
                     price,
-                    id,
+                    courseId,
                     rating,
                     reviewCount,
                     thumbnail,
                     instructorName}=course;
-                    return (<div key={i} className='cursor-pointer h-[14rem] max-tablet:h-[16rem] py-4 items-center relative -top-[1px] justify-between flex max-tablet:flex-col border-t-[1px] border-richblack-700'>
+                    return (<Link to={`/cources/${courseId}`} key={i} className='cursor-pointer h-[14rem] max-tablet:h-[16rem] py-4 items-center relative -top-[1px] justify-between flex max-tablet:flex-col border-t-[1px] border-richblack-700'>
                       <div className='flex space-x-6 '>
                         <img className='w-[15rem] max-tablet:w-[5rem] h-[10rem] object-cover rounded-xl' src={thumbnail} alt={title} />
                         <div className='space-y-4'>
@@ -49,10 +50,10 @@ export const Cart = () => {
                         </div>
                       </div>
                       <div className='flex flex-col max-tablet:mt-4 max-tablet:flex-row max-tablet:w-[90%] h-[10rem] max-tablet:h-[4rem] justify-between items-center'>
-                        <button onClick={(e)=>{dispatcher(removeFromCart(e.currentTarget.attributes.courseid.value))}} courseid={id} className='space-x-2 flex bg-richblack-800 text-pink-200 items-center p-3 border-richblack-700 border-[1px] rounded-xl'><FiTrash2/><span>Remove</span></button>
+                        <button onClick={(e)=>{e.preventDefault();dispatcher(removeFromCart(e.currentTarget.attributes.courseId.value))}} courseId={courseId} className='space-x-2 flex bg-richblack-800 text-pink-200 items-center p-3 border-richblack-700 border-[1px] rounded-xl'><FiTrash2/><span>Remove</span></button>
                         <p className='text-2xl font-[500] text-yellow-100'>Rs.{price}</p>
                       </div>
-                    </div>)
+                    </Link>)
                   })}
               </div>
               <div className='w-[14rem] h-[10rem] max-tablet:w-[100%] max-tablet:relative max-tablet:right-0 basis-[20%] rounded-lg flex flex-col justify-evenly bg-richblack-700 p-4 max-tablet:pt-2 absolute top-[15rem] max-tablet:-top-0 right-[3.5rem]'>

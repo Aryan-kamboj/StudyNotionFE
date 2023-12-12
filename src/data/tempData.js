@@ -70,7 +70,7 @@ export const myCoursesData = [
 export const testCartData = [{
     title:"Course 1 title",
     price:100,
-    id:"courseId1",
+    courseId:"courseId1",
     rating:3.7,
     reviewCount:200,
     thumbnail:"https://res.cloudinary.com/studynotion/image/upload/v1688384067/samples/smile.jpg",
@@ -79,7 +79,7 @@ export const testCartData = [{
 {
     title:"Course 2 title",
     price:101,
-    id:"courseId2",
+    courseId:"courseId2",
     rating:3.2,
     reviewCount:201,
     thumbnail:"https://res.cloudinary.com/studynotion/image/upload/v1688384067/samples/smile.jpg",
@@ -88,7 +88,7 @@ export const testCartData = [{
 {
     title:"Course 3 title",
     price:103,
-    id:"courseId3",
+    courseId:"courseId3",
     rating:3.9,
     reviewCount:203,
     thumbnail:"https://res.cloudinary.com/studynotion/image/upload/v1688384066/samples/balloons.jpg",
@@ -97,7 +97,7 @@ export const testCartData = [{
 {
     title:"Course 4 title",
     price:104,
-    id:"courseId4",
+    courseId:"courseId4",
     rating:4,
     reviewCount:204,
     thumbnail:"https://res.cloudinary.com/studynotion/image/upload/v1688384066/samples/shoe.jpg",
@@ -106,7 +106,7 @@ export const testCartData = [{
 {
     title:"Course 5 title",
     price:105,
-    id:"courseId5",
+    courseId:"courseId5",
     rating:5,
     reviewCount:205,
     thumbnail:"https://res.cloudinary.com/studynotion/image/upload/v1688384066/samples/shoe.jpg",
@@ -115,7 +115,7 @@ export const testCartData = [{
 {
     title:"Course 5 title",
     price:105,
-    id:"courseId5",
+    courseId:"courseId5",
     rating:5,
     reviewCount:205,
     thumbnail:"https://res.cloudinary.com/studynotion/image/upload/v1688384066/samples/shoe.jpg",
@@ -124,7 +124,7 @@ export const testCartData = [{
 {
     title:"Course 4 title",
     price:104,
-    id:"courseId4",
+    courseId:"courseId4",
     rating:4,
     reviewCount:204,
     thumbnail:"https://res.cloudinary.com/studynotion/image/upload/v1688384066/samples/shoe.jpg",
@@ -133,7 +133,7 @@ export const testCartData = [{
 {
     title:"Course 5 title",
     price:105,
-    id:"courseId5",
+    courseId:"courseId5",
     rating:5,
     reviewCount:205,
     thumbnail:"https://res.cloudinary.com/studynotion/image/upload/v1688384066/samples/shoe.jpg",
@@ -142,7 +142,7 @@ export const testCartData = [{
 {
     title:"Course 5 title",
     price:105,
-    id:"courseId5",
+    courseId:"courseId5",
     rating:5,
     reviewCount:205,
     thumbnail:"https://res.cloudinary.com/studynotion/image/upload/v1688384066/samples/shoe.jpg",
