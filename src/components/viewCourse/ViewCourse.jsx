@@ -11,6 +11,7 @@ export const ViewCourse = () => {
                 return acc+1;
             },0));
     },0)
+    console.log(setLectureCount(lectureCount));
     return lectures;});
     const lectureName = "Lecture 1";
     const desc = "Lecture ka chota sa description";

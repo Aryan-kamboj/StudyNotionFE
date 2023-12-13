@@ -7,6 +7,7 @@ export const Lecture = ({lecture,index,editLecture}) => {
     const [editLectureModal,showEditModal] = useState(false);
     const [lectureData,setData] = useState(lecture);
     const saveLecture = (lectureData)=>{
+        setData(lectureData);
         console.log("save edit lecture");
         // this funciton will call the backend api to save the lecture
         editLecture(index,lectureData);
