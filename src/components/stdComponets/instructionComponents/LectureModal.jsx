@@ -14,7 +14,7 @@ export const LectureModal = ({showModal,modalType,backendSaveHandlerFn,data}) =>
     const {acceptedFiles, getRootProps, getInputProps} = useDropzone({maxFiles:1});
     useEffect(()=>{
         acceptedFiles.length!==0?setLectureFile(URL.createObjectURL(acceptedFiles[0])):setLectureFile(data.lectureFile);
-    },[acceptedFiles]);
+    },[acceptedFiles,data.lectureFile]);
     const removeLectureFile = (e)=>{
         e.preventDefault();
         setLectureFile(undefined);

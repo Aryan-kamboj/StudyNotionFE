@@ -15,6 +15,7 @@ export const SectionDropdown = ({sectionData,setSections,sectionIdx}) => {
     }
     const editSection = (e) => {
         // console.log(e.currentTarget.parentNode.attributes.section.value);
+        setSection(section);
     }
     const deleteSection = (e) => {
         // console.log(e.currentTarget.parentNode.attributes.section.value);
