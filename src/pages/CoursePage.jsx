@@ -35,7 +35,7 @@ export const CoursePage = () => {
     const months= ["January","February","March","April","May","June","July",
                 "August","September","October","November","December"];
     // fetch course by course id 
-    const {thumbnail,title,description,price,reviewCount,rating,id,enrolledNo,createdAt,language,instructorName,benifits,requirements,courseContent,instructorImg} = courseDetails[0];
+    const {thumbnail,title,description,price,reviewCount,rating,id,enrolledNo,createdAt,language,instructorName,benifits,requirements,courseContent,instructorImg} = courseDetails;
     const dateCreated = new Date(createdAt);
     // console.log(dateCreated.getFullYear());
     const date = dateCreated.getDate();
