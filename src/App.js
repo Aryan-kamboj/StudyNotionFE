@@ -1,6 +1,5 @@
 import './App.css';
 import Navbar from './components/Navbar';
-// import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { Route,Routes, Outlet} from 'react-router';
 import AboutUs from './pages/AboutUs';
 import ContactUs from './pages/ContactUs';
@@ -14,6 +13,7 @@ import { CategoryPage } from "./pages/CategoryPage";
 import { CoursePage } from './pages/CoursePage'
 import { catagories } from './data/tempData';
 import { Dashboard } from './components/dashboardPages/Dashboard';
+import { ViewCourse } from './components/viewCourse/ViewCourse';
 function App() {
   return (
     <div className='bg-richblack-900 overflow-hidden min-h-screen'>
@@ -34,6 +34,7 @@ function App() {
             return <Route key={i} path={`/catalog/${catagory}`} element={<CategoryPage/>}/>
           })}
           <Route path={`/cources/*`} element={<CoursePage/>}/>
+          <Route path={`/view-course/*`} element={<ViewCourse/>}/>
           <Route path='*' element = {<div className='text-white'>invalid path</div>}/>
         </Route>
       </Routes>

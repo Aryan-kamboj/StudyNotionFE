@@ -272,7 +272,7 @@ export const mostPopularCourses = [{
     rating:5,
     id:"courseId3",
 }]
-export const courseDetails = [{
+export const courseDetails ={
     thumbnail:"https://res.cloudinary.com/studynotion/image/upload/v1688384067/samples/smile.jpg",
     title:"Course 1 title",
     description:"short sa description",
@@ -338,4 +338,4 @@ export const courseDetails = [{
         }]
     },
     ]
-}]
+}
