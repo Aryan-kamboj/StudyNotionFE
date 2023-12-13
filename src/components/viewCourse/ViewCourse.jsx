@@ -11,15 +11,17 @@ export const ViewCourse = () => {
                 return acc+1;
             },0));
     },0)
-    console.log(setLectureCount(lectureCount));
     return lectures;});
+    const remove_me = (e)=>{
+        setLectureCount(10);
+    }
     const lectureName = "Lecture 1";
     const desc = "Lecture ka chota sa description";
   return (
     <div className='text-white flex'>
         <div className='bg-richblack-800 min-w-[20%] w-[20%] h-fit pt-14  min-h-[100vh]'>
             {/* dashboard */}
-            <div className='text-2xl font-[500] text-center mt-6'>
+            <div onClick={remove_me} className='text-2xl font-[500] text-center mt-6'>
                 <span className='text-richblack-50'>{courseDetails.title}</span><span className='text-sm text-richblack-500'> {4}/{lectureCount}</span>
             </div>
             <div className='mt-4'>
