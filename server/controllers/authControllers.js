@@ -6,6 +6,8 @@ const bcrypt = require('bcrypt');
 const dotenv = require("dotenv");
 const jwt = require("jsonwebtoken");
 const otpBuilder = require("../utilityFunctions/otpBuilder");
+const mailSender = require("../config/mailingService");
+const forgotPassword = require("../templets/forgotPassword")
 dotenv.config();
 exports.authTokenCheck = async (req,res,next)=>{
     try {
@@ -186,6 +188,30 @@ exports.login = async (req,res)=>{
             error:error
         })
     }
+}
+exports.forgotPassword = async (req,res)=>{
+    try {
+        const {email} = req.body;
+        if(email){
+            const user = await USER.findOne({email:email});
+            // console.log(user);
+            if(user){
+                const name = user.fname+" "+user.lname;
+                const secret = process.env.JWT_SECRET;
+                const payload = {
+                    email:email,
+                }
+                const token = jwt.sign(payload,secret,{expiresIn:"5m"})
+                const link = `https://studynotionkamboj.netlify.app/newPassword/${token}`;
+                const mailContent = forgotPassword(email,name,link);
+                const response = await mailSender(email,mailContent);
+                console.log(response);
+            }
+        }
+    } catch (error) {
+        
+    }
+    
 }
 exports.changePassword = async (req,res)=>{
    try {

@@ -24,8 +24,11 @@ app.use("/api/auth",authRouter);
 const {authTokenCheck} = require("./controllers/authControllers");
 app.use("/api/*",authTokenCheck);
 
+const userRoutes = require("./routes/userRouter");
+app.use("/api/user",userRoutes);
 const studentRoutes = require("./routes/studentRouter");
 app.use("/api/student",studentRoutes)
+
 
 app.listen(PORT,()=>{
     console.log("backend is listening at port = ",PORT);

@@ -17,7 +17,7 @@ const mailSender = async (address,mail)=>{
         const info = await transporter.sendMail({
           from: mailUser, // sender address
           to: address, // list of receivers
-          subject: "Study Notion OTP", // Subject line
+          subject: "Study Notion", // Subject line
           text: "something", // plain text body
           html:mail , // html body
     });

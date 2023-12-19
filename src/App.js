@@ -27,8 +27,8 @@ function App() {
           <Route path="/signUp" element = {<SignUp/>}/>
           <Route path="/about_Us" element = {<AboutUs/>} />
           <Route path="/contact_Us" element = {<ContactUs/>}/>
-          <Route path="/forgot_password" element = {<ForgotPassword/>}/>
-          <Route path="/newPass" element={<ChooseNewPass/>}/>
+          <Route path="/forgotPassword" element = {<ForgotPassword/>}/>
+          <Route path="/newPassword/*" element={<ChooseNewPass/>}/>
           <Route path='/verifyEmail' element={<VerifyEmail/>}/>
           {catagories.map((catagory,i)=>{
             return <Route key={i} path={`/catalog/${catagory}`} element={<CategoryPage/>}/>

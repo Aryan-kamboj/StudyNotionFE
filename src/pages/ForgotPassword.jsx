@@ -6,12 +6,8 @@ import {FaLongArrowAltLeft} from "react-icons/fa"
 import { StdButton } from '../components/stdComponets/StdButton'
 
 export const ForgotPassword = () => {
-  const [email,set_email_ui]=useState(useSelector(({rootReducer})=>{
-    return rootReducer.Forms_slice.email;
-  }))
-  const [resetPasswordMailSent,setMailSent_ui] = useState(useSelector(({rootReducer})=>{
-    return rootReducer.UI_slice.resetPasswordMailSent;
-  }))
+  const [email,set_email_ui]=useState("")
+  const [resetPasswordMailSent,setMailSent_ui] = useState(false);
 
   // api call to backend on submit
   const submitHandler = (e)=>{
