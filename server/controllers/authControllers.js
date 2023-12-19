@@ -13,7 +13,12 @@ exports.authTokenCheck = async (req,res,next)=>{
         if(login){
             const verify = jwt.verify(login,process.env.JWT_SECRET);
             const {email,userType,exp} = verify;
+            const check = await USER.findOne({email:email});
+            if(check.userType===userType)
             req.locals = {email,userType,exp}
+            else{
+                throw ("There has been some error please log in again ");
+            }
         }
         next();
     } catch (error) {
@@ -240,6 +245,7 @@ exports.generateOtp = async (req,res)=>{
         const expiresAt = Date.now()+300000; //5 mins from creation of otp
         const attempts = 3;
         if(email){
+            await OTP.deleteOne({email:email});
             await OTP.create({email:email,otp:otp,expiresAt:expiresAt,attempts:attempts});
             return res.status(200).json({
                 message:"Email sent successfully"

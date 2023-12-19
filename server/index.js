@@ -24,7 +24,7 @@ app.use("/api/auth",authRouter);
 const {authTokenCheck} = require("./controllers/authControllers");
 app.use("/api/*",authTokenCheck);
 
-const studentRoutes = require("./routes/cartRouter");
+const studentRoutes = require("./routes/studentRouter");
 app.use("/api/student",studentRoutes)
 
 app.listen(PORT,()=>{

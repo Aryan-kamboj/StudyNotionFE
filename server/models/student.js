@@ -7,15 +7,25 @@ const studentSchema = new mongoose.Schema({
     },
     enrolledCources:[
         {
-            type:mongoose.Schema.Types.ObjectId,
-            required:true,
-            ref:"Course",
+            courseId:{
+                type:mongoose.Schema.Types.ObjectId,
+                required:true,
+                ref:"Course",
+            },
             contentConsumed:[
                 {
                     type:String,
                     required:true,
                 }
-            ]
+            ],
+            orderId:{
+                type:String,
+                required:true
+            },
+            paymentId:{
+                type:String,
+                required:true,
+            }
         }
     ],
     cart:[
