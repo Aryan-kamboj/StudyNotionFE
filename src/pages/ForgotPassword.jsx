@@ -1,6 +1,5 @@
 import React, { useState } from 'react'
 import { InputField } from '../components/stdComponets/InputField'
-import { useSelector } from 'react-redux'
 import { Link } from 'react-router-dom'
 import {FaLongArrowAltLeft} from "react-icons/fa"
 import { StdButton } from '../components/stdComponets/StdButton'
