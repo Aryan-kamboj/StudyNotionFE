@@ -21,6 +21,9 @@ const userSchema = new mongoose.Schema({
         type:String,
         require:true,
     },
+    resetPasswordToken:{
+        type:Number
+    },
     userType:{
         type:String,
         required:true

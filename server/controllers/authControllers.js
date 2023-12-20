@@ -194,24 +194,62 @@ exports.forgotPassword = async (req,res)=>{
         const {email} = req.body;
         if(email){
             const user = await USER.findOne({email:email});
-            // console.log(user);
             if(user){
                 const name = user.fname+" "+user.lname;
                 const secret = process.env.JWT_SECRET;
                 const payload = {
                     email:email,
+                    tokenNo:user.resetPasswordToken
                 }
-                const token = jwt.sign(payload,secret,{expiresIn:"5m"})
+                const token = jwt.sign(payload,secret,{expiresIn:"5d"})
                 const link = `https://studynotionkamboj.netlify.app/newPassword/${token}`;
                 const mailContent = forgotPassword(email,name,link);
-                const response = await mailSender(email,mailContent);
-                console.log(response);
+                await mailSender(email,mailContent);
             }
+            res.status(200).json({
+                success:true,
+                message:"Email sent succesfuly"
+            })
+            
         }
     } catch (error) {
-        
+        res.status(500).json({
+            error:error
+        })
     }
     
+}
+exports.newPassword = async (req,res)=>{
+    try {
+        const {password,cnfPassword} = req.body;
+        const {token} = req.params;
+        if(token&&password===cnfPassword&&password){
+            const verify = jwt.verify(token,process.env.JWT_SECRET);
+            if(verify){
+                const {email,tokenNo} = verify;
+                const user = await USER.findOne({email:email});
+                if(user.resetPasswordToken === tokenNo){
+                    const saltRounds  = Number(process.env.SALT_ROUNDS);
+                    const hash = await bcrypt.hash(password,saltRounds);
+                    await USER.findOneAndUpdate({email:email},{password:hash,resetPasswordToken:user.resetPasswordToken+1});
+                    res.status(200).json({
+                        message:"Password reset successfull"
+                    })
+                }
+                else{
+                    throw("Reset link expired pleas generate a new one");
+                }
+            }
+        }
+        else{
+            throw("All fields required");
+        }
+    } catch (error) {
+        res.status(500).json({
+            error:error
+        })
+    }
+
 }
 exports.changePassword = async (req,res)=>{
    try {
