@@ -1,0 +1,4 @@
+
+exports.updateProfile = (req,res)=>{
+    
+}

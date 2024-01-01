@@ -1,2 +1,387 @@
 const INSTRUCTOR = require("../models/instructor");
 const USER = require("../models/user");
+const COURSE = require("../models/course");
+const fileUpload = require("../utilityFunctions/fileUpload");
+const deleteFilesMultiple = require("../utilityFunctions/deleteFIlesMultiple");
+const deleteFile = require("../utilityFunctions/deleteFIle");
+exports.createCourse = async (req,res)=>{
+    try {
+        const {email,userType} = req.locals;
+        const {courseName,courseDesc,coursePrice,courseCatagory,tags,benifits,requirements} = req.body;
+        const {thumbnail} = req.files;
+        const tags_parsed = JSON.parse(tags);
+        const requirements_parsed = JSON.parse(requirements);
+        if(courseName&&courseDesc&&coursePrice&&courseCatagory&&tags_parsed&&thumbnail&&benifits&&requirements_parsed){
+            if(email&&userType){
+            const {secure_url} = await fileUpload(thumbnail);
+            const instructor = await INSTRUCTOR.findOne({email:email});
+                if(instructor){
+                    const newCourse = await COURSE.create({
+                        instructor:instructor._id,
+                        courseName:courseName,
+                        courseDesc:courseDesc,
+                        coursePrice:coursePrice,
+                        courseCatagory:courseCatagory,
+                        tags:tags_parsed,
+                        thumbnail:secure_url,
+                        benifits:benifits,
+                        requirements:requirements_parsed,
+                        sections:[],
+                        isPublic:false
+                    });
+                    const instructorUpdated = await INSTRUCTOR.updateOne({email:email},{$push: {myCources:newCourse._id}});
+                    if(newCourse&&instructorUpdated){
+                        return res.status(200).json({
+                            message:"New course created succesfully"
+                        });
+                    }
+                    else
+                        throw("There has been some error in creating the course");
+                }
+                else
+                    throw("There has been some error please log in again");
+            }
+            else{
+                return res.status(400).json({
+                    message:"There has been some error please log in again"
+                })
+            }
+        }
+        else{
+            return res.status(400).json({
+                message:"All sectionss mandatory"
+            })
+        }
+    } catch (error) {
+        return res.status(500).json({
+               error:error
+            })
+    }
+}
+exports.addSection = async (req,res)=>{
+    try {
+        const {email,userType} = req.locals;
+        const {sectionName,courseId} = req.body;
+        if(email&&userType==="instructor"&&userType&&sectionName&&courseId){
+            const instructor = await INSTRUCTOR.findOne({email:email});
+            if(instructor.myCources.includes(courseId)){
+                const updatedCourse = await COURSE.updateOne({_id:courseId},{$push: {sections:{sectionName:sectionName,lectures:[]}}});
+                if(updatedCourse){
+                    return res.status(200).json({
+                        message:"section created succesfully"
+                    })
+                }
+                else{
+                    throw("there was an error in creating section ");
+                }
+            }
+            else{
+                return res.status(400).json({
+                    error:"Action not allowed as you are not the instructor for this course"
+                })
+            }
+        }
+        else{
+            return res.status(400).json({
+                error:"All sectionss required"
+            })
+        }
+    } catch (error) {
+        console.log(error);
+        return res.status(500).json({
+            error:error
+        })
+    }
+}
+exports.removeSection = async (req,res)=>{
+    try {
+        const {email,userType} = req.locals;
+        const {sectionIdx,courseId} = req.body;
+        const sectionIdx_parsed = Number(sectionIdx);
+        if(email&&userType&&userType==="instructor"&&sectionIdx_parsed!==undefined&&courseId){
+            const instructor = await INSTRUCTOR.findOne({email:email});
+            if(instructor.myCources.includes(courseId)){
+                const course = await COURSE.findById(courseId);
+                // deleting form cloudinary
+                const publicIds = course.sections[sectionIdx_parsed].lectures.map((lecture)=>{
+                    const array = lecture.link.split("/");
+                    return("studyNotion/"+array[array.length-1].split(".")[0])
+                })
+                const response = await deleteFilesMultiple(publicIds,"video");
+                // deleting from db after deleting form CN;
+                if(Object.keys(response.deleted_counts).length===course.sections[sectionIdx_parsed].lectures.length){
+                    course.sections.splice(sectionIdx,1);
+                    const updatedCourse = await COURSE.updateOne({_id:courseId},{sections:course.sections});
+                    if(updatedCourse&&course){
+                        return res.status(200).json({
+                            message:"section deleted succesfully"
+                        })
+                    }
+                    else {
+                        throw "There has been some error in deleting the section"
+                    }
+                }
+                else
+                    throw "There has been some error in deleting the section";
+                // console.log(response);
+                //  deleted: {
+                //    The_First_Published_Map_of_Mount_Everest_1930_omubto: 'deleted',
+                //    'Screenshot_20210526-021217020_2\n': 'not_found',
+                //    'Screenshot_20210526-021217020_2_bsweuv': 'deleted'
+                //  },
+                //  deleted_counts: {
+                //    The_First_Published_Map_of_Mount_Everest_1930_omubto: { original: 1, derived: 0 },
+                //    'Screenshot_20210526-021217020_2\n': { original: 0, derived: 0 },
+                //    'Screenshot_20210526-021217020_2_bsweuv': { original: 1, derived: 0 }
+                //  },
+                //  partial: false,
+                //  rate_limit_allowed: 500,
+                //  rate_limit_reset_at: 2023-12-30T16:00:00.000Z,
+                //  rate_limit_remaining: 499
+            }
+        }
+        else{
+            return res.status(400).json({
+                error:"All sections required"
+            })
+        }
+    } catch (error) {
+        return res.status(500).json({
+            error:error
+        })
+    }
+}
+exports.addLecture = async (req,res)=>{
+    try {
+        const {email,userType}=req.locals;
+        const {courseId,sectionIdx,lectureTitle,lectureDesc} = req.body;
+        const {lectureFile} = req.files;
+        const sectionIdx_parsed = Number(sectionIdx);
+        if(userType==="instructor"&&userType&&email&&courseId&&sectionIdx.length&&lectureTitle&&lectureDesc&&lectureFile){
+            const instructor = await INSTRUCTOR.findOne({email:email});
+            if(instructor.myCources.includes(courseId)){
+                const response = await fileUpload(lectureFile);
+                if(response){
+                    const course = await COURSE.findById(courseId);
+                    course.sections[sectionIdx_parsed].lectures.push({
+                        lectureTitle:lectureTitle,
+                        lectureDesc:lectureDesc,
+                        link:response.secure_url,
+                        length:Math.ceil(response.duration)
+                    })
+                    const output = await COURSE.updateOne({_id:courseId},{sections:course.sections});
+                    if(course&&output){
+                        return res.status(200).json({
+                            message:"Lecture added succesfully"
+                        })
+                    }
+                    else
+                        throw("Could not update course ");
+                }
+                else
+                    throw("Could not upload lecture file");
+                
+            }
+            else{
+                return res.status(401).json({
+                    message:"You don't have access to edit this course"
+                })
+            }
+        }
+        else{
+            return res.status(400).json({
+                message:"All fields required"
+            })
+        }
+    } catch (error) {
+        return res.status(500).json({
+            error:error
+        })
+    }
+}
+
+exports.removeLecture = async (req,res)=>{
+    try {
+        const {email,userType}=req.locals;
+        const {courseId,sectionIdx,lectureIdx} = req.body;
+        if(userType==="instructor"&&userType&&email&&courseId&&sectionIdx!==undefined&&lectureIdx!==undefined){
+            const instructor = await INSTRUCTOR.findOne({email:email});
+            if(instructor.myCources.includes(courseId)){
+                const course = await COURSE.findById(courseId);
+                const array = course.sections[sectionIdx].lectures[lectureIdx].link.split("/");
+                const publicId = "studyNotion/"+array[array.length-1].split(".")[0];
+                const response = await deleteFile(publicId,"video");
+                if(response&&course){
+                    course.sections[sectionIdx].lectures.splice(lectureIdx,1);
+                    const update = await COURSE.updateOne({_id:courseId},{sections:course.sections});
+                    if(update){
+                        return res.status(200).json({
+                            message:"Lecture deleted succesfully"
+                        })
+                    }
+                    else
+                        throw("There has been some error in deleting the lecture");
+                }
+                else
+                    throw("There has been some error in deleting the lecture file");
+            }
+            else{
+                throw("You don't have access to edit this course ");
+            }
+        }
+        else{
+            return res.status(400).json({
+                message:"All fields required"
+            })
+        }
+    } catch (error) {
+        console.log(error);
+        return res.status(500).json({
+            error:error
+        })
+    }
+}
+// {
+//   asset_id: '3128499d3c8de4cdf330aebecfafcc47',
+//   public_id: 'ytuzxln4hlatqfhjtwck',
+//   version: 1703973988,
+//   version_id: '15847f169342a2d78d1686f9d37e5cc6',
+//   signature: 'd3325a0f022530b6cfabb8a640bea9f3c134affb',
+//   width: 360,
+//   height: 640,
+//   format: 'mov',
+//   resource_type: 'video',
+//   created_at: '2023-12-30T22:06:28Z',
+//   tags: [],
+//   pages: 0,
+//   bytes: 7715686,
+//   type: 'upload',
+//   etag: '09c883a7125aa8544785cab246d2a294',
+//   placeholder: false,
+//   url: 'http://res.cloudinary.com/studynotion/video/upload/v1703973988/ytuzxln4hlatqfhjtwck.mov',
+//   secure_url: 'https://res.cloudinary.com/studynotion/video/upload/v1703973988/ytuzxln4hlatqfhjtwck.mov',
+//   playback_url: 'https://res.cloudinary.com/studynotion/video/upload/sp_auto/v1703973988/ytuzxln4hlatqfhjtwck.m3u8',
+//   folder: '',
+//   audio: {},
+//   video: {
+//     pix_format: 'yuv420p',
+//     codec: 'h264',
+//     level: 30,
+//     profile: 'Main',
+//     bit_rate: '2198416',
+//     time_base: '1/25'
+//   },
+exports.saveCourse = async (req,res)=>{
+    try {
+        const {email,userType} = req.locals;
+        const {courseName,courseDesc,coursePrice,courseCatagory,tags,benifits,requirements,courseId} = req.body;
+        const {thumbnail} = req.files;
+        const tags_parsed = JSON.parse(tags?tags:null);
+        const requirements_parsed = JSON.parse(requirements?requirements:null);
+        if(email&&userType&&userType==="instructor"){
+            let url;
+            if(thumbnail){
+                const {secure_url} = await fileUpload(thumbnail);
+                url = secure_url;
+            }
+            console.log(url);
+        const instructor = await INSTRUCTOR.findOne({email:email});
+        if(instructor&&instructor.myCources.includes(courseId)){
+                const oldCOurse = await COURSE.findById(courseId);
+                const updateObj = {
+                    courseName:courseName?courseName:oldCOurse.courseName,
+                    courseDesc:courseDesc?courseDesc:oldCOurse.courseDesc,
+                    coursePrice:coursePrice?coursePrice:oldCOurse.coursePrice,
+                    courseCatagory:courseCatagory?courseCatagory:oldCOurse.courseCatagory,
+                    tags:tags_parsed?tags_parsed:oldCOurse.tags,
+                    thumbnail:url?url:oldCOurse.thumbnail,
+                    benifits:benifits?benifits:oldCOurse.benifits,
+                    requirements:requirements_parsed?requirements_parsed:oldCOurse.requirements,
+                }
+                const updateCourse = await COURSE.updateOne({_id:courseId},updateObj);
+                if(updateCourse){
+                    return res.status(200).json({
+                        message:"Course updated succesfully"
+                    });
+                }
+                else
+                    throw("There has been some error in updating the course");
+            }
+            else
+                throw("There has been some error please log in again");
+        }
+        else{
+            return res.status(400).json({
+                message:"There has been some error please log in again"
+            })
+        }
+    }
+    catch (error) {
+        return res.status(500).json({
+               error:error
+            })
+    }
+}
+exports.setPublic = async (req,res)=>{
+    try {
+        const {email,userType} = req.locals;
+        const {courseId,makePublic} = req.body;
+        if(email&&userType&&userType==="instructor"&&courseId&&makePublic!==undefined){
+            const instructor = await INSTRUCTOR.findOne({email:email});
+            if(instructor.myCources.includes(courseId)){
+                if(makePublic){
+                    await COURSE.updateOne({_id:courseId},{isPublic:true});
+                    return res.status(200).json({
+                        message:"Course made public successfully"
+                    })
+                }
+                else{
+                    await COURSE.updateOne({_id:courseId},{isPublic:false});
+                    return res.status(200).json({
+                        message:"Course made private successfully"
+                    })
+                }
+            }   
+            else{
+                return res.status(401).json({
+                    message:"You don't have access to update this course"
+                })
+            }
+        }
+        else{
+            return res.status(400).json({
+                message:"All fields are required"
+            })
+        }
+    } catch (error) {
+        return res.status(500).json({
+            error:error
+        })
+    }
+}
+exports.myCources = async (req,res)=>{
+    try {
+        const {email,userType} = req.locals;
+        if(email&&userType&&userType==="instructor"){
+            const {myCources} = await INSTRUCTOR.findOne({email:email});
+            const cources_Info = [];
+            for (const courseId of myCources){
+                const courseInfo = await COURSE.findById(courseId);
+                cources_Info.push(courseInfo);
+            }
+            console.log(cources_Info);
+            return res.status(200).json({
+                myCources:cources_Info
+            })
+        }
+        else{
+            return res.status(400).json({
+                message:"All fields required"
+            })
+        }
+    } catch (error) {
+        return res.status(500).json({
+            error:error
+        })
+    }
+}

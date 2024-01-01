@@ -14,6 +14,9 @@ database.connect();
 const cookieParser = require('cookie-parser');
 app.use(cookieParser());
 
+const fileUpload = require("express-fileupload");
+app.use(fileUpload());
+
 app.use(express.json());
 
 const authRouter = require("./routes/authRouter");
@@ -26,9 +29,12 @@ app.use("/api/*",authTokenCheck);
 
 const userRoutes = require("./routes/userRouter");
 app.use("/api/user",userRoutes);
-const studentRoutes = require("./routes/studentRouter");
-app.use("/api/student",studentRoutes)
 
+const studentRoutes = require("./routes/studentRouter");
+app.use("/api/student",studentRoutes);
+
+const instructorRoutes = require("./routes/instructorRouter");
+app.use("/api/instructor",instructorRoutes);
 
 app.listen(PORT,()=>{
     console.log("backend is listening at port = ",PORT);

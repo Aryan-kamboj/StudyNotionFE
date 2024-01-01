@@ -16,8 +16,11 @@ exports.authTokenCheck = async (req,res,next)=>{
             const verify = jwt.verify(login,process.env.JWT_SECRET);
             const {email,userType,exp} = verify;
             const check = await USER.findOne({email:email});
+            const id = check._id;
+            const fullName = check.fname+" "+check.lname;
+            const profilePhoto = check.profilePhoto;
             if(check.userType===userType)
-            req.locals = {email,userType,exp}
+            req.locals = {email,userType,exp,id,fullName,profilePhoto}
             else{
                 throw ("There has been some error please log in again ");
             }
