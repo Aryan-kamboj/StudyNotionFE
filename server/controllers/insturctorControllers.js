@@ -27,7 +27,8 @@ exports.createCourse = async (req,res)=>{
                         benifits:benifits,
                         requirements:requirements_parsed,
                         sections:[],
-                        isPublic:false
+                        isPublic:false,
+                        createdAt:Date.now()
                     });
                     const instructorUpdated = await INSTRUCTOR.updateOne({email:email},{$push: {myCources:newCourse._id}});
                     if(newCourse&&instructorUpdated){
@@ -367,7 +368,21 @@ exports.myCources = async (req,res)=>{
             const cources_Info = [];
             for (const courseId of myCources){
                 const courseInfo = await COURSE.findById(courseId);
-                cources_Info.push(courseInfo);
+                const {createdAt,courseName,courseDesc,coursePrice,thumbnail,isPublic,sections}=courseInfo;
+                const duration = sections.reduce((acc,section)=>{
+                    return acc+section.lectures.reduce((accLec,lecture)=>{
+                        return accLec+lecture.length;
+                    },0);
+                },0);
+                cources_Info.push({
+                    createdAt:Number(createdAt),
+                    courseName:courseName,
+                    courseDesc:courseDesc,
+                    coursePrice:coursePrice,
+                    thumbnail:thumbnail,
+                    isPublic:isPublic,
+                    duration:duration}
+                );
             }
             console.log(cources_Info);
             return res.status(200).json({

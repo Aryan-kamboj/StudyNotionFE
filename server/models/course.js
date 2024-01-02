@@ -52,6 +52,10 @@ const courseSchema = new mongoose.Schema({
     isPublic:{
         type:Boolean,
         required:true
+    },
+    createdAt:{
+        type:Date,
+        required:true
     }
 })
 const COURSE = mongoose.model("COURSE",courseSchema);
