@@ -14,13 +14,10 @@ exports.authTokenCheck = async (req,res,next)=>{
         const {login} = req.cookies;
         if(login){
             const verify = jwt.verify(login,process.env.JWT_SECRET);
-            const {email,userType,exp} = verify;
-            const check = await USER.findOne({email:email});
-            const id = check._id;
-            const fullName = check.fname+" "+check.lname;
-            const profilePhoto = check.profilePhoto;
+            const {email,userType} = verify;
+            const check = await USER.findOne({email:email},"userType");
             if(check.userType===userType)
-            req.locals = {email,userType,exp,id,fullName,profilePhoto}
+            req.locals = {email,userType}
             else{
                 throw ("There has been some error please log in again ");
             }
@@ -54,7 +51,7 @@ exports.signup = async (req,res)=>{
         }
 
         // check if email already registered
-        const checkAlreadyUser = await USER.findOne({email:email});
+        const checkAlreadyUser = await USER.findOne({email:email},{_id:1});
         if(checkAlreadyUser!==null){
             return res.status(403).json({
                 success:false,
@@ -157,7 +154,7 @@ exports.login = async (req,res)=>{
             })
         }
         else{
-            const user = await USER.findOne({email:email});
+            const user = await USER.findOne({email:email},{_id:1});
             if(!user)
                 return res.status(400).json({
                     message:"Email not registered"
@@ -196,7 +193,7 @@ exports.forgotPassword = async (req,res)=>{
     try {
         const {email} = req.body;
         if(email){
-            const user = await USER.findOne({email:email});
+            const user = await USER.findOne({email:email},"fname lname resetPasswordToken");
             if(user){
                 const name = user.fname+" "+user.lname;
                 const secret = process.env.JWT_SECRET;
@@ -230,7 +227,7 @@ exports.newPassword = async (req,res)=>{
             const verify = jwt.verify(token,process.env.JWT_SECRET);
             if(verify){
                 const {email,tokenNo} = verify;
-                const user = await USER.findOne({email:email});
+                const user = await USER.findOne({email:email},"resetPasswordToken");
                 if(user.resetPasswordToken === tokenNo){
                     const saltRounds  = Number(process.env.SALT_ROUNDS);
                     const hash = await bcrypt.hash(password,saltRounds);
@@ -264,11 +261,10 @@ exports.changePassword = async (req,res)=>{
         }
         else{
             if(password===cnfPassword){
-                const user = await USER.findOne({email:email});
+                const user = await USER.findOne({email:email},"password ");
                 if(user){
                     const oldMatch = await bcrypt.compare(oldPassword,user.password);
                     if(oldMatch){
-                        console.log("jii");
                         const saltRounds  = Number(process.env.SALT_ROUNDS);
                         const newHash = await bcrypt.hash(password,saltRounds);
                         const updatedUser = await USER.updateOne({email:email},{password:newHash});

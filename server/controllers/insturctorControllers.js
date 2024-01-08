@@ -1,9 +1,8 @@
 const INSTRUCTOR = require("../models/instructor");
-const USER = require("../models/user");
 const COURSE = require("../models/course");
 const fileUpload = require("../utilityFunctions/fileUpload");
-const deleteFilesMultiple = require("../utilityFunctions/deleteFIlesMultiple");
-const deleteFile = require("../utilityFunctions/deleteFIle");
+const deleteFilesMultiple = require("../utilityFunctions/deleteFilesMultiple");
+const deleteFile = require("../utilityFunctions/deleteFile");
 exports.createCourse = async (req,res)=>{
     try {
         const {email,userType} = req.locals;
@@ -14,7 +13,7 @@ exports.createCourse = async (req,res)=>{
         if(courseName&&courseDesc&&coursePrice&&courseCatagory&&tags_parsed&&thumbnail&&benifits&&requirements_parsed){
             if(email&&userType){
             const {secure_url} = await fileUpload(thumbnail);
-            const instructor = await INSTRUCTOR.findOne({email:email});
+            const instructor = await INSTRUCTOR.findOne({email:email},{_id:1});
                 if(instructor){
                     const newCourse = await COURSE.create({
                         instructor:instructor._id,
@@ -28,7 +27,9 @@ exports.createCourse = async (req,res)=>{
                         requirements:requirements_parsed,
                         sections:[],
                         isPublic:false,
-                        createdAt:Date.now()
+                        createdAt:Date.now(),
+                        rating:0.0,
+                        ratingCount:0
                     });
                     const instructorUpdated = await INSTRUCTOR.updateOne({email:email},{$push: {myCources:newCourse._id}});
                     if(newCourse&&instructorUpdated){
@@ -59,12 +60,19 @@ exports.createCourse = async (req,res)=>{
             })
     }
 }
+exports.deleteCourse = async (req,res)=>{
+    try {
+        // ye rhta hai abhi 
+    } catch (error) {
+        
+    }
+}
 exports.addSection = async (req,res)=>{
     try {
         const {email,userType} = req.locals;
         const {sectionName,courseId} = req.body;
         if(email&&userType==="instructor"&&userType&&sectionName&&courseId){
-            const instructor = await INSTRUCTOR.findOne({email:email});
+            const instructor = await INSTRUCTOR.findOne({email:email},"myCources");
             if(instructor.myCources.includes(courseId)){
                 const updatedCourse = await COURSE.updateOne({_id:courseId},{$push: {sections:{sectionName:sectionName,lectures:[]}}});
                 if(updatedCourse){
@@ -100,9 +108,9 @@ exports.removeSection = async (req,res)=>{
         const {sectionIdx,courseId} = req.body;
         const sectionIdx_parsed = Number(sectionIdx);
         if(email&&userType&&userType==="instructor"&&sectionIdx_parsed!==undefined&&courseId){
-            const instructor = await INSTRUCTOR.findOne({email:email});
+            const instructor = await INSTRUCTOR.findOne({email:email},"myCources");
             if(instructor.myCources.includes(courseId)){
-                const course = await COURSE.findById(courseId);
+                const course = await COURSE.findById(courseId,"sections");
                 // deleting form cloudinary
                 const publicIds = course.sections[sectionIdx_parsed].lectures.map((lecture)=>{
                     const array = lecture.link.split("/");
@@ -159,19 +167,19 @@ exports.addLecture = async (req,res)=>{
         const {lectureFile} = req.files;
         const sectionIdx_parsed = Number(sectionIdx);
         if(userType==="instructor"&&userType&&email&&courseId&&sectionIdx.length&&lectureTitle&&lectureDesc&&lectureFile){
-            const instructor = await INSTRUCTOR.findOne({email:email});
-            if(instructor.myCources.includes(courseId)){
+            const {myCources} = await INSTRUCTOR.findOne({email:email},"myCources");
+            if(myCources.includes(courseId)){
                 const response = await fileUpload(lectureFile);
                 if(response){
-                    const course = await COURSE.findById(courseId);
-                    course.sections[sectionIdx_parsed].lectures.push({
+                    const {sections} = await COURSE.findById(courseId,"sections");
+                    sections[sectionIdx_parsed].lectures.push({
                         lectureTitle:lectureTitle,
                         lectureDesc:lectureDesc,
                         link:response.secure_url,
                         length:Math.ceil(response.duration)
                     })
-                    const output = await COURSE.updateOne({_id:courseId},{sections:course.sections});
-                    if(course&&output){
+                    const output = await COURSE.updateOne({_id:courseId},{sections:sections});
+                    if(sections&&output){
                         return res.status(200).json({
                             message:"Lecture added succesfully"
                         })
@@ -206,15 +214,15 @@ exports.removeLecture = async (req,res)=>{
         const {email,userType}=req.locals;
         const {courseId,sectionIdx,lectureIdx} = req.body;
         if(userType==="instructor"&&userType&&email&&courseId&&sectionIdx!==undefined&&lectureIdx!==undefined){
-            const instructor = await INSTRUCTOR.findOne({email:email});
-            if(instructor.myCources.includes(courseId)){
-                const course = await COURSE.findById(courseId);
-                const array = course.sections[sectionIdx].lectures[lectureIdx].link.split("/");
+            const {myCources} = await INSTRUCTOR.findOne({email:email},"myCources");
+            if(myCources.includes(courseId)){
+                const {sections} = await COURSE.findById(courseId,"sections");
+                const array = sections[sectionIdx].lectures[lectureIdx].link.split("/");
                 const publicId = "studyNotion/"+array[array.length-1].split(".")[0];
                 const response = await deleteFile(publicId,"video");
-                if(response&&course){
-                    course.sections[sectionIdx].lectures.splice(lectureIdx,1);
-                    const update = await COURSE.updateOne({_id:courseId},{sections:course.sections});
+                if(response&&sections){
+                    sections[sectionIdx].lectures.splice(lectureIdx,1);
+                    const update = await COURSE.updateOne({_id:courseId},{sections:sections});
                     if(update){
                         return res.status(200).json({
                             message:"Lecture deleted succesfully"
@@ -286,9 +294,9 @@ exports.saveCourse = async (req,res)=>{
                 url = secure_url;
             }
             console.log(url);
-        const instructor = await INSTRUCTOR.findOne({email:email});
-        if(instructor&&instructor.myCources.includes(courseId)){
-                const oldCOurse = await COURSE.findById(courseId);
+        const {myCources} = await INSTRUCTOR.findOne({email:email},"myCources");
+        if(myCources&&myCources.includes(courseId)){
+                const oldCOurse = await COURSE.findById(courseId,"courseName courseDesc coursePrice courseCatagory tags thumbnail benifits requirements");
                 const updateObj = {
                     courseName:courseName?courseName:oldCOurse.courseName,
                     courseDesc:courseDesc?courseDesc:oldCOurse.courseDesc,
@@ -328,8 +336,8 @@ exports.setPublic = async (req,res)=>{
         const {email,userType} = req.locals;
         const {courseId,makePublic} = req.body;
         if(email&&userType&&userType==="instructor"&&courseId&&makePublic!==undefined){
-            const instructor = await INSTRUCTOR.findOne({email:email});
-            if(instructor.myCources.includes(courseId)){
+            const {myCources} = await INSTRUCTOR.findOne({email:email},"myCources");
+            if(myCources.includes(courseId)){
                 if(makePublic){
                     await COURSE.updateOne({_id:courseId},{isPublic:true});
                     return res.status(200).json({
@@ -364,11 +372,10 @@ exports.myCources = async (req,res)=>{
     try {
         const {email,userType} = req.locals;
         if(email&&userType&&userType==="instructor"){
-            const {myCources} = await INSTRUCTOR.findOne({email:email});
+            const {myCources} = await INSTRUCTOR.findOne({email:email},"myCources");
             const cources_Info = [];
             for (const courseId of myCources){
-                const courseInfo = await COURSE.findById(courseId);
-                const {createdAt,courseName,courseDesc,coursePrice,thumbnail,isPublic,sections}=courseInfo;
+                const {createdAt,courseName,courseDesc,coursePrice,thumbnail,isPublic,sections} = await COURSE.findById(courseId,"createdAt courseName courseDesc coursePrice thumbnail isPublic sections");
                 const duration = sections.reduce((acc,section)=>{
                     return acc+section.lectures.reduce((accLec,lecture)=>{
                         return accLec+lecture.length;

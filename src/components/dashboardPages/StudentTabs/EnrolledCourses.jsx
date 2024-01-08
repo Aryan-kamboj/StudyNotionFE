@@ -19,10 +19,10 @@ export const EnrolledCourses = () => {
             </div>
             <div className='border-x-2 border-richblack-700 border-b-2 h-[75%] rounded-b-lg'>
             {/* would like to add a filter bar to seperate completed and pending cources */}
-              {EnrolledCoursesData.map(({courseName,courseThumbnail,courseDesc,courseId,timeSpent,progress},i)=>{
-                  const sec = timeSpent%60;
-                  timeSpent-=sec;
-                  const totalMins = ((timeSpent)/60);
+              {EnrolledCoursesData.map(({courseName,thumbnail,desc,courseId,duration,progress},i)=>{
+                  const sec = duration%60;
+                  duration-=sec;
+                  const totalMins = ((duration)/60);
                   const mins = (totalMins%60);
                   const hours = ((totalMins-mins)/60);
                   const timeString = `${hours} h : ${mins} m : ${sec} s`;
@@ -32,10 +32,10 @@ export const EnrolledCourses = () => {
               {/* link these to that particular course  */}
                   <div className='h-[4rem] max-tablet:h-[9rem] max-tablet:flex-col flex items-start space-y-3 '>
                     <div className='flex basis-[50%] items-center'>
-                      <img className=" object-cover w-[4rem] h-[4rem] rounded-2xl " src={courseThumbnail} alt={courseName}/>
+                      <img className=" object-cover w-[4rem] h-[4rem] rounded-2xl " src={thumbnail} alt={courseName}/>
                       <div className='px-5 '>
                         <h2>{courseName}</h2>
-                        <p className='text-richblack-300'>{courseDesc}</p>
+                        <p className='text-richblack-300'>{desc}</p>
                       </div>
                     </div>
                     <div className='basis-[20%] text-richblack-50'>

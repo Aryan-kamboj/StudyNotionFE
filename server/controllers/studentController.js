@@ -1,11 +1,24 @@
 const STUDENT = require("../models/student");
+const COURSE = require("../models/course");
+const REVIEW = require("../models/review")
 exports.getCart = async (req,res)=>{
     try {
         const {email,userType} = req.locals;
         if(email&&userType==="student"){
-            const student = await STUDENT.findOne({email:email});
+            const {cart} = await STUDENT.findOne({email:email},"cart");
+            const cartDetails = [];
+            for(const course of cart){
+                const {courseCatagory,reviewCount,coursePrice,courseDesc,rating} = await COURSE.findById(course);
+                cartDetails.push({
+                    courseCatagory:courseCatagory,
+                    courseDesc:courseDesc,
+                    coursePrice:coursePrice,
+                    rating:rating,
+                    reviewCount:reviewCount
+                })
+            }
             return res.status(200).json({
-                cart:student.cart,
+                cart:cartDetails,
             });
         }
         else if(userType==="instructor"){
@@ -26,15 +39,15 @@ exports.addToCart = async (req,res)=>{
         const {course} = req.body;
         const {email,userType} = req.locals;
         if(email&&userType==="student"&&course){
-            const student = await STUDENT.findOne({email:email});
+            const student = await STUDENT.findOne({email:email},"cart");
             if(student){
                 if(!student.cart.includes(course)){
                     student.cart.unshift(course);
                     await STUDENT.findOneAndUpdate({email:email},{cart:student.cart});
-                    const studentUpdated = await STUDENT.findOne({email:email});
-                    console.log(studentUpdated.cart);
+                    const {cart} = await STUDENT.findOne({email:email},"cart");
+                    console.log(cart);
                     return res.status(200).json({
-                        cart:studentUpdated.cart,
+                        cart:cart,
                     });
                 }
                 else{
@@ -61,16 +74,19 @@ exports.removeFromCart = async (req,res)=>{
         const {course} = req.body;
         const {email,userType} = req.locals;
         if(email&&userType==="student"&&course){
-            const student = await STUDENT.findOne({email:email});
+            const student = await STUDENT.findOne({email:email},"cart");
             if(student){
                 student.cart = student.cart.filter((cartCource)=>{
-                    return (!course===cartCource);
+                    cartCource = String(cartCource)
+                    // console.log("cartCourse => "+typeof cartCource + " course => "+typeof course);
+                    return (!(course===cartCource));
                 })
+                console.log(student.cart);
                 await STUDENT.findOneAndUpdate({email:email},{cart:student.cart});
-                const studentUpdated = await STUDENT.findOne({email:email})
-                console.log(studentUpdated);
+                const {cart} = await STUDENT.findOne({email:email},"cart")
+                // console.log(studentUpdated);
                 return res.status(200).json({
-                    cart:studentUpdated.cart,
+                    cart:cart,
                 });
             }
         }
@@ -89,6 +105,7 @@ exports.removeFromCart = async (req,res)=>{
 
 // gonna work on it later so right now directly leting them enroll 
 const razorpayInstance = require("../config/razorpay");
+// special treatment ..... abhi rhta hai ye
 exports.buyCourse = async (req,res)=>{
     try {
         const {course,paymentId,orderId} = req.body;
@@ -136,12 +153,99 @@ exports.contentWatched = async (req,res)=>{
         const {email,userType} = req.locals;
         const {courseId,contentId} = req.body;
         if(email&&userType==="student"&&courseId&&contentId){
-            const user = await STUDENT.findOne({email:email});
-            const courseIdx = user.enrolledCources.findIndex((course)=>{return course.courseId == courseId});
-            user.enrolledCources[courseIdx].contentConsumed.push(contentId);
-            await STUDENT.findOneAndReplace({email:email},user);
-            const newUser = await STUDENT.findOne({email:email})
-            return res.status(200).json(newUser);
+            const student = await STUDENT.findOne({email:email},"enrolledCources");
+            const courseIdx = student.enrolledCources.findIndex((course)=>{
+                const id = String(course.courseId)
+                console.log(id , courseId);
+                return (id === courseId)
+            });
+            student.enrolledCources[courseIdx].contentConsumed.push(contentId);
+            await STUDENT.findOneAndUpdate({email:email},{enrolledCources:student.enrolledCources});
+            const {enrolledCources} = await STUDENT.findOne({email:email},"enrolledCources")
+            return res.status(200).json(enrolledCources[courseIdx]);
+        }
+    } catch (error) {
+        return res.status(500).json({
+            error:error
+        })
+    }
+}
+exports.enrolledCources = async (req,res) =>{
+    try {
+        const {email,userType} = req.locals;
+        if(email&&userType==="student"&&userType){
+            const {enrolledCources} = await STUDENT.findOne({email:email});
+            const enrolledIn = [];
+            for(const course of enrolledCources){
+                const {courseName,thumbnail,courseDesc,sections,_id} = await COURSE.findById(course.courseId,"courseName thumbnail courseDesc sections ");
+                const duration = sections.reduce((acc,section)=>{
+                    return acc+section.lectures.reduce((accLec,lecture)=>{
+                        return accLec+lecture.length;
+                    },0);
+                },0);
+                const totalLectures = sections.reduce((acc,section)=>{
+                    return acc+section.lectures.length;
+                },0);
+                const lengthConsumed = course.contentConsumed.length;
+                const progress = Math.floor((lengthConsumed/totalLectures)*100);
+                enrolledIn.push({
+                    courseName:courseName,
+                    thumbnail:thumbnail,
+                    desc:courseDesc,
+                    courseId:_id,
+                    duration:duration,
+                    progress:progress
+                })
+            }
+            return res.status(200).json({
+                enrolledCources:enrolledIn
+            })
+        }
+        else{
+            return res.status(400).json({
+                message:"All fields required"
+            })
+        }
+    } catch (error) {
+        return res.status(500).json({
+            error:error
+        })
+    }
+}
+exports.createReview = async (req,res) =>{
+    try { 
+        const {email,userType} = req.locals;
+        const {review,rating,course} = req.body;
+        if(review&&rating&&course&&email&&userType==="student"){
+            const {enrolledCourses} = await STUDENT.findOne({email:email},"enrolledCourses.courseId");
+            // checking if the user is enrolled in the course they are creating a review in
+            if(enrolledCourses.reduce((acc,enrolledCourse)=>{
+                if(course===enrolledCourse.courseId.toString())return acc+1 
+            },0)){
+                const newReview = await REVIEW.create({
+                    review:review,
+                    rating:rating,
+                    user:email,
+                    course:course
+                });
+                // console.log(newReview);
+                if(newReview)
+                return res.status(200).json({
+                    message:"Review created succesfully"
+                })
+                else
+                throw("There has been some error in creating the review try again");
+            }
+            else{
+                return res.status(400).json({
+                    message:"You don't have access to this course"
+                });
+            }
+        }
+        else{
+            return res.status(400).json({
+                message:"All fields required"
+            })
         }
     } catch (error) {
         return res.status(500).json({

@@ -36,6 +36,10 @@ app.use("/api/student",studentRoutes);
 const instructorRoutes = require("./routes/instructorRouter");
 app.use("/api/instructor",instructorRoutes);
 
+const schedule = require('node-schedule')
+const {ratingCalc} = require("./utilityFunctions/scheduledFunctions/ratingCalculator");
+// ratingCalc();
+schedule.scheduleJob("0 0 * * *",ratingCalc)
 app.listen(PORT,()=>{
     console.log("backend is listening at port = ",PORT);
 })

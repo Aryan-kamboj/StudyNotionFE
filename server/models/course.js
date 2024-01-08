@@ -56,6 +56,14 @@ const courseSchema = new mongoose.Schema({
     createdAt:{
         type:Date,
         required:true
+    },
+    rating:{
+        type:mongoose.Types.Decimal128,
+        required:true
+    },
+    reviewCount:{
+        type:Number,
+        required:true
     }
 })
 const COURSE = mongoose.model("COURSE",courseSchema);
