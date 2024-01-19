@@ -1,22 +1,30 @@
 const STUDENT = require("../models/student");
 const COURSE = require("../models/course");
 const REVIEW = require("../models/review")
+const getCartInfo = async (array)=>{
+    const cartDetails = [];
+    for(const course of array){
+        const {_id,courseCategory,thumbnail,instructor,reviewCount,coursePrice,courseDesc,rating,courseName} = await COURSE.findById(course,"courseCategory instructor reviewCount coursePrice courseDesc rating courseName thumbnail _id");
+        cartDetails.push({
+            thumbnail:thumbnail,
+            _id:_id,
+            courseName:courseName,
+            instructor:instructor,
+            courseCategory:courseCategory,
+            courseDesc:courseDesc,
+            coursePrice:coursePrice,
+            rating:rating,
+            reviewCount:reviewCount
+        })
+    }
+    return cartDetails;
+}
 exports.getCart = async (req,res)=>{
     try {
         const {email,userType} = req.locals;
         if(email&&userType==="student"){
             const {cart} = await STUDENT.findOne({email:email},"cart");
-            const cartDetails = [];
-            for(const course of cart){
-                const {courseCatagory,reviewCount,coursePrice,courseDesc,rating} = await COURSE.findById(course);
-                cartDetails.push({
-                    courseCatagory:courseCatagory,
-                    courseDesc:courseDesc,
-                    coursePrice:coursePrice,
-                    rating:rating,
-                    reviewCount:reviewCount
-                })
-            }
+            const cartDetails = await getCartInfo(cart);
             return res.status(200).json({
                 cart:cartDetails,
             });
@@ -36,6 +44,7 @@ exports.getCart = async (req,res)=>{
 }
 exports.addToCart = async (req,res)=>{
     try {
+        console.log(req.body);
         const {course} = req.body;
         const {email,userType} = req.locals;
         if(email&&userType==="student"&&course){
@@ -45,13 +54,13 @@ exports.addToCart = async (req,res)=>{
                     student.cart.unshift(course);
                     await STUDENT.findOneAndUpdate({email:email},{cart:student.cart});
                     const {cart} = await STUDENT.findOne({email:email},"cart");
-                    console.log(cart);
+                    const cartDetails = await getCartInfo(cart);
                     return res.status(200).json({
-                        cart:cart,
+                        cart:cartDetails,
                     });
                 }
                 else{
-                    res.status(400).json({
+                    return res.status(405).json({
                         message:"Course already added to cart"
                     })
                 }
@@ -72,21 +81,21 @@ exports.addToCart = async (req,res)=>{
 exports.removeFromCart = async (req,res)=>{
     try {
         const {course} = req.body;
+        console.log(course);
         const {email,userType} = req.locals;
         if(email&&userType==="student"&&course){
             const student = await STUDENT.findOne({email:email},"cart");
             if(student){
                 student.cart = student.cart.filter((cartCource)=>{
                     cartCource = String(cartCource)
-                    // console.log("cartCourse => "+typeof cartCource + " course => "+typeof course);
                     return (!(course===cartCource));
                 })
                 console.log(student.cart);
                 await STUDENT.findOneAndUpdate({email:email},{cart:student.cart});
                 const {cart} = await STUDENT.findOne({email:email},"cart")
-                // console.log(studentUpdated);
+                const cartDetails = await getCartInfo(cart);
                 return res.status(200).json({
-                    cart:cart,
+                    cart:cartDetails,
                 });
             }
         }
@@ -102,7 +111,6 @@ exports.removeFromCart = async (req,res)=>{
         })
     }
 }
-
 // gonna work on it later so right now directly leting them enroll 
 const razorpayInstance = require("../config/razorpay");
 // special treatment ..... abhi rhta hai ye
@@ -111,8 +119,9 @@ exports.buyCourse = async (req,res)=>{
         const {course,paymentId,orderId} = req.body;
         const {email,userType} = req.locals;
         if(email&&userType==="student"){
-            const user = await STUDENT.findOne({email:email});
-            if(user)
+            const user = await STUDENT.findOne({email:email},"enrolledCources");
+            const courseCheck = await COURSE.findById(course,{_id:1});
+            if(user&&courseCheck)
             {       
                 const enrollmentObj = {
                     courseId:course,
@@ -120,8 +129,10 @@ exports.buyCourse = async (req,res)=>{
                     orderId:orderId,
                     contentConsumed:[],
                 }
+                console.log(user);
                 user.enrolledCources.push(enrollmentObj);
                 await STUDENT.updateOne({email:email},{enrolledCources:user.enrolledCources});
+                await COURSE.updateOne({_id:course},{ $inc: { enrolled: 1 }});
                 return res.status(200).json({
                     message:"Course bought successfully"
                 })
@@ -252,4 +263,11 @@ exports.createReview = async (req,res) =>{
             error:error
         })
     }
+}
+exports.getCategory = async (req,res)=>{
+    const {category} = req.body;
+    const cources = await COURSE.find({courseCategory:category});
+    return res.status(200).json({
+        cources:cources
+    })
 }

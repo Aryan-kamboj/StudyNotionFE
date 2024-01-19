@@ -247,7 +247,7 @@ export const EnrolledCoursesData = [
             progress:50,
         },
     ]
-export const catagories = ["catagory 1","catagory2","catagory3"];
+export const categories = ["category 1","category2","category3"];
 export const mostPopularCourses = [{
     thumbnail:"https://res.cloudinary.com/studynotion/image/upload/v1688384067/samples/smile.jpg",
     title:"Course 1 title",

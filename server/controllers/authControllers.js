@@ -12,15 +12,19 @@ dotenv.config();
 exports.authTokenCheck = async (req,res,next)=>{
     try {
         const {login} = req.cookies;
+        console.log(req.cookies);
         if(login){
             const verify = jwt.verify(login,process.env.JWT_SECRET);
             const {email,userType} = verify;
             const check = await USER.findOne({email:email},"userType");
-            if(check.userType===userType)
-            req.locals = {email,userType}
+            console.log(check.userType,verify)
+            if(check.userType===userType){
+                req.locals = {email,userType}
+            }
             else{
                 throw ("There has been some error please log in again ");
             }
+            console.log("token check ho gya bhai")
         }
         next();
     } catch (error) {
@@ -104,7 +108,9 @@ exports.signup = async (req,res)=>{
                             }
                             newEntry = await INSTRUCTOR.create(newInstructor);
                         }
-    
+                        if(userType==="admin"){
+                            newEntry = true;
+                        }
                         if(newEntry === null||newUserEntry === null){
                             await USER.findOneAndDelete({email:email});
                             await STUDENT.findOneAndDelete({email:email});
@@ -154,7 +160,7 @@ exports.login = async (req,res)=>{
             })
         }
         else{
-            const user = await USER.findOne({email:email},{_id:1});
+            const user = await USER.findOne({email:email},{_id:1,password:1,userType:1});
             if(!user)
                 return res.status(400).json({
                     message:"Email not registered"
@@ -166,13 +172,16 @@ exports.login = async (req,res)=>{
                     email:email,
                     userType:user.userType,
                 }
-                const token = jwt.sign(login,jwtSecret,{expiresIn:"7d"});
-                res.cookie("login",token,
-                {
-                    httpOnly:true,
-                    secure:true,
-                });
-                return res.status(200).json({
+                let token;
+                if(user.userType==="admin"){
+                    token = jwt.sign(login,jwtSecret,{expiresIn:15000*60});    
+                }
+                else{token = jwt.sign(login,jwtSecret,{expiresIn:"7d"});}
+                return res.cookie("login",token,{
+                    httpOnly: false, secure: true, sameSite: 'None'
+                }).status(200).json({
+                    user:user.userType,
+                    token:token,
                     message:"Login successfull"
                 });
             }

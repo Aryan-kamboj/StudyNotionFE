@@ -4,7 +4,7 @@ import { StdButton } from '../StdButton';
 import { TagsInput } from '../TagsInput';
 import {RequirementInput} from "../RequirementInput";
 import {FiUploadCloud} from "react-icons/fi"
-import { catagories } from '../../../data/tempData';
+import { categories } from '../../../data/tempData';
 import {IoIosArrowForward} from "react-icons/io"
 import { useDropzone } from 'react-dropzone';
 import { FieldRequiredText } from './FieldRequiredText';
@@ -12,12 +12,12 @@ export const AddCourseBasicInfo = ({submitHandler}) => {
     const [requiredTextActive,setRqTxt]=useState(false);
     const handleSubmit = ()=>{
         setRqTxt(true);
-        if(courseTitle&&desc&&price&&catagory&&benifits&&thumbnail&&(tags.length!==0)&&(requirements.length!==0)){
+        if(courseTitle&&desc&&price&&category&&benifits&&thumbnail&&(tags.length!==0)&&(requirements.length!==0)){
             const basicInfo = {
                 courseTitle:courseTitle,
                 desc:desc,
                 price:price,
-                catagory:catagory,
+                category:category,
                 benifits:benifits,
                 thumbnail:thumbnail,
                 tags:tags,
@@ -30,7 +30,7 @@ export const AddCourseBasicInfo = ({submitHandler}) => {
     const [courseTitle,setTitle] = useState("");
     const [desc,setDesc] = useState("");
     const [price,setPrice] = useState();
-    const [catagory,setCatagory] = useState("");
+    const [category,setCategory] = useState("");
     const [benifits,setBenifits] = useState();
     const [thumbnail,setThumbnail] = useState(undefined);
     const removeThumbnail = (e)=>{
@@ -54,15 +54,15 @@ export const AddCourseBasicInfo = ({submitHandler}) => {
             <InputField value={price} setterFn={setPrice} label={"Course Price"} required={true} placeholder={"Enter Course Price"} />
             <FieldRequiredText active={requiredTextActive} data={price} fieldName={"Course Price"} />
             <div>
-                <p className='text-sm pb-2'>Catagory <span className='text-pink-200 pl-[0.1rem]'>*</span></p>
-                <select onChange={(e)=>{setCatagory(e.target.value)}} className='outline-none bg-richblack-700 p-3 rounded-lg border-b-[1px] border-richblack-300 w-[100%]'>
-                    <option>Select Catagory</option>
-                    {catagories.map((catagory,key)=>{
-                        return <option key={key}>{catagory}</option>
+                <p className='text-sm pb-2'>Category <span className='text-pink-200 pl-[0.1rem]'>*</span></p>
+                <select onChange={(e)=>{setCategory(e.target.value)}} className='outline-none bg-richblack-700 p-3 rounded-lg border-b-[1px] border-richblack-300 w-[100%]'>
+                    <option>Select Category</option>
+                    {categories.map((category,key)=>{
+                        return <option key={key}>{category}</option>
                     })}
                 </select>
             </div> 
-            <FieldRequiredText active={requiredTextActive} data={catagory} fieldName={"Course Catagory"} />                  
+            <FieldRequiredText active={requiredTextActive} data={category} fieldName={"Course Category"} />                  
     {/* tags */}
             <TagsInput tags={tags} setTags={setTags} required={true} label={"Tags"} placeholder={"Write a tag and hit Enter"}/>
             <FieldRequiredText active={requiredTextActive} data={tags} fieldName={"Course Tag"}/>

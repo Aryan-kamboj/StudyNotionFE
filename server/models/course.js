@@ -1,9 +1,19 @@
 const mongoose = require("mongoose");
 const courseSchema = new mongoose.Schema({
     instructor:{
-        type:mongoose.Schema.ObjectId,
-        required:true,
-        ref:"INSTRUCTOR"
+        fullName:{
+            type:String,
+            required:true
+        },
+        profilePhoto:{
+            type:String,
+            required:true,
+        },
+        id:{
+            type:mongoose.Schema.ObjectId,
+            required:true,
+            ref:"INSTRUCTOR"
+        }
     },
     courseName:{
         type:String,
@@ -17,7 +27,7 @@ const courseSchema = new mongoose.Schema({
         type:Number,
         required:true
     },
-    courseCatagory:{
+    courseCategory:{
         type:String,
         required:true
     },
@@ -59,6 +69,10 @@ const courseSchema = new mongoose.Schema({
     },
     rating:{
         type:mongoose.Types.Decimal128,
+        required:true
+    },
+    enrolled:{
+        type:Number,
         required:true
     },
     reviewCount:{

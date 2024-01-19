@@ -1,8 +1,30 @@
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import { EnrolledCoursesData } from '../../../data/tempData'
 import { Link } from 'react-router-dom'
-import {BsThreeDotsVertical} from "react-icons/bs"
+import { BsThreeDotsVertical } from "react-icons/bs"
+import { useDispatch } from 'react-redux'
+import { setLoading } from '../../../redux/slices/UI_slice'
+import { getEnorlledCources } from '../../../services/student/dashboardAPIS'
+import { getCourse } from '../../../services/open/courseAPIs'
+
 export const EnrolledCourses = () => {
+  // let [EnrolledCoursesData,setData] = useState(getEnorlledCources());
+  const dispatcher = useDispatch();
+  useEffect(()=>{
+    // iifc-> Immediately Invoked Function Expression invokes itself as soon as it lodes 
+    (async ()=>{
+      try {
+        dispatcher(setLoading(true));
+        // setData(await getEnorlledCources());
+        const data = await getEnorlledCources();
+        console.log(data);
+        dispatcher(setLoading(false));
+      } catch (error) {
+        console.log(error);
+      }
+    })()
+  },[])
+  
   return (
       <div className='min-h-[100%] pt-14 overflow-auto'>
           <div className='w-[70%] max-tablet:w-[95%] mx-auto pb-14'>

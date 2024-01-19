@@ -5,13 +5,24 @@ import {RiArrowDropDownLine} from "react-icons/ri";
 import {PiTriangleFill} from "react-icons/pi";
 import {Link} from "react-router-dom"
 import { NavbarLinks } from '../data/NavbarData';
-import { catagories } from '../data/tempData';
-import { useState } from 'react';
+// import { categories } from '../data/tempData';
+import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import {getCategories} from "../services/open/categoryAPIs"
+import { setCategories } from '../redux/slices/UI_slice';
+import { useDispatch, useSelector } from 'react-redux';
 function Headder() {
-    const pathname = window.location.pathname;
-    console.log(pathname);
-    const [catagoriesVisible,setVisible] = useState(false);
+    const dispatcher = useDispatch();
+    useEffect(()=>{
+        (async()=>{
+            const {data} = await getCategories();
+            dispatcher(setCategories(data.categories));
+        })()
+    },[])
+    const uiCategories = useSelector(({rootReducer})=>{
+        return rootReducer.UI_slice.categories;
+    });
+    const [categoriesVisible,setVisible] = useState(false);
     const makeVisible = (e)=>{
         setVisible(true);
     }
@@ -21,8 +32,9 @@ function Headder() {
     const navigator = useNavigate();
     return (
       <div className="h-14 fixed z-[100] w-[100vw] bg-richblack-900 text-rich-black-25  border-solid border-b-[1px] border-richblack-700">
-            {catagoriesVisible?<div onMouseEnter={makeVisible} onMouseLeave={hide} className='rounded-2xl p-3 bg-richblack-5 absolute top-[48px] z-[10000] right-[45%] w-[15%] flex flex-col text-richblack-5 '><PiTriangleFill className="text-2xl absolute -top-[18px] right-[41%]" />{catagories.map((catagory,i)=>{
-                return <Link key={i} to={`catalog/${catagory}`} className='text-black font-[500] text-lg p-4 text-center hover:bg-richblack-100 rounded-2xl'>{catagory}</Link>
+            {categoriesVisible?<div onMouseEnter={makeVisible} onMouseLeave={hide} className='rounded-2xl p-3 bg-richblack-5 absolute top-[48px] z-[10000] right-[45%] w-[15%] flex flex-col text-richblack-5 '><PiTriangleFill className="text-2xl absolute -top-[18px] right-[41%]" />
+            {uiCategories.map(({categoryName},i)=>{
+                return <Link key={i} to={`catalog/${categoryName}`}className='text-black font-[500] text-lg p-4 text-center hover:bg-richblack-100 rounded-2xl'>{categoryName}</Link>
             })}</div>:<p className='w-[15%]'></p>}
 
             <div className='justify-between flex items-center'>
@@ -30,14 +42,14 @@ function Headder() {
                     <Link to={'/'}><img src={logo} alt={"logo"} loading='lazy'/></Link>
                 </div>
                 <div className="w-fill flex my-auto  justify-between text-richblack-25 max-tablet:hidden">
-                    {NavbarLinks.map((link,index)=>{
+                    {NavbarLinks?NavbarLinks.map((link,index)=>{
                         if(link.title==="Catalog"){
                             return (
                                 <div className=' py-2 px-3 flex' onMouseEnter={makeVisible} onMouseLeave={hide} key={index} ><div className='flex pr-1' >{link.title}</div><RiArrowDropDownLine className='text-2xl'/></div>
                             )
                         }
                         return (<Link key={index} to = {link.path}><div className='py-2 px-3 flex' key={index}>{link.title}</div></Link>)
-                    })}
+                    }):""}
                 </div>
                 <div className='flex w-[22%] text-2xl text-white justify-evenly py-4  max-tablet:w-[50%] pr-0'>
                     <LuSearch className=''/>

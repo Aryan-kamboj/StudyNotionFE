@@ -7,14 +7,14 @@ import {FaGripLines} from "react-icons/fa"
 import {FaXmark} from "react-icons/fa6"
 import { useNavigate } from 'react-router'
 export const DashboardNav = ({setTab,userType,setUserType,tab}) => {
-    const currentTab = document.URL.split("/").slice(-1)[0];
-    console.log(currentTab);
+    // const currentTab = document.URL.split("/").slice(-1)[0];
+    // console.log(currentTab);
     const [showTabs,setShowTabs] = useState(false);
     const navigator = useNavigate();
     const clickHandler = (e)=>{
       setShowTabs(false);
       e.stopPropagation();
-      console.log(e.currentTarget.attributes.id.value);
+      // console.log(e.currentTarget.attributes.id.value);
       navigator(`${e.currentTarget.attributes.id.value}`);
       setTab(e.currentTarget.attributes.id.value);
     }
@@ -26,12 +26,12 @@ export const DashboardNav = ({setTab,userType,setUserType,tab}) => {
     const handleUserType = (e)=>
     {
       if(userType==="student"){
-        console.log("hii");
+        // console.log("hii");
         setUserType("instructor");
       }
       else if(userType==="instructor"){
         setUserType("student");
-        console.log("hii2")
+        // console.log("hii2")
       }
     }
     const selectedCSS = "bg-yellow-800 text-yellow-50 border-yellow-50 "

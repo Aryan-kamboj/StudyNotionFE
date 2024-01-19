@@ -1,5 +1,6 @@
 import { createSlice } from "@reduxjs/toolkit";
-import {testCartData} from "../../data/tempData"
+// import {testCartData} from "../../data/tempData"
+import { getCart } from "../../services/open/courseAPIs";
 const initialState = {
     fname:"",
     lname:"",
@@ -10,22 +11,16 @@ const initialState = {
     email:"",
     message:"",
     password:"",
-    cart:[...testCartData],
+    cart:document.cookie.length!==0?await getCart():[]
   }
 
   const UserDataSlice = createSlice({
     name: 'UI_slice',
     initialState,
     reducers: {
-      addToCart:(state,action)=>{
-        state.cart.push(action.payload);
-      },
-      removeFromCart:(state,action)=>{
-        console.log("action called");
-        console.log(action);
-        state.cart = state.cart.filter((item)=>{
-          return(item.courseId !== action.payload);
-        });
+      updateCart:(state,action)=>{
+        console.log(action.payload);
+        state.cart=action.payload;
       },
         setFname: (state,action) => {
         state.fname= action.payload;
@@ -53,6 +48,6 @@ const initialState = {
     }
   })
   // Action creators are generated for each case reducer function
-  export const { setFname,setLname,setMessage,setphoneNo,setEmail,setPassword,addToCart,removeFromCart } = UserDataSlice.actions;
+  export const { setFname,setLname,setMessage,setphoneNo,setEmail,setPassword,updateCart } = UserDataSlice.actions;
   
   export default UserDataSlice;

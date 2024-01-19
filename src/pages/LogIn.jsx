@@ -6,6 +6,7 @@ import { Link } from 'react-router-dom'
 import loginPhoto from "../assets/Images/login.webp";
 import frame from "../assets/Images/frame.png"
 import { HomePageNavbar } from '../components/homepage/Navbar/HomePageNavbar';
+import { loginAPI } from '../services/auth/auth';
 
 export const LogIn = () => {
     const [password,set_pass_ui] = useState();
@@ -18,15 +19,16 @@ export const LogIn = () => {
         text:"Instructor",
       }]
     // const password
-    const submitHandler = (e)=>{
+    const submitHandler = async (e)=>{
         e.preventDefault();
-        console.log({
+        const data = await loginAPI({
             email:email,
             password:password,
         });
+        console.log(data);
     }
   return (
-    <div className='h-[86vh] flex mt-16 max-tablet:flex-col max-tablet:h-[116vh] '>
+    <div className='min-h-[86vh] h-fit flex mt-16 max-tablet:flex-col max-tablet:h-[116vh] '>
         {/* form section */}
         <div className='w-[50%] p-16 max-tablet:p-4 max-tablet:w-[100%] space-y-4' >
             <div className=''>

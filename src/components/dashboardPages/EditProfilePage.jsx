@@ -27,7 +27,7 @@ export const EditProfilePage = ({setEditPage,profileInfo}) => {
     const imageChangeHandler = (e) => {
         const image = e.target.files[0];
         image?setprofilePhoto(URL.createObjectURL(image)):
-        console.log(URL.createObjectURL(image));
+        console.log("image not found");
     }
     const uploadHandler = (e)=>{
 

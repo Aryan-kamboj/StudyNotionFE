@@ -6,11 +6,11 @@ const deleteFile = require("../utilityFunctions/deleteFile");
 exports.createCourse = async (req,res)=>{
     try {
         const {email,userType} = req.locals;
-        const {courseName,courseDesc,coursePrice,courseCatagory,tags,benifits,requirements} = req.body;
+        const {courseName,courseDesc,coursePrice,courseCategory,tags,benifits,requirements} = req.body;
         const {thumbnail} = req.files;
         const tags_parsed = JSON.parse(tags);
         const requirements_parsed = JSON.parse(requirements);
-        if(courseName&&courseDesc&&coursePrice&&courseCatagory&&tags_parsed&&thumbnail&&benifits&&requirements_parsed){
+        if(courseName&&courseDesc&&coursePrice&&courseCategory&&tags_parsed&&thumbnail&&benifits&&requirements_parsed){
             if(email&&userType){
             const {secure_url} = await fileUpload(thumbnail);
             const instructor = await INSTRUCTOR.findOne({email:email},{_id:1});
@@ -20,10 +20,11 @@ exports.createCourse = async (req,res)=>{
                         courseName:courseName,
                         courseDesc:courseDesc,
                         coursePrice:coursePrice,
-                        courseCatagory:courseCatagory,
+                        courseCategory:courseCategory,
                         tags:tags_parsed,
                         thumbnail:secure_url,
                         benifits:benifits,
+                        enrolled:0,
                         requirements:requirements_parsed,
                         sections:[],
                         isPublic:false,
@@ -63,8 +64,13 @@ exports.createCourse = async (req,res)=>{
 exports.deleteCourse = async (req,res)=>{
     try {
         // ye rhta hai abhi 
+        return res.status(200).json({
+            message:"This functionality is not working right now"
+        })
     } catch (error) {
-        
+        return res.status(500).json({
+            message:"This functionality is not working right now"
+        })
     }
 }
 exports.addSection = async (req,res)=>{
@@ -96,7 +102,7 @@ exports.addSection = async (req,res)=>{
             })
         }
     } catch (error) {
-        console.log(error);
+        // console.log(error);
         return res.status(500).json({
             error:error
         })
@@ -283,7 +289,7 @@ exports.removeLecture = async (req,res)=>{
 exports.saveCourse = async (req,res)=>{
     try {
         const {email,userType} = req.locals;
-        const {courseName,courseDesc,coursePrice,courseCatagory,tags,benifits,requirements,courseId} = req.body;
+        const {courseName,courseDesc,coursePrice,courseCategory,tags,benifits,requirements,courseId} = req.body;
         const {thumbnail} = req.files;
         const tags_parsed = JSON.parse(tags?tags:null);
         const requirements_parsed = JSON.parse(requirements?requirements:null);
@@ -296,12 +302,12 @@ exports.saveCourse = async (req,res)=>{
             console.log(url);
         const {myCources} = await INSTRUCTOR.findOne({email:email},"myCources");
         if(myCources&&myCources.includes(courseId)){
-                const oldCOurse = await COURSE.findById(courseId,"courseName courseDesc coursePrice courseCatagory tags thumbnail benifits requirements");
+                const oldCOurse = await COURSE.findById(courseId,"courseName courseDesc coursePrice courseCategory tags thumbnail benifits requirements");
                 const updateObj = {
                     courseName:courseName?courseName:oldCOurse.courseName,
                     courseDesc:courseDesc?courseDesc:oldCOurse.courseDesc,
                     coursePrice:coursePrice?coursePrice:oldCOurse.coursePrice,
-                    courseCatagory:courseCatagory?courseCatagory:oldCOurse.courseCatagory,
+                    courseCategory:courseCategory?courseCategory:oldCOurse.courseCategory,
                     tags:tags_parsed?tags_parsed:oldCOurse.tags,
                     thumbnail:url?url:oldCOurse.thumbnail,
                     benifits:benifits?benifits:oldCOurse.benifits,

@@ -10,18 +10,18 @@ export const AddCourse = ({setTab}) => {
     const navigator = useNavigate();
     const [stage,setStage]=useState(2);
     const basicInfoSubmit = (e)=>{
-        console.log(e);
+        // console.log(e);
         setStage(2);
     }
     const courseBuilderSubmit = (e) =>{
-        console.log(e);
+        // console.log(e);
         setStage(3);
     }
     const backHandler = (e)=>{
         setStage(stage-1);
     }
     const publishCourseHandler = (e)=>{
-        console.log(e);
+        // console.log(e);
     }
   return (
     <div className='p-8 flex max-tablet:flex-col space-x-8'>

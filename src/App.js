@@ -9,35 +9,41 @@ import { SignUp } from './pages/SignUp';
 import { ForgotPassword } from "./pages/ForgotPassword"
 import { ChooseNewPass } from './pages/ChooseNewPass';
 import { VerifyEmail } from './pages/VerifyEmail';
-import { CategoryPage } from "./pages/CategoryPage";
+import { CategoryRouter } from "./pages/CategoryRouter";
+import { CategoryPage } from './pages/CategoryPage';
 import { CoursePage } from './pages/CoursePage'
-import { catagories } from './data/tempData';
 import { Dashboard } from './components/dashboardPages/Dashboard';
 import { ViewCourse } from './components/viewCourse/ViewCourse';
+import { LoadingScreen } from './components/LoadingScreen';
+import { useSelector } from 'react-redux';
 function App() {
+  const isLoading = useSelector(({rootReducer})=>{
+    return rootReducer.UI_slice.loading;
+  });
+  console.log(isLoading);
   return (
     <div className='bg-richblack-900 overflow-hidden min-h-screen'>
       <Navbar/>
       <div className=''>
-      <Routes>
-        <Route path='/' element={<div><Outlet/></div>}>
-          <Route index element={<Home/>}/>
-          <Route path="/dashboard/*" element={<Dashboard/>}/>
-          <Route path="/login" element = {<LogIn/>}/>
-          <Route path="/signUp" element = {<SignUp/>}/>
-          <Route path="/about_Us" element = {<AboutUs/>} />
-          <Route path="/contact_Us" element = {<ContactUs/>}/>
-          <Route path="/forgotPassword" element = {<ForgotPassword/>}/>
-          <Route path="/newPassword/*" element={<ChooseNewPass/>}/>
-          <Route path='/verifyEmail' element={<VerifyEmail/>}/>
-          {catagories.map((catagory,i)=>{
-            return <Route key={i} path={`/catalog/${catagory}`} element={<CategoryPage/>}/>
-          })}
-          <Route path={`/cources/*`} element={<CoursePage/>}/>
-          <Route path={`/view-course/*`} element={<ViewCourse/>}/>
-          <Route path='*' element = {<div className='text-white'>invalid path</div>}/>
-        </Route>
-      </Routes>
+        {isLoading?<LoadingScreen/>:
+        <Routes>
+          <Route path='/' element={<div><Outlet/></div>}>
+            <Route index element={<Home/>}/>
+            <Route path="/dashboard/*" element={<Dashboard/>}/>
+            <Route path="/login" element = {<LogIn/>}/>
+            <Route path="/signUp" element = {<SignUp/>}/>
+            <Route path="/about_Us" element = {<AboutUs/>} />
+            <Route path="/contact_Us" element = {<ContactUs/>}/>
+            <Route path="/forgotPassword" element = {<ForgotPassword/>}/>
+            <Route path="/newPassword/*" element={<ChooseNewPass/>}/>
+            <Route path='/verifyEmail' element={<VerifyEmail/>}/>
+            <Route path={`/catalog/*`} element={<CategoryPage/>}/>
+            <Route path={`/cources/*`} element={<CoursePage/>}/>
+            <Route path={`/view-course/*`} element={<ViewCourse/>}/>
+            <Route path='*' element = {<div className='text-white'>invalid path</div>}/>
+          </Route>
+        </Routes>
+        }
       </div>
     </div>
     

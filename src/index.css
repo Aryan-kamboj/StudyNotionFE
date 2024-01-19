@@ -4,6 +4,7 @@
 
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;900&display=swap');
 .hideScrollBars::-webkit-scrollbar{
+    scrollbar-width: none;
     display: none; /* chrome */
     -ms-overflow-style: none;  /* IE and Edge */
     scrollbar-width: none;  /* Firefox */

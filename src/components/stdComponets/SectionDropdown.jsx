@@ -21,7 +21,7 @@ export const SectionDropdown = ({collapseAll,section}) => {
             <div className='flex items-center space-x-4 select-none '> 
                 {showLec?
                 <AiOutlineDown/>:<AiOutlineUp/>}
-                <p>{section.section}</p>
+                <p>{section.sectionName}</p>
             </div>
             <p className='text-yellow-100'>{section.lectures.length} lecture(s)</p>
         </div> 
@@ -31,7 +31,7 @@ export const SectionDropdown = ({collapseAll,section}) => {
                 <div key={i} className={`px-6 flex overflow-hidden duration-500 items-center ${showLec?"h-[4rem]":" duration-500 overflow-hidden  h-0 text-transparent "} justify-between` }>
                     <span className="flex space-x-2 items-center">
                         <AiFillVideoCamera/>
-                        <p>{lecture.title}</p>
+                        <p>{lecture.lectureTitle}</p>
                     </span>
                     <p>{lecture.length}</p>
                 </div>)
