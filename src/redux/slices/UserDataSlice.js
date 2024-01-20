@@ -11,7 +11,8 @@ const initialState = {
     email:"",
     message:"",
     password:"",
-    cart:document.cookie.length!==0?await getCart():[]
+    cart:document.cookie.length!==0?await getCart():[],
+    userType:document.cookie.length!==0?localStorage.getItem("userType"):null,
   }
 
   const UserDataSlice = createSlice({
@@ -21,6 +22,10 @@ const initialState = {
       updateCart:(state,action)=>{
         console.log(action.payload);
         state.cart=action.payload;
+      },
+      setUserType:(state,action)=>{
+        console.log("setUserType runnig")
+        state.userType = action.payload;
       },
         setFname: (state,action) => {
         state.fname= action.payload;
@@ -48,6 +53,6 @@ const initialState = {
     }
   })
   // Action creators are generated for each case reducer function
-  export const { setFname,setLname,setMessage,setphoneNo,setEmail,setPassword,updateCart } = UserDataSlice.actions;
+  export const { setFname,setLname,setUserType,setMessage,setphoneNo,setEmail,setPassword,updateCart } = UserDataSlice.actions;
   
   export default UserDataSlice;

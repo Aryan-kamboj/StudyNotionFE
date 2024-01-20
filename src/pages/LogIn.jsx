@@ -21,11 +21,10 @@ export const LogIn = () => {
     // const password
     const submitHandler = async (e)=>{
         e.preventDefault();
-        const data = await loginAPI({
+          await loginAPI({
             email:email,
             password:password,
         });
-        console.log(data);
     }
   return (
     <div className='min-h-[86vh] h-fit flex mt-16 max-tablet:flex-col max-tablet:h-[116vh] '>

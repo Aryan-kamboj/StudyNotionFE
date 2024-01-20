@@ -156,15 +156,11 @@ exports.login = async (req,res)=>{
         // console.log(req.locals);
         if(!email||!password){
             return res.status(403).json({
-                error:"All fields required"
+                message:"All fields required"
             })
         }
         else{
             const user = await USER.findOne({email:email},{_id:1,password:1,userType:1});
-            if(!user)
-                return res.status(400).json({
-                    message:"Email not registered"
-                })
             const check = await bcrypt.compare(password,user.password);
             if(check){
                 const jwtSecret = process.env.JWT_SECRET;
@@ -187,14 +183,14 @@ exports.login = async (req,res)=>{
             }
             else{
                 res.status(401).json({
-                    message:"Wrong password enterd"
+                    message:"Wrong password or Email"
                 })
             }
         }
     } catch (error) {
         console.error(error);
         return res.status(500).json({
-            error:error
+            message:error
         })
     }
 }

@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { MyProfile } from '../dashboardPages/MyProfile'
 import { EnrolledCourses } from '../dashboardPages/StudentTabs/EnrolledCourses'
 import { Cart } from '../dashboardPages/StudentTabs/Cart'
@@ -8,13 +8,22 @@ import { Settings } from '../dashboardPages/Settings'
 import {AddCourse} from "../dashboardPages/InstructorTabs/AddCourse";
 import { MyCourses } from '../dashboardPages/InstructorTabs/MyCourses'
 import { DashboardNav } from '../dashboardPages/DashboardNav';
+import { useSelector } from 'react-redux'
+import { useNavigate } from 'react-router'
 export const Dashboard = () => {
     const path = document.URL.split("/").slice(-1)[0];
-    // console.log(path);
+    const navigator = useNavigate();
     const [tab,setTab]=useState(path);
-    const [userType,setUserType] = useState("student");
+    const [userType,setUserType] = useState(useSelector(({rootReducer})=>{
+        return (rootReducer.UserDataSlice.userType);
+    }));
+    useEffect(()=>{
+      if(!userType){
+        navigator("/login");
+      }    
+    },[userType])
   return (
-        <div className='text-white overflow-y-scroll hideScrollBars flex max-tablet:flex-col h-[100%] min-h-[92vh]'>
+    <div className='text-white overflow-y-scroll hideScrollBars flex max-tablet:flex-col h-[100%] min-h-[92vh]'>
             <DashboardNav setTab={setTab} setUserType={setUserType} userType={userType} tab={tab}/>
             <div className=' overflow-y-scroll hideScrollBars basis-[80%] max-tablet:pt-0 pt-[2.9rem] '>
               {/* <DashboardNav setTab={setTab} userType={userType} tab={tab}/> */}

@@ -4,7 +4,6 @@ import toast from "react-hot-toast"
 const login = document.cookie.split("=")[1];
 export const addToCart = async (course)=>{
     try {
-        // console.log(course);
         const bodyData = {
             course:course
         }
