@@ -13,18 +13,20 @@ const initialState = {
     password:"",
     cart:document.cookie.length!==0?await getCart():[],
     userType:document.cookie.length!==0?localStorage.getItem("userType"):null,
+    currentlyEditing:localStorage.getItem("userType")==="instructor"?"65ac2db97e51fffbeeb77a6c":null
   }
 
   const UserDataSlice = createSlice({
     name: 'UI_slice',
     initialState,
     reducers: {
+      setCurrentlyEditing:(state,action)=>{
+        state.currentlyEditing=action.payload;
+      },
       updateCart:(state,action)=>{
-        console.log(action.payload);
         state.cart=action.payload;
       },
       setUserType:(state,action)=>{
-        console.log("setUserType runnig")
         state.userType = action.payload;
       },
         setFname: (state,action) => {
@@ -38,7 +40,6 @@ const initialState = {
         state.email = action.payload;
       },
       setphoneNo: (state,action) => {
-        console.log(action.payload);
         if(action.payload.countryCode)
         state.phoneNo.countryCode = action.payload.countryCode;
         else
@@ -53,6 +54,6 @@ const initialState = {
     }
   })
   // Action creators are generated for each case reducer function
-  export const { setFname,setLname,setUserType,setMessage,setphoneNo,setEmail,setPassword,updateCart } = UserDataSlice.actions;
+  export const { setFname,setLname,setUserType,setMessage,setphoneNo,setEmail,setPassword,updateCart,setCurrentlyEditing } = UserDataSlice.actions;
   
   export default UserDataSlice;

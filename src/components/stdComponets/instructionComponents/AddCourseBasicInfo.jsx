@@ -4,49 +4,88 @@ import { StdButton } from '../StdButton';
 import { TagsInput } from '../TagsInput';
 import {RequirementInput} from "../RequirementInput";
 import {FiUploadCloud} from "react-icons/fi"
-import { categories } from '../../../data/tempData';
+// import { categories } from '../../../data/tempData';
 import {IoIosArrowForward} from "react-icons/io"
 import { useDropzone } from 'react-dropzone';
 import { FieldRequiredText } from './FieldRequiredText';
-export const AddCourseBasicInfo = ({submitHandler}) => {
-    const [requiredTextActive,setRqTxt]=useState(false);
-    const handleSubmit = ()=>{
-        setRqTxt(true);
-        if(courseTitle&&desc&&price&&category&&benifits&&thumbnail&&(tags.length!==0)&&(requirements.length!==0)){
-            const basicInfo = {
-                courseTitle:courseTitle,
-                desc:desc,
-                price:price,
-                category:category,
-                benifits:benifits,
-                thumbnail:thumbnail,
-                tags:tags,
-                requirements:requirements
-            }
-            console.log(basicInfo);
-            submitHandler();
-        }
-    }
+import { useSelector } from 'react-redux';
+import { createCourse,editCourse } from '../../../services/instructor/Course';
+import { setCurrentlyEditing } from '../../../redux/slices/UserDataSlice';
+import { getCourseInfo } from "../../../services/user/userCourseApis";
+export const AddCourseBasicInfo = ({setStage,courseDetails}) => {
+    const categories = useSelector(({rootReducer})=>{
+        console.log(rootReducer.UI_slice.categories)
+        return rootReducer.UI_slice.categories;
+    })
+
+    console.log(courseDetails?.courseDesc);
+    const [requiredTextActive,setRqTxt] = useState(false);
     const [courseTitle,setTitle] = useState("");
     const [desc,setDesc] = useState("");
     const [price,setPrice] = useState();
     const [category,setCategory] = useState("");
-    const [benifits,setBenifits] = useState();
+    const [benifits,setBenifits] = useState("");
     const [thumbnail,setThumbnail] = useState(undefined);
+    const [tags,setTags] = useState([]);
+    const [requirements,setRequirements]=useState([]);
+    useEffect(()=>{
+        setTitle(courseDetails?.courseName)
+        setDesc(courseDetails?.courseDesc)
+        setPrice(courseDetails?.coursePrice)
+        setCategory(courseDetails?.courseCategory)
+        setBenifits(courseDetails?.benifits)
+        setThumbnail(courseDetails.thumbnail?courseDetails.thumbnail:undefined)
+        setTags(courseDetails.tags?courseDetails.tags:[])
+        setRequirements(courseDetails.requirements?courseDetails.requirements:[])  
+    },[courseDetails]);
     const removeThumbnail = (e)=>{
         e.preventDefault();
         setThumbnail(undefined);
     }
-    const [tags,setTags] = useState([]);
-    const [requirements,setRequirements]=useState([]);
-    const {acceptedFiles, getRootProps, getInputProps} = useDropzone({maxFiles:1});
+    const {acceptedFiles, getRootProps, getInputProps} = useDropzone({maxFiles:1,accept: {
+        'image/jpeg': [],
+        'image/png': [],
+        // 'video/mp4':[],
+        // 'video/mov':[],
+        // 'video/WebM':[],
+        // 'video/Ogg':[]
+    }});
+    let thumbnailFile = acceptedFiles[0]?acceptedFiles[0]:null;
+    const handleSubmit = async ()=>{
+        setRqTxt(true);
+        if(courseTitle&&desc&&price&&category&&benifits&&thumbnail&&(tags.length!==0)&&(requirements.length!==0)){
+            const basicInfo = {
+                courseName:courseTitle,
+                courseDesc:desc,
+                coursePrice:price,
+                courseCategory:category,
+                benifits:benifits,
+                thumbnail:thumbnailFile,
+                tags:JSON.stringify(tags),
+                requirements:JSON.stringify(requirements)
+            }
+            if(courseDetails)
+            {
+                await editCourse(basicInfo,courseDetails._id);
+            }
+            else
+                console.log("save ho rha hai tumhara course ")
+                // setCurrentlyEditing(await createCourse(basicInfo));
+            setStage(2);
+        }
+    }
     useEffect(()=>{
-        acceptedFiles.length!==0?setThumbnail(URL.createObjectURL(acceptedFiles[0])):setThumbnail(undefined);
+        if(acceptedFiles.length!==0){
+            setThumbnail(URL.createObjectURL(acceptedFiles[0]));
+        }
+        else{
+            setThumbnail(undefined);
+        }
     },[acceptedFiles])
 
   return (
     <div className='bg-richblack-800 border-[1px] border-richblack-700 p-4 space-y-4 rounded-xl'>
-        <form className=' space-y-2' id={"basicInfo"} onSubmit={submitHandler}>
+        <form className=' space-y-2' id={"basicInfo"} onSubmit={handleSubmit}>
             <InputField value={courseTitle} setterFn={setTitle} label={"Course Title"} required={true} placeholder={"Enter Course Title"} />
             <FieldRequiredText active={requiredTextActive} data={courseTitle} fieldName={"Course Title"} />
             <InputField value={desc} setterFn={setDesc} label={"Course Short Description"} type="textarea" lines={3} required={true} placeholder={"Enter Course Description"} />
@@ -57,8 +96,8 @@ export const AddCourseBasicInfo = ({submitHandler}) => {
                 <p className='text-sm pb-2'>Category <span className='text-pink-200 pl-[0.1rem]'>*</span></p>
                 <select onChange={(e)=>{setCategory(e.target.value)}} className='outline-none bg-richblack-700 p-3 rounded-lg border-b-[1px] border-richblack-300 w-[100%]'>
                     <option>Select Category</option>
-                    {categories.map((category,key)=>{
-                        return <option key={key}>{category}</option>
+                    {categories.map(({categoryName},key)=>{
+                        return <option key={key}>{categoryName}</option>
                     })}
                 </select>
             </div> 

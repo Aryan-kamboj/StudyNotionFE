@@ -5,8 +5,9 @@ export const getCategories = async ()=>{
             method:"GET",
             url:"http://localhost:4002/api/open/getCategories",
         }
-        const data = await apiConnector(request);
-        return data;
+        const {data} = await apiConnector(request);
+        console.log(data);
+        return data.categories;
     } catch (error) {
         console.log(error)
     }

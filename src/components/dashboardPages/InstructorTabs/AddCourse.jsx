@@ -5,14 +5,24 @@ import { useNavigate } from 'react-router';
 import { AddCourseBasicInfo } from '../../stdComponets/instructionComponents/AddCourseBasicInfo';
 import { CourseBuilder } from '../../stdComponets/instructionComponents/CourseBuilder';
 import { PublishCourse } from '../../stdComponets/instructionComponents/PublishCourse';
-
+import { useEffect } from 'react';
+import { useSelector } from 'react-redux';
+import { getCourseInfo } from '../../../services/user/userCourseApis';
 export const AddCourse = ({setTab}) => {
     const navigator = useNavigate();
-    const [stage,setStage]=useState(2);
-    const basicInfoSubmit = (e)=>{
-        // console.log(e);
-        setStage(2);
-    }
+    const [stage,setStage]=useState(1);
+    const [courseDetails,setDetails] = useState({});
+    const course = useSelector(({rootReducer})=>{
+        return rootReducer.UserDataSlice.currentlyEditing;
+    })
+    useEffect(()=>{
+        if(course){
+            (async ()=>{
+                setDetails(await getCourseInfo(course));
+            }
+            )()}
+        }
+    ,[stage]);
     const courseBuilderSubmit = (e) =>{
         // console.log(e);
         setStage(3);
@@ -49,7 +59,10 @@ export const AddCourse = ({setTab}) => {
                     <span className={`basis-[25%] text-center ${stage===3?" text-yellow-50 ":" text-richblack-500 "} `}>Publish</span>
                 </div>
             </div>
-            {stage===1?<AddCourseBasicInfo submitHandler={basicInfoSubmit}/>:stage===2?<CourseBuilder submitHandler={courseBuilderSubmit} backHandler={backHandler}/>:stage===3?<PublishCourse submitHandler={publishCourseHandler} backHandler={backHandler}/>:<div>There has been some error please reload again or log in again if the error presists </div>}
+            {stage===1?<AddCourseBasicInfo courseDetails={courseDetails} setStage={setStage}/>
+            :stage===2?<CourseBuilder courseDetails={courseDetails} submitHandler={courseBuilderSubmit} backHandler={backHandler}/>
+            :stage===3?<PublishCourse courseDetails={courseDetails} submitHandler={publishCourseHandler} backHandler={backHandler}/>
+            :<div>There has been some error please reload again or log in again if the error presists </div>}
             
         </div>
         <div className='basis-[30%] h-fit text-richblack-5 bg-richblack-800 border-[1px] border-richblack-700 rounded-lg p-4'>

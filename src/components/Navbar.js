@@ -13,12 +13,12 @@ import { setCategories } from '../redux/slices/UI_slice';
 import { useDispatch, useSelector } from 'react-redux';
 function Headder() {
     const dispatcher = useDispatch();
-    useEffect(()=>{
-        (async()=>{
-            const {data} = await getCategories();
-            dispatcher(setCategories(data.categories));
-        })()
-    },[])
+    // useEffect(()=>{
+    //     (async()=>{
+    //         const categories = await getCategories();
+    //         dispatcher(setCategories(categories));
+    //     })()
+    // },[])
     const uiCategories = useSelector(({rootReducer})=>{
         return rootReducer.UI_slice.categories;
     });

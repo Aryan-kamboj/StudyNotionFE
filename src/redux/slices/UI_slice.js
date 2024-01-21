@@ -1,8 +1,9 @@
 import { createSlice } from '@reduxjs/toolkit'
 import { HomePageExplore } from "../../data/HomeNavbarData"
+import { getCategories } from '../../services/open/categoryAPIs';
 const initialState = {
   loading:false,
-  categories:[],
+  categories:await getCategories(),
   homePageNavbarSelected: HomePageExplore[0].tag,
   homePageCardsData:HomePageExplore[0].courses,
   homePageCardSelected:null,

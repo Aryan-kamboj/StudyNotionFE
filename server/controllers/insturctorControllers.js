@@ -1,4 +1,5 @@
 const INSTRUCTOR = require("../models/instructor");
+const USER = require("../models/user");
 const COURSE = require("../models/course");
 const fileUpload = require("../utilityFunctions/fileUpload");
 const deleteFilesMultiple = require("../utilityFunctions/deleteFilesMultiple");
@@ -13,10 +14,12 @@ exports.createCourse = async (req,res)=>{
         if(courseName&&courseDesc&&coursePrice&&courseCategory&&tags_parsed&&thumbnail&&benifits&&requirements_parsed){
             if(email&&userType){
             const {secure_url} = await fileUpload(thumbnail);
+            const user = await USER.findOne({email:email},{_id:1,fname:1,lname:1,profilePhoto:1});
             const instructor = await INSTRUCTOR.findOne({email:email},{_id:1});
+            const instObj = {id:instructor._id,fullName:user.fname+" "+user.lname,profilePhoto:user.profilePhoto}
                 if(instructor){
                     const newCourse = await COURSE.create({
-                        instructor:instructor._id,
+                        instructor:instObj,
                         courseName:courseName,
                         courseDesc:courseDesc,
                         coursePrice:coursePrice,
@@ -30,12 +33,14 @@ exports.createCourse = async (req,res)=>{
                         isPublic:false,
                         createdAt:Date.now(),
                         rating:0.0,
-                        ratingCount:0
+                        reviewCount:0
                     });
                     const instructorUpdated = await INSTRUCTOR.updateOne({email:email},{$push: {myCources:newCourse._id}});
                     if(newCourse&&instructorUpdated){
                         return res.status(200).json({
-                            message:"New course created succesfully"
+                            // courseName:courseName,courseDesc:courseDesc,coursePrice:coursePrice,courseCategory:courseCategory,tags_parsed:tags_parsed,thumbnail:thumbnail,benifits:benifits,requirements_parsed:requirements_parsed
+                            message:"New course created succesfully",
+                            _id:newCourse._id
                         });
                     }
                     else
@@ -59,6 +64,51 @@ exports.createCourse = async (req,res)=>{
         return res.status(500).json({
                error:error
             })
+    }
+}
+exports.updateCourse = async (req,res)=>{
+    try {
+        const {course,courseName,courseDesc,coursePrice,courseCategory,tags,benifits,requirements} = req.body;
+        console.log(course,courseName,courseDesc,typeof coursePrice,courseCategory,tags,benifits,requirements);
+        const tags_parsed = JSON.parse(tags);
+        const requirements_parsed = JSON.parse(requirements);
+        console.log(tags_parsed,requirements_parsed);
+        let thumbnail=null;
+        let newUrl = null;
+        const oldCourse = await COURSE.findById(course,"thumbnail");
+        if(req.files){
+            thumbnail = req.files.thumbnail;
+            const arr = oldCourse.thumbnail.split("/");
+            const publicId = "studynotion/"+arr[arr.length-1].split(".")[0];
+            const deleted = await deleteFile(publicId);
+            if(deleted.result!=="ok"){
+                throw new Error("Could not delete old image")
+            }
+            else
+            {
+                const {secure_url} = await fileUpload(thumbnail);
+                newUrl = secure_url;
+            }
+        }
+        const update = await COURSE.findOneAndUpdate({_id:course},{
+            courseName:courseName,
+            courseDesc:courseDesc,
+            coursePrice:coursePrice,
+            courseCategory:courseCategory,
+            tags:tags_parsed,
+            benifits:benifits,
+            requirements:requirements_parsed,
+            thumbnail:newUrl?newUrl:oldCourse.thumbnail
+        })
+        console.log(update);
+        return res.status(200).json({
+            message:"Course updated "
+        })
+    } catch (error) {
+        console.log(error);
+        return res.status(500).json({
+            message:error
+        })
     }
 }
 exports.deleteCourse = async (req,res)=>{
@@ -214,7 +264,6 @@ exports.addLecture = async (req,res)=>{
         })
     }
 }
-
 exports.removeLecture = async (req,res)=>{
     try {
         const {email,userType}=req.locals;
