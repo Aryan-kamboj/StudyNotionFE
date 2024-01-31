@@ -130,10 +130,10 @@ exports.addSection = async (req,res)=>{
         if(email&&userType==="instructor"&&userType&&sectionName&&courseId){
             const instructor = await INSTRUCTOR.findOne({email:email},"myCources");
             if(instructor.myCources.includes(courseId)){
-                const updatedCourse = await COURSE.updateOne({_id:courseId},{$push: {sections:{sectionName:sectionName,lectures:[]}}});
+                const updatedCourse = await COURSE.findByIdAndUpdate({_id:courseId},{$push: {sections:{sectionName:sectionName,lectures:[]}}},{new:true});
                 if(updatedCourse){
                     return res.status(200).json({
-                        message:"section created succesfully"
+                        updatedCourse:updatedCourse
                     })
                 }
                 else{
@@ -168,18 +168,21 @@ exports.removeSection = async (req,res)=>{
             if(instructor.myCources.includes(courseId)){
                 const course = await COURSE.findById(courseId,"sections");
                 // deleting form cloudinary
-                const publicIds = course.sections[sectionIdx_parsed].lectures.map((lecture)=>{
-                    const array = lecture.link.split("/");
-                    return("studyNotion/"+array[array.length-1].split(".")[0])
-                })
-                const response = await deleteFilesMultiple(publicIds,"video");
+                let response ;
+                if(course.sections[sectionIdx_parsed].lectures.length>0){
+                    const publicIds = course.sections[sectionIdx_parsed].lectures.map((lecture)=>{
+                        const array = lecture.link.split("/");
+                        return("studyNotion/"+array[array.length-1].split(".")[0])
+                    })
+                    response = await deleteFilesMultiple(publicIds,"video");
+                }
                 // deleting from db after deleting form CN;
-                if(Object.keys(response.deleted_counts).length===course.sections[sectionIdx_parsed].lectures.length){
+                if((course.sections[sectionIdx_parsed].lectures.length===0)||(Object.keys(response.deleted_counts).length===course.sections[sectionIdx_parsed].lectures.length)){
                     course.sections.splice(sectionIdx,1);
-                    const updatedCourse = await COURSE.updateOne({_id:courseId},{sections:course.sections});
+                    const updatedCourse = await COURSE.findOneAndUpdate({_id:courseId},{sections:course.sections},{new:true});
                     if(updatedCourse&&course){
                         return res.status(200).json({
-                            message:"section deleted succesfully"
+                            updatedCourse:updatedCourse
                         })
                     }
                     else {
@@ -219,9 +222,11 @@ exports.removeSection = async (req,res)=>{
 exports.addLecture = async (req,res)=>{
     try {
         const {email,userType}=req.locals;
+        console.log(req.body,req.files);
         const {courseId,sectionIdx,lectureTitle,lectureDesc} = req.body;
         const {lectureFile} = req.files;
         const sectionIdx_parsed = Number(sectionIdx);
+        console.log(userType==="instructor"&&userType&&email&&courseId&&sectionIdx.length&&lectureTitle&&lectureDesc&&lectureFile);
         if(userType==="instructor"&&userType&&email&&courseId&&sectionIdx.length&&lectureTitle&&lectureDesc&&lectureFile){
             const {myCources} = await INSTRUCTOR.findOne({email:email},"myCources");
             if(myCources.includes(courseId)){
@@ -234,9 +239,10 @@ exports.addLecture = async (req,res)=>{
                         link:response.secure_url,
                         length:Math.ceil(response.duration)
                     })
-                    const output = await COURSE.updateOne({_id:courseId},{sections:sections});
+                    const output = await COURSE.findByIdAndUpdate(courseId,{sections:sections},{new:true});
                     if(sections&&output){
                         return res.status(200).json({
+                            data:output,
                             message:"Lecture added succesfully"
                         })
                     }

@@ -6,14 +6,12 @@ export const getCategories = async ()=>{
             url:"http://localhost:4002/api/open/getCategories",
         }
         const {data} = await apiConnector(request);
-        console.log(data);
         return data.categories;
     } catch (error) {
         console.log(error)
     }
 }
 export const getCategoryData = async (category)=>{
-    console.log(category);
     const parameter = {
         category:category
     }
@@ -24,9 +22,8 @@ export const getCategoryData = async (category)=>{
             params:parameter
         }
         const data = await apiConnector(request);
-        console.log(data);
         return data;
     } catch (error) {
-        
+        console.log(error);
     }
 }

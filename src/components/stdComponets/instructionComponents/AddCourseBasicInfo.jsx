@@ -12,20 +12,28 @@ import { useSelector } from 'react-redux';
 import { createCourse,editCourse } from '../../../services/instructor/Course';
 import { setCurrentlyEditing } from '../../../redux/slices/UserDataSlice';
 import { getCourseInfo } from "../../../services/user/userCourseApis";
-export const AddCourseBasicInfo = ({setStage,courseDetails}) => {
+export const AddCourseBasicInfo = ({setStage,data,fetchCourse}) => {
+    const courseDetails = useSelector((store)=>{
+        return store.rootReducer.instructorSlice.courseInfo;
+     });
+    useEffect(()=>{
+        (
+            async()=>{
+                await fetchCourse();
+            })()
+        },[])
     const categories = useSelector(({rootReducer})=>{
-        console.log(rootReducer.UI_slice.categories)
         return rootReducer.UI_slice.categories;
     })
 
-    console.log(courseDetails?.courseDesc);
+    // console.log(courseDetails?.courseDesc);
     const [requiredTextActive,setRqTxt] = useState(false);
     const [courseTitle,setTitle] = useState("");
     const [desc,setDesc] = useState("");
     const [price,setPrice] = useState();
     const [category,setCategory] = useState("");
     const [benifits,setBenifits] = useState("");
-    const [thumbnail,setThumbnail] = useState(undefined);
+    const [thumbnail,setThumbnail] = useState(()=>courseDetails.thumbnail?courseDetails.thumbnail:courseDetails.thumbnail);
     const [tags,setTags] = useState([]);
     const [requirements,setRequirements]=useState([]);
     useEffect(()=>{

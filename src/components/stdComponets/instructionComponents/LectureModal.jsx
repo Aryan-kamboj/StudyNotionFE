@@ -1,23 +1,35 @@
-import React,{useEffect, useState} from 'react'
+import React,{useEffect, useState,useRef} from 'react'
 import { FaXmark } from "react-icons/fa6";
 import {FiUploadCloud} from "react-icons/fi";
 import { useDropzone } from 'react-dropzone';
 import { InputField } from '../InputField';
 import { StdButton } from '../StdButton';
 import { FieldRequiredText } from './FieldRequiredText';
-export const LectureModal = ({showModal,modalType,backendSaveHandlerFn,data}) => {
-    console.log(data);
-    const [lectureFile,setLectureFile] = useState(data.lectureFile);
-    const [lectureName,setLectureName] = useState(data.name);
-    const [lectureDesc,setLectureDesc] = useState(data.desc);
+export const LectureModal = ({closeModal,data,modalType,saveHandlerFn}) => {
+    // console.log(data);
+    const [lectureFileUrl,setLectureFileUrl] = useState();
+    const [lectureFileData,setFileData] = useState();
+    const [lectureName,setLectureName] = useState(data?.lectureTitle);
+    const [lectureDesc,setLectureDesc] = useState(data?.lectureDesc);
     const [req_check,setCheck] = useState(false);
     const {acceptedFiles, getRootProps, getInputProps} = useDropzone({maxFiles:1});
     useEffect(()=>{
-        acceptedFiles.length!==0?setLectureFile(URL.createObjectURL(acceptedFiles[0])):setLectureFile(data.lectureFile);
-    },[acceptedFiles,data.lectureFile]);
+        if(acceptedFiles.length!==0)
+        {
+            console.log(acceptedFiles)
+            setLectureFileUrl(URL.createObjectURL(acceptedFiles[0]));
+            console.log(lectureFileUrl)
+            setFileData(acceptedFiles[0]);
+            console.log(lectureFileData)
+        }   
+        else{
+            setLectureFileUrl(data?.link);
+            setFileData(undefined);
+        }
+    },[acceptedFiles,data?.lectureFile]);
     const removeLectureFile = (e)=>{
         e.preventDefault();
-        setLectureFile(undefined);
+        setLectureFileUrl(undefined);
     }
     document.body.style.overflowY="hidden";
     document.addEventListener("keydown",(e)=>{
@@ -25,21 +37,18 @@ export const LectureModal = ({showModal,modalType,backendSaveHandlerFn,data}) =>
             e.preventDefault();
         }
     })
-    const closeModal = ()=>{
+    const hideModal = ()=>{
         console.log("closeModal");
         document.body.style.overflowY="scroll";
-        showModal(false);
+        console.log(closeModal)
+        closeModal();
     }
-    const saveButtonHandler = ()=>{
+    const saveButtonHandler = async ()=>{
         setCheck(true);
-        const lecture = {
-            name:lectureName,
-            desc:lectureDesc,
-            lectureFile:lectureFile,
-        }
-        if(lectureFile&&lectureName&&lectureDesc){
-            backendSaveHandlerFn(lecture);
-            closeModal();
+        console.log(lectureFileData)
+        if(lectureFileData&&lectureName&&lectureDesc){
+            await saveHandlerFn(lectureFileData ,lectureName, lectureDesc);
+            hideModal();
         }
 
     }
@@ -49,15 +58,18 @@ export const LectureModal = ({showModal,modalType,backendSaveHandlerFn,data}) =>
         <div className='bg-richblack-800 w-[50%] rounded-xl h-fit my-auto align-middle '>
             <div className='text-white text-2xl rounded-t-xl flex justify-between items-center px-4 bg-richblack-600 h-[2.7rem]'>
                 <span>{modalType}</span>
-                <FaXmark onClick={closeModal}/>
+                <FaXmark onClick={hideModal}/>
             </div>
             <div className='p-4 space-y-4'>
                 <label>
                     <div className='text-sm pb-2'>Course lectureFile <span className='text-pink-200'>*</span></div>
                     <div className='bg-richblack-700 max-h-fit border-[1px] text-white border-richblack-600 border-dashed rounded-lg p-8'>
-                    {lectureFile?
+                    {lectureFileUrl?
                     <div>
-                        <img src={lectureFile} className='object-cover max-h-[100%] w-[100%] rounded-lg' alt={"There has been some error please upload again"}/>
+                        <video controls className='mx-auto'>
+                            <source src={lectureFileUrl}></source>
+                        </video>
+                        {/* <img src={lectureFileUrl} className='object-cover max-h-[100%] w-[100%] rounded-lg' alt={"There has been some error please upload again"}/> */}
                         <button onClick={removeLectureFile}>Cancel</button>
                     </div>
                     :<div {...getRootProps({className: 'dropzone'})} name="lectureFile" className='flex flex-col h-32 justify-between items-center '>
@@ -72,7 +84,7 @@ export const LectureModal = ({showModal,modalType,backendSaveHandlerFn,data}) =>
                     }
                     </div>
                 </label>
-                <FieldRequiredText fieldName={"Lecture file"} active={req_check} data={lectureFile} />
+                <FieldRequiredText fieldName={"Lecture file"} active={req_check} data={lectureFileUrl} />
                 <InputField required={true} label={"Lecture Title"} setterFn={setLectureName} value={lectureName} placeholder={"Enter lecture Title"}/>
                 <FieldRequiredText fieldName={"Lecture Title"} active={req_check} data={lectureName} />
                 <InputField required={true} type={"textarea"} lines={4} label={"Lecture Description"} value={lectureDesc} setterFn={setLectureDesc}/>

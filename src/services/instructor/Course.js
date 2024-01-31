@@ -1,5 +1,7 @@
 import toast from "react-hot-toast";
 import { apiConnector } from "../apiConnection";
+import {store} from "../../index";
+import { setCourseInfo } from "../../redux/slices/instructorSlice";
 const login = document.cookie.split("=")[1];
 export const createCourse = async (courseDetails)=>{
     try {
@@ -47,6 +49,86 @@ export const editCourse = async (courseDetails,id) =>{
     } catch (error) {
         toast.dismiss();
         toast.error(error?.response?.message);
+        console.log(error);
+    }
+}
+export const addSectionApi = async (section,id)=>{
+    try {
+        const bodyData = {sectionName:section,courseId:id};
+        const request = {
+            method:"POST",
+            bodyData:bodyData,
+            url:"http://localhost:4002/api/instructor/addSection",
+            creds:true,
+            headers:{
+                'Authorization':`Bearer ${login}`,
+                'Content-Type': 'multipart/form-data'},
+        }
+        toast.loading("Creating section");
+        const {data} = await apiConnector(request);
+        toast.dismiss();
+        toast.success("Section created")
+        return data;    
+    } catch (error) {
+        toast.dismiss();
+        toast.error(error?.response?.message)
+        console.log(error);
+    }
+}
+export const deleteSectionApi = async (index,id)=>{
+    try {
+        const bodyData = {
+            sectionIdx:index,
+            courseId:id
+        }
+        const request = {
+            method:"POST",
+            url:"http://localhost:4002/api/instructor/removeSection",
+            bodyData,
+            creds:true,
+            headers:{
+                'Authorization':`Bearer ${login}`,
+                'Content-Type': 'multipart/form-data' 
+            }
+        }
+        toast.loading("Deleting section");
+        const {data}=await apiConnector(request);
+        toast.dismiss();
+        toast.success("Section deleted");
+        return data;
+    } catch (error) {
+        console.log(error);
+        toast.dismiss();
+        toast.error("Could not delete")
+    }
+}
+export const addLecture = async (lectureDetails)=>{
+    try {
+        const formData = new FormData ();
+        Object.entries(lectureDetails).forEach(([key,value])=>{
+            console.log(key,value);
+            formData.append(key,value);
+        })
+        console.log(formData);
+        const request = {
+            method:"POST",
+            url:"http://localhost:4002/api/instructor/addLecture",
+            bodyData:formData,
+            creds:true,
+            headers:{
+                'Authorization':`Bearer ${login}`,
+                'Content-Type': 'multipart/form-data'
+            }
+        }
+        toast.loading("Creating lecture");
+        const {data} = await apiConnector(request);
+        console.log(data);
+        toast.dismiss();
+        toast.success("Lecture added");
+        return data.data;
+    } catch (error) {
+        toast.dismiss();
+        toast.error("Could not create course");
         console.log(error);
     }
 }

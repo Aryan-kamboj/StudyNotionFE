@@ -6,24 +6,54 @@ import { AddCourseBasicInfo } from '../../stdComponets/instructionComponents/Add
 import { CourseBuilder } from '../../stdComponets/instructionComponents/CourseBuilder';
 import { PublishCourse } from '../../stdComponets/instructionComponents/PublishCourse';
 import { useEffect } from 'react';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { getCourseInfo } from '../../../services/user/userCourseApis';
+import {setCourseInfo} from "../../../redux/slices/instructorSlice";
+import { courseDetails } from '../../../data/tempData';
 export const AddCourse = ({setTab}) => {
-    const navigator = useNavigate();
     const [stage,setStage]=useState(1);
-    const [courseDetails,setDetails] = useState({});
+
+    const dispatcher = useDispatch();
+    const navigator = useNavigate();
     const course = useSelector(({rootReducer})=>{
-        return rootReducer.UserDataSlice.currentlyEditing;
+        return rootReducer.instructorSlice.currentlyEditing;
     })
-    useEffect(()=>{
-        if(course){
-            (async ()=>{
-                setDetails(await getCourseInfo(course));
-            }
-            )()}
-        }
-    ,[stage]);
-    const courseBuilderSubmit = (e) =>{
+    const fetchCourse = async()=>{
+        const fetchedData = await getCourseInfo(course);
+        dispatcher(setCourseInfo(fetchedData));
+        return fetchedData;
+    }
+    const courseDetails ={something:"something"};
+    // const [courseDetails,setDetails] = useState(async()=>await fetchCourse());
+    // const refetchCourse = async ()=>{
+    //     const response = await fetchCourse();
+    //     setDetails(response);
+    // }
+    // useEffect(()=>{
+    //     ( async ()=>await refetchCourse())()
+    // },[course]);
+    // console.log(course);
+    // // const data = useSelector(({rootReducer})=>{
+    // //     if(rootReducer.instructorSlice.courseInfo){
+    // //         return rootReducer.instructorSlice;
+    // //     }
+    // //     else
+    // //     console.log("kuch nahi aaya bhai")
+    // //         return {
+    // //             message:"kuch nahi aaya bhai "
+    // //         }
+    // // })
+    // // useEffect(()=>{
+    // //     if(course){
+    // //         (async ()=>{
+    // //             dispatcher(setCourseInfo(await getCourseInfo(course)));
+    // //             setDetails(data);
+    // //         }
+    // //         )()}
+    // //     }
+    // //     ,[course]);
+
+        const courseBuilderSubmit = (e) =>{
         // console.log(e);
         setStage(3);
     }
@@ -59,9 +89,9 @@ export const AddCourse = ({setTab}) => {
                     <span className={`basis-[25%] text-center ${stage===3?" text-yellow-50 ":" text-richblack-500 "} `}>Publish</span>
                 </div>
             </div>
-            {stage===1?<AddCourseBasicInfo courseDetails={courseDetails} setStage={setStage}/>
-            :stage===2?<CourseBuilder courseDetails={courseDetails} submitHandler={courseBuilderSubmit} backHandler={backHandler}/>
-            :stage===3?<PublishCourse courseDetails={courseDetails} submitHandler={publishCourseHandler} backHandler={backHandler}/>
+            {stage===1?<AddCourseBasicInfo data={courseDetails} fetchCourse={fetchCourse} setStage={setStage}/>
+            :stage===2?<CourseBuilder data={courseDetails} fetchCourse={fetchCourse} submitHandler={courseBuilderSubmit} backHandler={backHandler}/>
+            :stage===3?<PublishCourse data={courseDetails} fetchCourse={fetchCourse} submitHandler={publishCourseHandler} backHandler={backHandler}/>
             :<div>There has been some error please reload again or log in again if the error presists </div>}
             
         </div>

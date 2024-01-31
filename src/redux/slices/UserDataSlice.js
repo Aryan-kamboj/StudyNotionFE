@@ -13,16 +13,13 @@ const initialState = {
     password:"",
     cart:document.cookie.length!==0?await getCart():[],
     userType:document.cookie.length!==0?localStorage.getItem("userType"):null,
-    currentlyEditing:localStorage.getItem("userType")==="instructor"?"65ac2db97e51fffbeeb77a6c":null
   }
 
   const UserDataSlice = createSlice({
-    name: 'UI_slice',
+    name: 'UserDataSlice',
     initialState,
     reducers: {
-      setCurrentlyEditing:(state,action)=>{
-        state.currentlyEditing=action.payload;
-      },
+      
       updateCart:(state,action)=>{
         state.cart=action.payload;
       },
@@ -54,6 +51,6 @@ const initialState = {
     }
   })
   // Action creators are generated for each case reducer function
-  export const { setFname,setLname,setUserType,setMessage,setphoneNo,setEmail,setPassword,updateCart,setCurrentlyEditing } = UserDataSlice.actions;
+  export const { setFname,setLname,setUserType,setMessage,setphoneNo,setEmail,setPassword,updateCart } = UserDataSlice.actions;
   
   export default UserDataSlice;

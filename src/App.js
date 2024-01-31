@@ -16,11 +16,14 @@ import { Dashboard } from './components/dashboardPages/Dashboard';
 import { ViewCourse } from './components/viewCourse/ViewCourse';
 import { LoadingScreen } from './components/LoadingScreen';
 import { useSelector } from 'react-redux';
+import { useEffect } from 'react';
 function App() {
+  useEffect(()=>{
+    document.title = "StudyNotion"
+  })
   const isLoading = useSelector(({rootReducer})=>{
     return rootReducer.UI_slice.loading;
   });
-  console.log(isLoading);
   return (
     <div className='bg-richblack-900 overflow-hidden min-h-screen'>
       <Navbar/>
