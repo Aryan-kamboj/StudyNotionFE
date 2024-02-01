@@ -158,6 +158,43 @@ exports.addSection = async (req,res)=>{
         })
     }
 }
+exports.editSectionName = async (req,res)=>{
+    try {
+        const {email,userType} = req.locals;
+        const {courseId,editedSectionName,sectionIdx} = req.body; 
+        if(email&&userType==="instructor"&&userType&&editedSectionName&&sectionIdx&&courseId){
+            const instructor = await INSTRUCTOR.findOne({email:email},"myCources");
+            if(instructor.myCources.includes(courseId)){
+                const {sections}= await COURSE.findById(courseId,"sections");
+                sections[sectionIdx].sectionName = editedSectionName;
+                const updatedCourse = await COURSE.findByIdAndUpdate(courseId,{sections},{new:true});
+                if(updatedCourse){
+                    return res.status(200).json({
+                        data:updatedCourse
+                    })
+                }
+                else{
+                    throw("there was an error in creating section ");
+                }
+            }
+            else{
+                return res.status(400).json({
+                    error:"Action not allowed as you are not the instructor for this course"
+                })
+            }
+        }
+        else{
+            return res.status(400).json({
+                error:"All sectionss required"
+            })
+        }
+    }
+    catch (error) {
+       return res.status(500).json({
+        error:error
+       }) 
+    }
+}
 exports.removeSection = async (req,res)=>{
     try {
         const {email,userType} = req.locals;
@@ -191,21 +228,6 @@ exports.removeSection = async (req,res)=>{
                 }
                 else
                     throw "There has been some error in deleting the section";
-                // console.log(response);
-                //  deleted: {
-                //    The_First_Published_Map_of_Mount_Everest_1930_omubto: 'deleted',
-                //    'Screenshot_20210526-021217020_2\n': 'not_found',
-                //    'Screenshot_20210526-021217020_2_bsweuv': 'deleted'
-                //  },
-                //  deleted_counts: {
-                //    The_First_Published_Map_of_Mount_Everest_1930_omubto: { original: 1, derived: 0 },
-                //    'Screenshot_20210526-021217020_2\n': { original: 0, derived: 0 },
-                //    'Screenshot_20210526-021217020_2_bsweuv': { original: 1, derived: 0 }
-                //  },
-                //  partial: false,
-                //  rate_limit_allowed: 500,
-                //  rate_limit_reset_at: 2023-12-30T16:00:00.000Z,
-                //  rate_limit_remaining: 499
             }
         }
         else{
@@ -270,12 +292,57 @@ exports.addLecture = async (req,res)=>{
         })
     }
 }
+exports.editLecture = async (req,res)=>{
+    try {
+        const {email,userType} = req.locals;
+        const {lectureIdx,sectionIdx,courseId,lectureDesc,lectureTitle} = req.body; 
+        console.log(req.files);
+        const {lectureFile} = req?.files;
+        if(lectureIdx&&sectionIdx&&lectureDesc&&lectureTitle&&email&&userType==="instructor"){
+            const {myCources} = await INSTRUCTOR.findOne({email:email},"myCources");
+            if(myCources.includes(courseId)){
+                const {sections} =await COURSE.findById(courseId,"sections");
+                if(lectureFile){
+                    const {link} = sections[sectionIdx].lectures[lectureIdx];
+                    const array = link.split("/");
+                    const public_id = "studyNotion/"+array[array.length-1].split(".")[0];
+                    const del_res = await deleteFile(public_id,"video");
+                    console.log("hiiii");
+                    console.log(del_res);
+                    const response = await fileUpload(lectureFile);
+                    console.log(response);
+                        sections[sectionIdx].lectures[lectureIdx].link = response.secure_url;
+                        sections[sectionIdx].lectures[lectureIdx].length=Math.ceil(response.duration);
+                    }
+                sections[sectionIdx].lectures[lectureIdx].lectureTitle = lectureTitle;
+                sections[sectionIdx].lectures[lectureIdx].lectureDesc = lectureDesc;
+                const dbUpdate = await COURSE.findByIdAndUpdate(courseId,{sections:sections},{new:true});
+                if(dbUpdate)
+                    return res.status(200).json({
+                        data:dbUpdate,
+                        message:"Lecture edited"
+                    })
+                else throw new Error("Could not edit lecture in DB");
+            }
+            else{
+                return res.status(400).json({
+                    message:"You don't have access to edit this course"
+                })
+            }
+        }
+    } catch (error) {
+        return res.status(500).json({
+            error:error
+        })
+    }
+}
 exports.removeLecture = async (req,res)=>{
     try {
         const {email,userType}=req.locals;
         const {courseId,sectionIdx,lectureIdx} = req.body;
         if(userType==="instructor"&&userType&&email&&courseId&&sectionIdx!==undefined&&lectureIdx!==undefined){
             const {myCources} = await INSTRUCTOR.findOne({email:email},"myCources");
+            console.log(myCources,courseId)
             if(myCources.includes(courseId)){
                 const {sections} = await COURSE.findById(courseId,"sections");
                 const array = sections[sectionIdx].lectures[lectureIdx].link.split("/");
@@ -283,9 +350,10 @@ exports.removeLecture = async (req,res)=>{
                 const response = await deleteFile(publicId,"video");
                 if(response&&sections){
                     sections[sectionIdx].lectures.splice(lectureIdx,1);
-                    const update = await COURSE.updateOne({_id:courseId},{sections:sections});
+                    const update = await COURSE.findByIdAndUpdate(courseId,{sections:sections},{new:true});
                     if(update){
                         return res.status(200).json({
+                            data:update,
                             message:"Lecture deleted succesfully"
                         })
                     }

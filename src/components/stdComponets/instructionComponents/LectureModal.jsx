@@ -46,7 +46,8 @@ export const LectureModal = ({closeModal,data,modalType,saveHandlerFn}) => {
     const saveButtonHandler = async ()=>{
         setCheck(true);
         console.log(lectureFileData)
-        if(lectureFileData&&lectureName&&lectureDesc){
+        if((lectureFileData||lectureFileUrl)&&lectureName&&lectureDesc){
+            console.log("hiii")
             await saveHandlerFn(lectureFileData ,lectureName, lectureDesc);
             hideModal();
         }
