@@ -1,25 +1,59 @@
-import React from 'react'
+/* eslint-disable react/no-unknown-property */
 import {AiOutlinePlusCircle,AiFillCheckCircle,AiFillClockCircle} from 'react-icons/ai'
 import {BsCurrencyRupee} from "react-icons/bs"
 import {MdModeEditOutline,MdOutlineDeleteForever} from "react-icons/md"
-import { myCoursesData } from '../../../data/tempData'
 import { StdButton } from '../../stdComponets/StdButton'
 import { useNavigate } from 'react-router'
+import { useDispatch, useSelector } from 'react-redux'
+import { deleteCourseApi, getMyCoursesApi } from '../../../services/instructor/Course'
+import { updateMyCources } from '../../../redux/slices/UserDataSlice'
+import { useEffect, useState } from 'react'
+import { setCurrentlyEditing } from '../../../redux/slices/instructorSlice'
+import { DeleteCourseConfirmationModal } from '../../stdComponets/instructionComponents/deleteCourseConfirmationModal'
 export const MyCourses = ({setTab}) => {
+  const dispatcher = useDispatch();
+  const myCoursesData = useSelector(({rootReducer})=>rootReducer.UserDataSlice.myCourses);
+  const [deleteModal,setDeleteModal] = useState(false);
+  const [courseDelete,setToDelete] = useState("");
+  const [courseNameDel,setCourseNameDelete] = useState("");
+  useEffect(()=>{
+    (async ()=>{
+      console.log("hii from get my cources");
+      const data = await getMyCoursesApi();
+      console.log(data);
+      dispatcher(updateMyCources(data));
+    })()
+  },[]);
   const navigator = useNavigate(); 
   const editHandler = (e)=>{
-    console.log("edit");
+    e.stopPropagation();
+    const courseId = e.currentTarget.attributes.courseid.value;
+    dispatcher(setCurrentlyEditing(courseId));
+    navigator("add-course")
+    setTab("add-course");
+      console.log("edit",courseId);
   }  
   const deleteHandler = (e)=>{
+    e.stopPropagation();
+    setToDelete(e.currentTarget.attributes.courseid.value);
+    setCourseNameDelete(e.currentTarget.attributes.coursename.value)
+    setDeleteModal(true); 
+  }
+  const deletingFn = async ()=>{
+    const data = await deleteCourseApi(courseDelete);
+    console.log(data);
+    dispatcher(updateMyCources(data));
     console.log("delete");
   }
-  const newCourseHandler = (e)=>{
+  const newCourseHandler = ()=>{
+    dispatcher(setCurrentlyEditing(""));
     navigator("add-course");
     setTab("add-course");
     console.log("new");
   }
   return (
     <div className=' m-8 pt-14 max-tablet:pt-0 overflow-auto hideScrollBars h-fit'>
+      {deleteModal?<DeleteCourseConfirmationModal courseName={courseNameDel} deletingFn={deletingFn} setModal={setDeleteModal}  />:""}
         <div className=' mx-auto pb-14 flex justify-between items-center'>
           <div className='text-sm space-y-4 max-tablet:space-y-2'>
             <span className='text-richblack-300'>Home / Dashboard /</span>
@@ -36,7 +70,7 @@ export const MyCourses = ({setTab}) => {
             <span className='basis-[10%]'>ACTIONS</span>
           </div>
           <div className=''>
-            {myCoursesData.map(({title,thumbnail,duration,createdAt,published,description,price},id)=>{
+            {myCoursesData?.map(({courseName,thumbnail,duration,createdAt,isPublic,courseDesc,coursePrice,courseId},id)=>{
               const sec = duration%60;
               duration-=sec;
               const totalMins = ((duration)/60);
@@ -56,17 +90,17 @@ export const MyCourses = ({setTab}) => {
               return (
                 <div key={id} className='flex p-4 text-richblack-100'>
                   <div className='basis-[65%] flex space-x-4  '>
-                    <img src={thumbnail} alt={title} className='min-w-[14rem] max-w-[14rem] max-tablet:w-[5rem] min-h-[9rem] max-h-[10rem] object-cover rounded-xl'/>
+                    <img src={thumbnail} alt={courseName} className='min-w-[14rem] max-w-[14rem] max-tablet:w-[5rem] min-h-[9rem] max-h-[10rem] object-cover rounded-xl'/>
                     <div className='flex justify-between w-[65%] flex-col'>
-                      <h1 className='text-2xl font-[500]'>{title}</h1>
-                      <p className='text-richblack-100 text-sm'>{description}</p>
+                      <h1 className='text-2xl font-[500]'>{courseName}</h1>
+                      <p className='text-richblack-100 text-sm'>{courseDesc}</p>
                       <p className='flex items-center space-x-2 text-white'><span>Created at {month} {date}, {year} | {hours}:{mins} {am_pm}</span></p>
-                      {published?<span className='text-yellow-100 text-sm bg-richblack-700 rounded-full flex w-fit px-2 py-1 items-center space-x-2'><AiFillCheckCircle/><span>Published</span></span>:<span className='text-pink-100 text-sm bg-richblack-700 rounded-full flex w-fit px-2 py-1 items-center space-x-2'><AiFillClockCircle/><span>Drafted</span></span>}
+                      {isPublic?<span className='text-yellow-100 text-sm bg-richblack-700 rounded-full flex w-fit px-2 py-1 items-center space-x-2'><AiFillCheckCircle/><span>Published</span></span>:<span className='text-pink-100 text-sm bg-richblack-700 rounded-full flex w-fit px-2 py-1 items-center space-x-2'><AiFillClockCircle/><span>Drafted</span></span>}
                     </div>
                   </div>
                   <div className='basis-[15%] items-center px-6 flex text-sm'>{timeString}</div>
-                  <div className='basis-[10%] flex items-center '><BsCurrencyRupee/>{price}</div>
-                  <div className='basis-[10%] flex items-center text-2xl space-x-4'><MdModeEditOutline onClick={editHandler}/><MdOutlineDeleteForever onClick={deleteHandler}/></div>
+                  <div className='basis-[10%] flex items-center '><BsCurrencyRupee/>{coursePrice}</div>
+                  <div className='basis-[10%] flex items-center text-2xl space-x-4'><MdModeEditOutline courseid = {courseId} onClick={editHandler}/><MdOutlineDeleteForever coursename = {courseName} courseid = {courseId} onClick={deleteHandler}/></div>
               </div>
               )
             })

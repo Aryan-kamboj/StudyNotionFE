@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import { useEffect, useState } from 'react'
 import { MyProfile } from '../dashboardPages/MyProfile'
 import { EnrolledCourses } from '../dashboardPages/StudentTabs/EnrolledCourses'
 import { Cart } from '../dashboardPages/StudentTabs/Cart'
@@ -23,7 +23,7 @@ export const Dashboard = () => {
       }    
     },[userType])
   return (
-    <div className='text-white overflow-y-scroll hideScrollBars flex max-tablet:flex-col h-[100%] min-h-[92vh]'>
+    <div className='text-white overflow-y-scroll hideScrollBars flex max-tablet:flex-col h-full min-h-full'>
             <DashboardNav setTab={setTab} setUserType={setUserType} userType={userType} tab={tab}/>
             <div className=' overflow-y-scroll hideScrollBars basis-[80%] max-tablet:pt-0 pt-[2.9rem] '>
               {/* <DashboardNav setTab={setTab} userType={userType} tab={tab}/> */}

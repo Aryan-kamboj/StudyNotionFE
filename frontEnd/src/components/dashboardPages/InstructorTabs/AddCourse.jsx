@@ -1,15 +1,14 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import {IoIosArrowBack} from "react-icons/io";
 import { FaCheck } from 'react-icons/fa6';
 import { useNavigate } from 'react-router';
 import { AddCourseBasicInfo } from '../../stdComponets/instructionComponents/AddCourseBasicInfo';
 import { CourseBuilder } from '../../stdComponets/instructionComponents/CourseBuilder';
 import { PublishCourse } from '../../stdComponets/instructionComponents/PublishCourse';
-import { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { getCourseInfo } from '../../../services/user/userCourseApis';
 import {setCourseInfo} from "../../../redux/slices/instructorSlice";
-import { courseDetails } from '../../../data/tempData';
+// eslint-disable-next-line react/prop-types
 export const AddCourse = ({setTab}) => {
     const [stage,setStage]=useState(1);
 
@@ -20,10 +19,12 @@ export const AddCourse = ({setTab}) => {
     })
     const fetchCourse = async()=>{
         const fetchedData = await getCourseInfo(course);
-        dispatcher(setCourseInfo(fetchedData));
-        return fetchedData;
+        console.log(fetchedData);
+        if(fetchedData){
+            dispatcher(setCourseInfo(fetchedData));
+            return fetchedData;
+        }
     }
-    const courseDetails ={something:"something"};
     // const [courseDetails,setDetails] = useState(async()=>await fetchCourse());
     // const refetchCourse = async ()=>{
     //     const response = await fetchCourse();
@@ -53,14 +54,14 @@ export const AddCourse = ({setTab}) => {
     // //     }
     // //     ,[course]);
 
-        const courseBuilderSubmit = (e) =>{
+        const courseBuilderSubmit = () =>{
         // console.log(e);
         setStage(3);
     }
-    const backHandler = (e)=>{
+    const backHandler = ()=>{
         setStage(stage-1);
     }
-    const publishCourseHandler = (e)=>{
+    const publishCourseHandler = ()=>{
         // console.log(e);
     }
   return (
@@ -89,9 +90,9 @@ export const AddCourse = ({setTab}) => {
                     <span className={`basis-[25%] text-center ${stage===3?" text-yellow-50 ":" text-richblack-500 "} `}>Publish</span>
                 </div>
             </div>
-            {stage===1?<AddCourseBasicInfo data={courseDetails} fetchCourse={fetchCourse} setStage={setStage}/>
-            :stage===2?<CourseBuilder data={courseDetails} fetchCourse={fetchCourse} submitHandler={courseBuilderSubmit} backHandler={backHandler}/>
-            :stage===3?<PublishCourse data={courseDetails} fetchCourse={fetchCourse} submitHandler={publishCourseHandler} backHandler={backHandler}/>
+            {stage===1?<AddCourseBasicInfo  fetchCourse={fetchCourse} setStage={setStage}/>
+            :stage===2?<CourseBuilder  fetchCourse={fetchCourse} submitHandler={courseBuilderSubmit} backHandler={backHandler}/>
+            :stage===3?<PublishCourse courseId={course} fetchCourse={fetchCourse} submitHandler={publishCourseHandler} backHandler={backHandler}/>
             :<div>There has been some error please reload again or log in again if the error presists </div>}
             
         </div>

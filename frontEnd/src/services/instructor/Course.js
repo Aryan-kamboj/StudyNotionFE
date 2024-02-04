@@ -1,7 +1,5 @@
 import toast from "react-hot-toast";
 import { apiConnector } from "../apiConnection";
-import {store} from "../../main";
-import { setCourseInfo } from "../../redux/slices/instructorSlice";
 const login = document.cookie.split("=")[1];
 export const createCourse = async (courseDetails)=>{
     try {
@@ -20,10 +18,37 @@ export const createCourse = async (courseDetails)=>{
                 'Authorization':`Bearer ${login}`,
                 'Content-Type': 'multipart/form-data'}
         }
+        toast.loading("Creating course");
         const {data} = await apiConnector(request);
-        return data;
+        toast.dismiss();
+        toast.success("Course created");
+        return data.data;
     } catch (error) {
         console.log(error);
+    }
+}
+export const deleteCourseApi = async (courseId)=>{
+    try {
+        const bodyData={
+            courseId
+        }
+        const request = {
+            method:"POST",
+            url:"http://localhost:4002/api/instructor/deleteCourse",
+            bodyData:bodyData,
+            creds:true,
+            headers:{
+                'Authorization':`Bearer ${login}`,
+                'Content-Type': 'multipart/form-data'} 
+        }
+        toast.loading("Deleting course");
+        const {data} = await apiConnector(request);
+        toast.dismiss();
+        toast.success("Course deleted");
+        return data.data;
+    } catch (error) {
+        toast.dismiss();
+        toast.error("Could not delete course");
     }
 }
 export const editCourse = async (courseDetails,id) =>{
@@ -210,3 +235,52 @@ export const deleteLectureApi = async (lectureIdx,sectionIdx,courseId)=>{
         console.log(error);
     }
 }
+export const makeCoursePublicApi = async (courseId,makePublic)=>{
+    try {
+        const bodyData = {
+            courseId,
+            makePublic
+        }
+        const request = {
+            method:"POST",
+            url:"http://localhost:4002/api/instructor/setPublic",
+            bodyData:bodyData,
+            creds:true,
+            headers:{
+                'Authorization':`Bearer ${login}`,
+                'Content-Type': 'multipart/form-data'
+            }
+        }
+        toast.loading("Editing publish settings");
+        const {data}=await apiConnector(request);
+        toast.dismiss();
+        toast.success("Course publish settings updated");
+        return data.data;
+    } catch (error) {
+        toast.dismiss();
+        toast.error("Could not change publish setting");
+        console.log(error);
+    }
+}
+export const getMyCoursesApi = async ()=>{
+    try {
+        const request = {
+            method:"GET",
+            url:"http://localhost:4002/api/instructor/myCourses",
+            creds:true,
+            headers:{
+                'Authorization':`Bearer ${login}`,
+                'Content-Type': 'multipart/form-data'
+            }
+        }
+        toast.loading("Fetching your courses");
+        const {data} = await apiConnector(request);
+        toast.dismiss();
+        toast.success("Your courses sucsessfully fetched");
+        return data.myCourses;
+    } catch (error) {
+        toast.dismiss();
+        toast.error("Could not fetch your cources")
+        console.log(error);
+    }
+} 

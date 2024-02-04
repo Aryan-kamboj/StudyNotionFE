@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import { useEffect, useState } from 'react'
 import { RatingStars } from '../components/stdComponets/RatingStars';
 import {AiOutlineInfoCircle,AiOutlineShareAlt} from 'react-icons/ai'
 import {IoGlobeOutline} from "react-icons/io5"
@@ -42,7 +42,7 @@ export const CoursePage = () => {
     const months= ["January","February","March","April","May","June","July",
     "August","September","October","November","December"];
     // fetch course by course id 
-    const {thumbnail,courseName,description,coursePrice,reviewCount,rating,_id,enrolled,createdAt,language,instructor,benifits,requirements,sections} = courseDetails;
+    const {thumbnail,courseName,description,coursePrice,reviewCount,rating,enrolled,createdAt,language,instructor,benifits,requirements,sections} = courseDetails;
     const dateCreated = new Date(createdAt);
     // console.log(dateCreated.getFullYear());
     const date = dateCreated.getDate();
@@ -71,9 +71,22 @@ export const CoursePage = () => {
     }
   return (
     <div className='overflow-hidden'>
-        <div className='text-white bg-richblack-800 '>
-        {/* course Buy and add to cart card */}
-            <div className='w-[24rem] p-4 overflow-hidden bg-richblack-700 rounded-md absolute right-8 top-[10.5rem]'>
+        <div className='text-white bg-richblack-800 flex flex-col'>
+        {/* course courseName section */}
+        <div className='w-[100%]  max-h-[22rem] space-y-4 text-lg flex justify-between'>
+            <div className='px-24 py-32'>
+                <h1 className='text-5xl font-[500]'>{courseName}</h1>
+                <p className='text-richblack-300'>{description}</p>
+                {rating?<div className='flex items-center space-x-2 '><span className='text-yellow-100'>{rating.$numberDecimal}</span><RatingStars space={2} rating={rating.$numberDecimal}/><span>({reviewCount} reviews)</span> <span>{enrolled} students enrolled</span></div>:""}
+                <p>Created By {instructor?instructor.fullName:""}</p>
+                <div className='flex space-x-2 items-center'>
+                    <p className='flex items-center space-x-2'><AiOutlineInfoCircle/> <span>Created at {month} {date}, {year} | {hours}:{mins} {am_pm}</span></p>
+                    <IoGlobeOutline/>
+                    <p>{language}</p>
+                </div>
+            </div>
+                {/* course Buy and add to cart card */}
+            <div className='w-[24rem] relative p-4 top-[4rem] overflow-hidden h-fit max-h-[92vh] bg-richblack-700 rounded-md right-[5%]'>
                 <img className="rounded-lg h-[22rem] w-full object-cover" src={thumbnail} alt={courseName}/>
                 <div className='space-y-4 pt-4'>
                     <p className='text-3xl font-[500]'>Rs. {coursePrice}</p>
@@ -93,18 +106,9 @@ export const CoursePage = () => {
                     </CopyToClipboard>
                 </div>
             </div>
-        {/* course courseName section */}
-            <div className='w-[70%] px-24 py-32 space-y-4 text-lg'>
-                <h1 className='text-5xl font-[500]'>{courseName}</h1>
-                <p className='text-richblack-300'>{description}</p>
-                {rating?<div className='flex items-center space-x-2 '><span className='text-yellow-100'>{rating.$numberDecimal}</span><RatingStars space={2} rating={rating.$numberDecimal}/><span>({reviewCount} reviews)</span> <span>{enrolled} students enrolled</span></div>:""}
-                <p>Created By {instructor?instructor.fullName:""}</p>
-                <div className='flex space-x-2 items-center'>
-                    <p className='flex items-center space-x-2'><AiOutlineInfoCircle/> <span>Created at {month} {date}, {year} | {hours}:{mins} {am_pm}</span></p>
-                    <IoGlobeOutline/>
-                    <p>{language}</p>
-                </div>
             </div>
+        
+        
 {/* dark colored section */}
             <div className='bg-richblack-900 pt-8 px-24'>
                 <div className='w-[66%]'>

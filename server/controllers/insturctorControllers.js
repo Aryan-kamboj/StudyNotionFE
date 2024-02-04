@@ -40,7 +40,7 @@ exports.createCourse = async (req,res)=>{
                         return res.status(200).json({
                             // courseName:courseName,courseDesc:courseDesc,coursePrice:coursePrice,courseCategory:courseCategory,tags_parsed:tags_parsed,thumbnail:thumbnail,benifits:benifits,requirements_parsed:requirements_parsed
                             message:"New course created succesfully",
-                            _id:newCourse._id
+                            data:newCourse
                         });
                     }
                     else
@@ -113,10 +113,55 @@ exports.updateCourse = async (req,res)=>{
 }
 exports.deleteCourse = async (req,res)=>{
     try {
-        // ye rhta hai abhi 
-        return res.status(200).json({
-            message:"This functionality is not working right now"
-        })
+        const {email,userType} = req.locals;
+        const {courseId} = req.body;
+        if(email&&userType==="instructor"&&courseId){
+            const instructor = await INSTRUCTOR.findOne({email:email});
+            if(instructor.myCources.includes(courseId)){
+                const myCourcesFiltered = instructor.myCources.filter((course)=>{
+                    console.log(course.toString(),courseId);
+                    return !(course.toString()===courseId)});
+                const course = await COURSE.findByIdAndUpdate(courseId,{isPublic:false},{new:true});
+                if(course.enrolled===0){
+                    const public_ids_to_be_deleted =[]
+                    course.sections.map((section)=>{
+                        section.lectures.map((lecture)=>{
+                            const array = lecture.link.split("/");
+                            const public_id = "studyNotion/"+array[array.length-1].split(".")[0];
+                            public_ids_to_be_deleted.push(public_id);
+                        })
+                    })
+                    if(public_ids_to_be_deleted.length>0){
+                        const delete_lec_res = await deleteFilesMultiple(public_ids_to_be_deleted,"video");
+                        console.log("Lectures deleted ",delete_lec_res);
+                    }
+                    if(course.thumbnail.length>0){
+                        const array = course.thumbnail.split("/");
+                        const public_id = "studyNotion/"+array[array.length-1].split(".")[0];
+                        const delete_thumb_res = await deleteFile(public_id);
+                        console.log("Thumbnail delted",delete_thumb_res);
+                    }
+                    await COURSE.deleteOne({_id:courseId});
+                }
+                const response = await INSTRUCTOR.findOneAndUpdate({email:email},{myCources:myCourcesFiltered},{new:true});
+                return res.status(200).json({
+                    message:"Course deleted",
+                    data:response.myCources
+                })
+            }
+            else{
+                return res.status(400).json({
+                    message:"You don't have access to delete this course"
+                })
+            }
+        }
+        else{
+            return res.status(400).json({
+                message:"All fields required"
+            })
+        }
+        // ye phle course ko private krega taki vo logo ko na dikhe aur fir ye course ko instructor ke object se delete krega taki vo isko edit na kr ske
+        // aur jin logo ne enrolle kiya hua hai usme vo log deakh hi skte hai if enrolled students === 0 course permanently delete ho jaega 
     } catch (error) {
         return res.status(500).json({
             message:"This functionality is not working right now"
@@ -296,8 +341,10 @@ exports.editLecture = async (req,res)=>{
     try {
         const {email,userType} = req.locals;
         const {lectureIdx,sectionIdx,courseId,lectureDesc,lectureTitle} = req.body; 
-        console.log(req.files);
-        const {lectureFile} = req?.files;
+        let lectureFile = null;
+        if(req?.files?.lectureFile!==undefined){
+            lectureFile = req.files.lectureFile;
+        }
         if(lectureIdx&&sectionIdx&&lectureDesc&&lectureTitle&&email&&userType==="instructor"){
             const {myCources} = await INSTRUCTOR.findOne({email:email},"myCources");
             if(myCources.includes(courseId)){
@@ -467,18 +514,11 @@ exports.setPublic = async (req,res)=>{
         if(email&&userType&&userType==="instructor"&&courseId&&makePublic!==undefined){
             const {myCources} = await INSTRUCTOR.findOne({email:email},"myCources");
             if(myCources.includes(courseId)){
-                if(makePublic){
-                    await COURSE.updateOne({_id:courseId},{isPublic:true});
-                    return res.status(200).json({
-                        message:"Course made public successfully"
-                    })
-                }
-                else{
-                    await COURSE.updateOne({_id:courseId},{isPublic:false});
-                    return res.status(200).json({
-                        message:"Course made private successfully"
-                    })
-                }
+                const info = await COURSE.findOneAndUpdate({_id:courseId},{isPublic:makePublic},{new:true});
+                return res.status(200).json({
+                    data:info,
+                    message:"Course publish settings changed"
+                })
             }   
             else{
                 return res.status(401).json({
@@ -497,12 +537,12 @@ exports.setPublic = async (req,res)=>{
         })
     }
 }
-exports.myCources = async (req,res)=>{
+exports.myCourses = async (req,res)=>{
     try {
         const {email,userType} = req.locals;
         if(email&&userType&&userType==="instructor"){
             const {myCources} = await INSTRUCTOR.findOne({email:email},"myCources");
-            const cources_Info = [];
+            const courses_Info = [];
             for (const courseId of myCources){
                 const {createdAt,courseName,courseDesc,coursePrice,thumbnail,isPublic,sections} = await COURSE.findById(courseId,"createdAt courseName courseDesc coursePrice thumbnail isPublic sections");
                 const duration = sections.reduce((acc,section)=>{
@@ -510,19 +550,21 @@ exports.myCources = async (req,res)=>{
                         return accLec+lecture.length;
                     },0);
                 },0);
-                cources_Info.push({
+                courses_Info.push({
                     createdAt:Number(createdAt),
                     courseName:courseName,
                     courseDesc:courseDesc,
                     coursePrice:coursePrice,
                     thumbnail:thumbnail,
                     isPublic:isPublic,
-                    duration:duration}
-                );
+                    duration:duration,
+                    courseId:courseId}
+                    );
+                // console.log(courses_Info);
             }
-            console.log(cources_Info);
+                console.log("hiii",courses_Info);
             return res.status(200).json({
-                myCources:cources_Info
+                myCourses:courses_Info
             })
         }
         else{

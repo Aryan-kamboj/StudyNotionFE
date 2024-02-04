@@ -23,12 +23,12 @@ function App() {
     return rootReducer.UI_slice.loading;
   });
   return (
-    <div className='bg-richblack-900 overflow-hidden min-h-screen'>
+    <div className='bg-richblack-900 overflow-x-hidden h-screen min-h-screen'>
       <Navbar/>
-      <div className=''>
+      <div className='h-[100%]'>
         {isLoading?<LoadingScreen/>:
         <Routes>
-          <Route path='/' element={<div><Outlet/></div>}>
+          <Route path='/' element={<div className='h-[100%]'><Outlet/></div>}>
             <Route index element={<Home/>}/>
             <Route path="/dashboard/*" element={<Dashboard/>}/>
             <Route path="/login" element = {<LogIn/>}/>
@@ -49,5 +49,5 @@ function App() {
     </div>
     
   )
-};
+}
 export default App;

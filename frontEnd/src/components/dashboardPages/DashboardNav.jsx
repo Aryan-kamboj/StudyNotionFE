@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import  { useState } from 'react'
 import {LiaBookSolid,LiaBookmarkSolid,LiaGraduationCapSolid} from "react-icons/lia"
 import {CgProfile,CgShoppingCart,CgLogOut} from "react-icons/cg"
 import {RiDashboard2Line} from "react-icons/ri"
@@ -6,15 +6,23 @@ import {AiFillSetting,AiOutlinePlusCircle} from "react-icons/ai"
 import {FaGripLines} from "react-icons/fa"
 import {FaXmark} from "react-icons/fa6"
 import { useNavigate } from 'react-router'
+import { useDispatch } from 'react-redux'
+import { setCourseInfo, setCurrentlyEditing } from '../../redux/slices/instructorSlice'
+// eslint-disable-next-line react/prop-types
 export const DashboardNav = ({setTab,userType,setUserType,tab}) => {
     // const currentTab = document.URL.split("/").slice(-1)[0];
     // console.log(currentTab);
     const [showTabs,setShowTabs] = useState(false);
     const navigator = useNavigate();
+    const dispatcher = useDispatch();
     const clickHandler = (e)=>{
       setShowTabs(false);
       e.stopPropagation();
       // console.log(e.currentTarget.attributes.id.value);
+      if(e.currentTarget.attributes.id.value==="add-course"){
+        dispatcher(setCurrentlyEditing(""));
+        dispatcher(setCourseInfo({}));
+      }
       navigator(`${e.currentTarget.attributes.id.value}`);
       setTab(e.currentTarget.attributes.id.value);
     }
@@ -23,7 +31,7 @@ export const DashboardNav = ({setTab,userType,setUserType,tab}) => {
       navigator("/");
       console.log("log_out");
     }
-    const handleUserType = (e)=>
+    const handleUserType = ()=>
     {
       if(userType==="student"){
         // console.log("hii");
@@ -36,7 +44,7 @@ export const DashboardNav = ({setTab,userType,setUserType,tab}) => {
     }
     const selectedCSS = "bg-yellow-800 text-yellow-50 border-yellow-50 "
   return (
-        <div className={`overflow-hidden transition-all duration-1000 max-tablet:w-[100%] w-[18%] top-14 text-richblack-300  border-b-[1px] ${showTabs?" space-y-2 max-tablet:h-[25rem] ":" max-tablet:h-[6rem] "} font-[500] pt-28 max-tablet:pt-12  text-md bg-richblack-800 border-x-[1px] border-richblack-700 `}>
+        <div className={`overflow-hidden transition-all duration-1000 max-tablet:w-[100%] w-[18%] top-14 text-richblack-300  border-b-[1px] ${showTabs?" space-y-2 max-tablet:h-[25rem] ":" max-tablet:h-[6rem] "} min-h-full font-[500] pt-28 max-tablet:pt-12  text-md bg-richblack-800 border-x-[1px] border-richblack-700 `}>
         <div className='absolute z-[1000] top-[5rem]'>Under developemnt so <br/> to see tabs use - <button className='bg-pink-100 text-black' onClick={handleUserType}>{userType} Tabs</button></div>
         <div className='fixed max-tablet:static top-21 max-tablet:w-[100%] w-[18%]'>
           <div className={`pt-2 ${showTabs?" max-tablet:space-y-2 ":""}`}>
@@ -50,7 +58,7 @@ export const DashboardNav = ({setTab,userType,setUserType,tab}) => {
                     </span>
                   </div>
                   <div className={`max-tablet:text-[20px] text-[0px] ${(tab==="my-profile")? "":" hidden "}`}>
-                    {showTabs?<FaXmark onClick={(e)=>{setShowTabs(false)}}/>:<FaGripLines onClick={(e)=>{e.stopPropagation();setShowTabs(true)}}/>}
+                    {showTabs?<FaXmark onClick={()=>{setShowTabs(false)}}/>:<FaGripLines onClick={(e)=>{e.stopPropagation();setShowTabs(true)}}/>}
                   </div>
                   
                 </div>
@@ -62,7 +70,7 @@ export const DashboardNav = ({setTab,userType,setUserType,tab}) => {
                     </span>
                   </div>
                   <div className={`max-tablet:text-[20px] text-[0px] ${(tab==="enrolled-courses")?"":" hidden "}`}>
-                    {showTabs?<FaXmark onClick={(e)=>{setShowTabs(false)}}/>:<FaGripLines onClick={(e)=>{e.stopPropagation();setShowTabs(true)}}/>}
+                    {showTabs?<FaXmark onClick={()=>{setShowTabs(false)}}/>:<FaGripLines onClick={(e)=>{e.stopPropagation();setShowTabs(true)}}/>}
                   </div>
                 </div>
                 <div onClick={clickHandler} id="cart" className={`duration-500 border-l-4 ${(tab==="cart")?selectedCSS: `border-richblack-800 ${(showTabs)?"":"max-tablet:hidden"}`} flex items-center justify-between pr-6`}>
@@ -73,7 +81,7 @@ export const DashboardNav = ({setTab,userType,setUserType,tab}) => {
                     </span>
                   </div>
                   <div className={`max-tablet:text-[20px] text-[0px] ${(tab==="cart")?"":" hidden "}`}>
-                    {showTabs?<FaXmark onClick={(e)=>{setShowTabs(false)}}/>:<FaGripLines onClick={(e)=>{e.stopPropagation();setShowTabs(true)}}/>}
+                    {showTabs?<FaXmark onClick={()=>{setShowTabs(false)}}/>:<FaGripLines onClick={(e)=>{e.stopPropagation();setShowTabs(true)}}/>}
                   </div>
                 </div>
                 <div onClick={clickHandler} id="purchase-history" className={`duration-500 border-l-4 ${(tab==="purchase-history")?selectedCSS: `border-richblack-800 ${(showTabs)?"":"max-tablet:hidden"}`} flex items-center justify-between pr-6`}>
@@ -84,7 +92,7 @@ export const DashboardNav = ({setTab,userType,setUserType,tab}) => {
                     </span>
                   </div>
                   <div className={`max-tablet:text-[20px] text-[0px] ${(tab==="purchase-history")?"":" hidden "}`}>
-                    {showTabs?<FaXmark onClick={(e)=>{setShowTabs(false)}}/>:<FaGripLines onClick={(e)=>{e.stopPropagation();setShowTabs(true)}}/>}
+                    {showTabs?<FaXmark onClick={()=>{setShowTabs(false)}}/>:<FaGripLines onClick={(e)=>{e.stopPropagation();setShowTabs(true)}}/>}
                   </div>
                 </div>
                 <div onClick={clickHandler} id="courses" className={`duration-500 border-l-4 ${(tab==="courses")?selectedCSS: `border-richblack-800 ${(showTabs)?"":"max-tablet:hidden"}`} flex items-center justify-between pr-6`}>
@@ -95,7 +103,7 @@ export const DashboardNav = ({setTab,userType,setUserType,tab}) => {
                     </span>
                   </div>
                   <div className={`max-tablet:text-[20px] text-[0px] ${(tab==="courses")?"":" hidden "}`}>
-                    {showTabs?<FaXmark onClick={(e)=>{setShowTabs(false)}}/>:<FaGripLines onClick={(e)=>{e.stopPropagation();setShowTabs(true)}}/>}
+                    {showTabs?<FaXmark onClick={()=>{setShowTabs(false)}}/>:<FaGripLines onClick={(e)=>{e.stopPropagation();setShowTabs(true)}}/>}
                   </div>
                 </div>
             </div>
@@ -109,7 +117,7 @@ export const DashboardNav = ({setTab,userType,setUserType,tab}) => {
                     </span>
                   </div>
                   <div className={`max-tablet:text-[20px] text-[0px] ${(tab==="dashboard")?"":" hidden "}`}>
-                    {showTabs?<FaXmark onClick={(e)=>{setShowTabs(false)}}/>:<FaGripLines onClick={(e)=>{e.stopPropagation();setShowTabs(true)}}/>}
+                    {showTabs?<FaXmark onClick={()=>{setShowTabs(false)}}/>:<FaGripLines onClick={(e)=>{e.stopPropagation();setShowTabs(true)}}/>}
                   </div>
                 </div>
                 <div onClick={clickHandler} id="my-courses" className={`duration-500 border-l-4 ${(tab==="my-courses")?selectedCSS: `border-richblack-800 ${(showTabs)?"":"max-tablet:hidden"}`} flex items-center justify-between pr-6`}>
@@ -120,7 +128,7 @@ export const DashboardNav = ({setTab,userType,setUserType,tab}) => {
                     </span>
                   </div>
                   <div className={`max-tablet:text-[20px] text-[0px] ${(tab==="my-courses")?"":" hidden "}`}>
-                    {showTabs?<FaXmark onClick={(e)=>{setShowTabs(false)}}/>:<FaGripLines onClick={(e)=>{e.stopPropagation();setShowTabs(true)}}/>}
+                    {showTabs?<FaXmark onClick={()=>{setShowTabs(false)}}/>:<FaGripLines onClick={(e)=>{e.stopPropagation();setShowTabs(true)}}/>}
                   </div>
                 </div>
                 <div onClick={clickHandler} id="add-course" className={`duration-500 border-l-4 ${(tab==="add-course")?selectedCSS: `border-richblack-800 ${(showTabs)?"":"max-tablet:hidden"}`} flex items-center justify-between pr-6`}>
@@ -131,7 +139,7 @@ export const DashboardNav = ({setTab,userType,setUserType,tab}) => {
                     </span>
                   </div>
                   <div className={`max-tablet:text-[20px] text-[0px] ${(tab==="my-profile")?"":" hidden "}`}>
-                    {showTabs?<FaXmark onClick={(e)=>{setShowTabs(false)}}/>:<FaGripLines onClick={(e)=>{e.stopPropagation();setShowTabs(true)}}/>}
+                    {showTabs?<FaXmark onClick={()=>{setShowTabs(false)}}/>:<FaGripLines onClick={(e)=>{e.stopPropagation();setShowTabs(true)}}/>}
                   </div>
                 </div>
                 <div>
@@ -144,7 +152,7 @@ export const DashboardNav = ({setTab,userType,setUserType,tab}) => {
                       </span>
                     </div>
                     <div className={`max-tablet:text-[20px] text-[0px] ${(tab==="my-profile")?"":" hidden "}`}>
-                      {showTabs?<FaXmark onClick={(e)=>{setShowTabs(false)}}/>:<FaGripLines onClick={(e)=>{e.stopPropagation();setShowTabs(true)}}/>}
+                      {showTabs?<FaXmark onClick={()=>{setShowTabs(false)}}/>:<FaGripLines onClick={(e)=>{e.stopPropagation();setShowTabs(true)}}/>}
                     </div>
                   </div>
                 </div>
@@ -161,7 +169,7 @@ export const DashboardNav = ({setTab,userType,setUserType,tab}) => {
                 </span>
               </div>
               <div className={`max-tablet:text-[20px] text-[0px] ${(tab==="settings")?"":" hidden "}`}>
-                {showTabs?<FaXmark onClick={(e)=>{setShowTabs(false)}}/>:<FaGripLines onClick={(e)=>{e.stopPropagation();setShowTabs(true)}}/>}
+                {showTabs?<FaXmark onClick={()=>{setShowTabs(false)}}/>:<FaGripLines onClick={(e)=>{e.stopPropagation();setShowTabs(true)}}/>}
               </div>
             </div>
             <div onClick={logoutHandler} id="logout"  className={`duration-500 border-l-4 ${(tab==="logout")?selectedCSS: `border-richblack-800 ${(showTabs)?"":"max-tablet:hidden"}`} flex items-center justify-between pr-6`}>
@@ -172,7 +180,7 @@ export const DashboardNav = ({setTab,userType,setUserType,tab}) => {
                 </span>
               </div>
               <div className={`max-tablet:text-[20px] text-[0px] ${(tab==="logout")?"":" hidden "}`}>
-                {showTabs?<FaXmark onClick={(e)=>{setShowTabs(false)}}/>:<FaGripLines onClick={(e)=>{e.stopPropagation();setShowTabs(true)}}/>}
+                {showTabs?<FaXmark onClick={()=>{setShowTabs(false)}}/>:<FaGripLines onClick={(e)=>{e.stopPropagation();setShowTabs(true)}}/>}
               </div>
             </div>
           </div>

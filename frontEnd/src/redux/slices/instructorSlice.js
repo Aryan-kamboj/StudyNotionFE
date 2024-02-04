@@ -1,7 +1,7 @@
 import { createSlice } from "@reduxjs/toolkit";
 
 const initialState = {
-    currentlyEditing:localStorage.getItem("userType")==="instructor"?"6596730b41696e8b12fb6e43":null,
+    currentlyEditing:localStorage.getItem("userType")==="instructor"?"":null,
     courseInfo:{}
 }
 

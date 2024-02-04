@@ -1,4 +1,5 @@
-import React, { useEffect, useState } from 'react'
+/* eslint-disable react/prop-types */
+import  {  useState } from 'react'
 import { InputField } from '../InputField'
 import { AiFillPlusCircle } from "react-icons/ai";
 import { SectionDropdown } from './SectionDropdown';

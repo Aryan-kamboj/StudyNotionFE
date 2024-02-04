@@ -9,7 +9,7 @@ exports.getCourseInfo = async (req,res)=>{
                 return res.status(200).json(details);
             }
             else
-                throw new Error({code:500,message:"Could not find the details"});
+                throw new Error("Could not find the details");
         }
         else
             throw new Error ({
@@ -17,8 +17,8 @@ exports.getCourseInfo = async (req,res)=>{
                 message:"Course id required",
             });
     } catch (error) {
-        return res.status(error.code).json({
-            message:error.message,
+        return res.status(500).json({
+            message:error,
         })
     }
 }

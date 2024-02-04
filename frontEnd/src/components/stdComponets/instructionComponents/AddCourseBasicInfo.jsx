@@ -1,22 +1,25 @@
-import React ,{ useEffect, useState } from 'react'
+/* eslint-disable react/prop-types */
+import { useEffect, useState } from 'react'
 import { InputField } from '../InputField';
 import { StdButton } from '../StdButton';
 import { TagsInput } from '../TagsInput';
 import {RequirementInput} from "../RequirementInput";
 import {FiUploadCloud} from "react-icons/fi"
-// import { categories } from '../../../data/tempData';
 import {IoIosArrowForward} from "react-icons/io"
 import { useDropzone } from 'react-dropzone';
 import { FieldRequiredText } from './FieldRequiredText';
-import { useSelector } from 'react-redux';
-import { editCourse } from '../../../services/instructor/Course';
-export const AddCourseBasicInfo = ({setStage,data,fetchCourse}) => {
+import { useDispatch, useSelector } from 'react-redux';
+import { createCourse, editCourse } from '../../../services/instructor/Course';
+import { setCourseInfo, setCurrentlyEditing } from '../../../redux/slices/instructorSlice';
+export const AddCourseBasicInfo = ({setStage,fetchCourse}) => {
     const courseDetails = useSelector((store)=>{
         return store.rootReducer.instructorSlice.courseInfo;
      });
+    const currentlyEditing = useSelector(({rootReducer})=>rootReducer.instructorSlice.currentlyEditing);
     useEffect(()=>{
         (
             async()=>{
+                if(currentlyEditing.length>0)
                 await fetchCourse();
             })()
         },[])
@@ -34,6 +37,7 @@ export const AddCourseBasicInfo = ({setStage,data,fetchCourse}) => {
     const [thumbnail,setThumbnail] = useState(()=>courseDetails.thumbnail?courseDetails.thumbnail:courseDetails.thumbnail);
     const [tags,setTags] = useState([]);
     const [requirements,setRequirements]=useState([]);
+    const dispatcher = useDispatch();
     useEffect(()=>{
         setTitle(courseDetails?.courseName)
         setDesc(courseDetails?.courseDesc)
@@ -70,14 +74,19 @@ export const AddCourseBasicInfo = ({setStage,data,fetchCourse}) => {
                 tags:JSON.stringify(tags),
                 requirements:JSON.stringify(requirements)
             }
-            if(courseDetails)
+            if(courseDetails&&currentlyEditing.length!==0)
             {
                 await editCourse(basicInfo,courseDetails._id);
+                setStage(2);
             }
-            else
-                console.log("save ho rha hai tumhara course ")
-                // setCurrentlyEditing(await createCourse(basicInfo));
-            setStage(2);
+            else if(courseDetails&&currentlyEditing.length===0){
+                console.log("save ho rha hai tumhara course ");
+                const courseInfo = await createCourse(basicInfo);
+                console.log(courseInfo);
+                dispatcher(setCurrentlyEditing(courseInfo._id));
+                dispatcher(setCourseInfo(courseInfo));
+                setStage(2);
+            }
         }
     }
     useEffect(()=>{

@@ -1,9 +1,17 @@
-import React,{useState} from 'react'
+/* eslint-disable react/prop-types */
+import {useState} from 'react'
 import { StdButton } from '../StdButton'
+import { makeCoursePublicApi } from '../../../services/instructor/Course';
+import { useDispatch, useSelector } from 'react-redux';
+import { setCourseInfo } from '../../../redux/slices/instructorSlice';
 
-export const PublishCourse = ({backHandler}) => {
-  const [checkbox,setCheckbox] = useState(false);
-  const submitHandler = (e)=>{
+export const PublishCourse = ({backHandler,courseId}) => {
+  const [checkbox,setCheckbox] = useState(useSelector(({rootReducer})=>rootReducer.instructorSlice.courseInfo.isPublic));
+  const dispatcher = useDispatch();
+  const submitHandler = async ()=>{
+    const response = await makeCoursePublicApi(courseId,checkbox);
+    console.log(response)
+    dispatcher(setCourseInfo(response));
     checkbox?console.log("Public"):console.log("Private");
   }
 
