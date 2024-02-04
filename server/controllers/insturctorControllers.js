@@ -544,7 +544,7 @@ exports.myCourses = async (req,res)=>{
             const {myCources} = await INSTRUCTOR.findOne({email:email},"myCources");
             const courses_Info = [];
             for (const courseId of myCources){
-                const {createdAt,courseName,courseDesc,coursePrice,thumbnail,isPublic,sections} = await COURSE.findById(courseId,"createdAt courseName courseDesc coursePrice thumbnail isPublic sections");
+                const {createdAt,courseName,enrolled,courseDesc,coursePrice,thumbnail,isPublic,sections} = await COURSE.findById(courseId,"enrolled createdAt courseName courseDesc coursePrice thumbnail isPublic sections");
                 const duration = sections.reduce((acc,section)=>{
                     return acc+section.lectures.reduce((accLec,lecture)=>{
                         return accLec+lecture.length;
@@ -556,6 +556,7 @@ exports.myCourses = async (req,res)=>{
                     courseDesc:courseDesc,
                     coursePrice:coursePrice,
                     thumbnail:thumbnail,
+                    enrolled:enrolled,
                     isPublic:isPublic,
                     duration:duration,
                     courseId:courseId}

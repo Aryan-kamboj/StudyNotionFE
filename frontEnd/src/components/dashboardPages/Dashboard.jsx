@@ -10,6 +10,7 @@ import { MyCourses } from '../dashboardPages/InstructorTabs/MyCourses'
 import { DashboardNav } from '../dashboardPages/DashboardNav';
 import { useSelector } from 'react-redux'
 import { useNavigate } from 'react-router'
+import { MyDashboard } from './InstructorTabs/MyDashboard'
 export const Dashboard = () => {
     const path = document.URL.split("/").slice(-1)[0];
     const navigator = useNavigate();
@@ -32,7 +33,8 @@ export const Dashboard = () => {
               :tab==="cart"?<Cart/>
               :tab==="purchase-history"?<PurchaseHistory />
               :tab==="courses"?<Courses />
-              :tab==="dashboard"?<Settings />
+              :tab==="dashboard"?<MyDashboard setTab={setTab}/>
+              :tab==="settings"?<Settings/>
               :tab==="my-courses"?<MyCourses setTab={setTab} />
               :tab==="add-course"?<AddCourse setTab={setTab} />:
               <div className='text-white'>There has been some error please logIn again</div>

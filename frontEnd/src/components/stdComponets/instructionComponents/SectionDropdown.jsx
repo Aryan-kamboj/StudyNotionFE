@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import { useState } from 'react';
 import { IoMdArrowDropdown, IoMdArrowDropup } from "react-icons/io";
 import { HiMiniPencil } from "react-icons/hi2";
 import { FaRegTrashAlt } from "react-icons/fa";
@@ -11,7 +11,7 @@ import {  addLecture, editSectionNameApi,editLectureApi } from '../../../service
 import { InputField } from '../InputField';
 import { StdButton } from '../StdButton';
 import { FieldRequiredText } from './FieldRequiredText';
-export const SectionDropdown = ({deleteSectionHandler,courseId,setSections,sectionIdx}) => {
+export const SectionDropdown = ({deleteSectionHandler,courseId,sectionIdx}) => {
     const [showLec,setshowLec] = useState(true);
     const [addLectureModal,setAddLectureModal] = useState(false);
     let sectionData = useSelector(({rootReducer})=>rootReducer.instructorSlice.courseInfo.sections[sectionIdx]);
