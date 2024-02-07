@@ -36,10 +36,10 @@ exports.authTokenCheck = async (req,res,next)=>{
 }
 exports.signup = async (req,res)=>{
     try{
-        const {email,fname,lname,phoneNo,password,cnfPassword,otp,userType}=req.body;
+        const {email,fname,lname,phoneNo,countryCode,password,cnfPassword,otp,userType}=req.body;
 
         // all fields avilable
-        if(!email||!fname||!lname||!phoneNo||!password||!otp||!userType){
+        if(!email||!fname||!lname||!phoneNo||!password||!otp||!userType||!countryCode){
             return res.status(403).json({
                 success:false,
                 message:"All fields required",
@@ -79,6 +79,7 @@ exports.signup = async (req,res)=>{
                         const newUser = {
                             email:email,
                             phoneNo:phoneNo,
+                            countryCode:countryCode,
                             fname:fname,
                             lname:lname,
                             password:hashedPass,
@@ -87,6 +88,7 @@ exports.signup = async (req,res)=>{
                             DOB:null,
                             profilePhoto:"",
                             gender:"",
+                            resetPasswordToken:0,
                         }
                         let newUserEntry = null;
                         newUserEntry = await USER.create(newUser);

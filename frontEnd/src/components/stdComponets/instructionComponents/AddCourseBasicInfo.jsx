@@ -64,6 +64,7 @@ export const AddCourseBasicInfo = ({setStage,fetchCourse}) => {
     const handleSubmit = async ()=>{
         setRqTxt(true);
         if(courseTitle&&desc&&price&&category&&benifits&&thumbnail&&(tags.length!==0)&&(requirements.length!==0)){
+
             const basicInfo = {
                 courseName:courseTitle,
                 courseDesc:desc,
@@ -112,6 +113,9 @@ export const AddCourseBasicInfo = ({setStage,fetchCourse}) => {
                 <select onChange={(e)=>{setCategory(e.target.value)}} className='outline-none bg-richblack-700 p-3 rounded-lg border-b-[1px] border-richblack-300 w-[100%]'>
                     <option>Select Category</option>
                     {categories.map(({categoryName},key)=>{
+                        if(categoryName===category)
+                            return <option key={key} selected >{category}</option>
+                        else
                         return <option key={key}>{categoryName}</option>
                     })}
                 </select>

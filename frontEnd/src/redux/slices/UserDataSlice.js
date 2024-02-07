@@ -1,15 +1,9 @@
 import { createSlice } from "@reduxjs/toolkit";
+import { getProfileApi } from "../../services/user/profileApis";
 const initialState = {
-    fname:"",
-    lname:"",
-    phoneNo:{
-        countryCode:"+91-India",
-        number:"",
-    },
-    email:"",
-    message:"",
-    password:"",
+    profileData:document.cookie.length!==0?await getProfileApi():null,
     userType:document.cookie.length!==0?localStorage.getItem("userType"):null,
+    enrolledCourses:[],
     cart:[],
     myCourses:[],
   }
@@ -18,40 +12,30 @@ const initialState = {
     name: 'UserDataSlice',
     initialState,
     reducers: {
+      setCourseDetails:(state,action)=>{
+        state.courseDetails=action.payload;
+      },
       updateMyCources:(state,action)=>{
         state.myCourses=action.payload;
       }, 
       updateCart:(state,action)=>{
         state.cart=action.payload;
       },
-      setUserType:(state,action)=>{
+      updateUserType:(state,action)=>{
         state.userType = action.payload;
       },
-        setFname: (state,action) => {
+      setProfileData: (state,action) => {
         state.fname= action.payload;
       },
-        setLname:(state,action)=>{
-        state.lname = action.payload;
-      },
-      setEmail: (state,action) =>
-      {
-        state.email = action.payload;
-      },
-      setphoneNo: (state,action) => {
-        if(action.payload.countryCode)
-        state.phoneNo.countryCode = action.payload.countryCode;
-        else
-        state.phoneNo.number = action.payload.number;
+      setEnrolledCourses:(state,action)=>{
+        state.enrolledCourses = action.payload;
       },
       setMessage: (state,action) => {
         state.message = action.payload;
       },
-      setPassword:(state,action)=>{
-        state.password = action.payload;
-      }
     }
   })
   // Action creators are generated for each case reducer function
-  export const { setFname,setLname,setUserType,setMessage,setphoneNo,setEmail,setPassword,updateCart,updateMyCources } = UserDataSlice.actions;
+  export const {setEnrolledCourses,setCourseDetails,updateUserType,setMessage,updateCart,updateMyCources,setProfileData } = UserDataSlice.actions;
   
   export default UserDataSlice;

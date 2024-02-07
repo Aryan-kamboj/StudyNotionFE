@@ -4,7 +4,7 @@ const instructorSchema = new mongoose.Schema({
         type:String,
         required:true
     },
-    myCources:[
+    myCourses:[
         {
             type:mongoose.Schema.Types.ObjectId,
             required:true,

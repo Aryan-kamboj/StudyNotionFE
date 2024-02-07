@@ -1,4 +1,6 @@
 const USER = require("../models/user");
+const deleteFile = require("../utilityFunctions/deleteFile");
+const fileUpload = require("../utilityFunctions/fileUpload");
 exports.updateProfile = async (req,res)=>{
     try {
         const {email} = req.locals;
@@ -29,8 +31,6 @@ exports.updateProfile = async (req,res)=>{
         })
     }
 }
-const deleteFile = require("../utilityFunctions/deleteFile");
-const fileUpload = require("../utilityFunctions/fileUpload");
 exports.changeProfilePhoto = async (req,res)=>{
     try {
         const {email} = req.locals;
@@ -70,22 +70,20 @@ exports.myProfile = async (req,res)=>{
     try {
         const {email} = req.locals;
         if(email){
-            const {bio,fname,lname,phoneNo,DOB,gender,profilePhoto} = await USER.findOne({email:email},"bio fname lname phoneNo DOB gender profilePhoto");
-            if(bio&&fname&&lname&&phoneNo&&DOB&&gender&&profilePhoto){
-                return res.status(200).json({
-                    fullName:fname+" "+lname,
-                    email:email,
-                    profilePhoto:profilePhoto,
-                    fname:fname,
-                    lname:lname,
-                    phoneNo:phoneNo,
-                    DOB:DOB,
-                    gender:gender
-                })
-            }
-            else{
-                throw "There has been some error in fetching the details";
-            }
+            const {bio,fname,lname,phoneNo,DOB,gender,profilePhoto,countryCode} = await USER.findOne({email:email},"bio countryCode fname lname phoneNo DOB gender profilePhoto");
+            console.log(bio,fname,lname,phoneNo,DOB,gender,profilePhoto,countryCode);
+            return res.status(200).json({
+                fullName:fname+" "+lname,
+                email:email,
+                countryCode:countryCode,
+                profilePhoto:profilePhoto,
+                fname:fname,
+                lname:lname,
+                phoneNo:phoneNo,
+                DOB:DOB,
+                gender:gender,
+                bio:bio
+            }) 
         }
         else{
             return res.status(400).json({

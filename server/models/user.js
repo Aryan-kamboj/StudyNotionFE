@@ -9,6 +9,10 @@ const userSchema = new mongoose.Schema({
         type:String,
         required:true,
     },
+    countryCode:{
+        type:String,
+        required:true,
+    },
     fname:{
         type:String,
         require:true,

@@ -1,23 +1,25 @@
-import React, { useEffect, useState } from 'react'
-import { EnrolledCoursesData } from '../../../data/tempData'
+import { useEffect} from 'react'
+// import { EnrolledCoursesData } from '../../../data/tempData'
 import { Link } from 'react-router-dom'
 import { BsThreeDotsVertical } from "react-icons/bs"
-import { useDispatch } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
 import { setLoading } from '../../../redux/slices/UI_slice'
-import { getEnorlledCources } from '../../../services/student/dashboardAPIS'
-import { getCourse } from '../../../services/open/courseAPIs'
+import { getEnorlledCourses } from '../../../services/student/dashboardAPIS'
+import { setEnrolledCourses } from '../../../redux/slices/UserDataSlice'
 
 export const EnrolledCourses = () => {
   // let [EnrolledCoursesData,setData] = useState(getEnorlledCources());
+  const EnrolledCoursesData = useSelector(({rootReducer})=>rootReducer.UserDataSlice.enrolledCourses);
+  console.log(EnrolledCoursesData);
   const dispatcher = useDispatch();
   useEffect(()=>{
     // iifc-> Immediately Invoked Function Expression invokes itself as soon as it lodes 
     (async ()=>{
       try {
         dispatcher(setLoading(true));
-        // setData(await getEnorlledCources());
-        const data = await getEnorlledCources();
+        const data = await getEnorlledCourses();
         console.log(data);
+        dispatcher(setEnrolledCourses(data));
         dispatcher(setLoading(false));
       } catch (error) {
         console.log(error);
@@ -41,7 +43,8 @@ export const EnrolledCourses = () => {
             </div>
             <div className='border-x-2 border-richblack-700 border-b-2 h-[75%] rounded-b-lg'>
             {/* would like to add a filter bar to seperate completed and pending cources */}
-              {EnrolledCoursesData.map(({courseName,thumbnail,desc,courseId,duration,progress},i)=>{
+              {EnrolledCoursesData?.map(({courseName,thumbnail,desc,courseId,duration,progress},i)=>{
+                {/* console.log("mai chala") */}
                   const sec = duration%60;
                   duration-=sec;
                   const totalMins = ((duration)/60);

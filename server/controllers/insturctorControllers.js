@@ -541,9 +541,9 @@ exports.myCourses = async (req,res)=>{
     try {
         const {email,userType} = req.locals;
         if(email&&userType&&userType==="instructor"){
-            const {myCources} = await INSTRUCTOR.findOne({email:email},"myCources");
+            const {myCourses} = await INSTRUCTOR.findOne({email:email},"myCourses");
             const courses_Info = [];
-            for (const courseId of myCources){
+            for (const courseId of myCourses){
                 const {createdAt,courseName,enrolled,courseDesc,coursePrice,thumbnail,isPublic,sections} = await COURSE.findById(courseId,"enrolled createdAt courseName courseDesc coursePrice thumbnail isPublic sections");
                 const duration = sections.reduce((acc,section)=>{
                     return acc+section.lectures.reduce((accLec,lecture)=>{

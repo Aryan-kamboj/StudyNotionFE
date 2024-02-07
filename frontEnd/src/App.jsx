@@ -23,7 +23,7 @@ function App() {
     return rootReducer.UI_slice.loading;
   });
   return (
-    <div className='bg-richblack-900 overflow-x-hidden h-screen min-h-screen'>
+    <div className='bg-richblack-900 overflow-x-hidden h-screen min-h-screen hideScrollBars '>
       <Navbar/>
       <div className='h-[100%]'>
         {isLoading?<LoadingScreen/>:

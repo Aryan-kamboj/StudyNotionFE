@@ -185,31 +185,35 @@ exports.enrolledCources = async (req,res) =>{
     try {
         const {email,userType} = req.locals;
         if(email&&userType==="student"&&userType){
-            const {enrolledCources} = await STUDENT.findOne({email:email});
+            const {enrolledCourses} = await STUDENT.findOne({email:email},"enrolledCourses");
             const enrolledIn = [];
-            for(const course of enrolledCources){
-                const {courseName,thumbnail,courseDesc,sections,_id} = await COURSE.findById(course.courseId,"courseName thumbnail courseDesc sections ");
-                const duration = sections.reduce((acc,section)=>{
-                    return acc+section.lectures.reduce((accLec,lecture)=>{
-                        return accLec+lecture.length;
+            console.log(enrolledCourses);
+            if(enrolledCourses){
+                for(const course of enrolledCourses){
+                    const {courseName,thumbnail,courseDesc,sections,_id} = await COURSE.findById(course.courseId,"courseName thumbnail courseDesc sections ");
+                    const duration = sections.reduce((acc,section)=>{
+                        return acc+section.lectures.reduce((accLec,lecture)=>{
+                            return accLec+lecture.length;
+                        },0);
                     },0);
-                },0);
-                const totalLectures = sections.reduce((acc,section)=>{
-                    return acc+section.lectures.length;
-                },0);
-                const lengthConsumed = course.contentConsumed.length;
-                const progress = Math.floor((lengthConsumed/totalLectures)*100);
-                enrolledIn.push({
-                    courseName:courseName,
-                    thumbnail:thumbnail,
-                    desc:courseDesc,
-                    courseId:_id,
-                    duration:duration,
-                    progress:progress
-                })
+                    const totalLectures = sections.reduce((acc,section)=>{
+                        return acc+section.lectures.length;
+                    },0);
+                    const lengthConsumed = course.contentConsumed.length;
+                    const progress = Math.floor((lengthConsumed/totalLectures)*100);
+                    enrolledIn.push({
+                        courseName:courseName,
+                        thumbnail:thumbnail,
+                        desc:courseDesc,
+                        courseId:_id,
+                        duration:duration,
+                        progress:progress
+                    })
+                }
             }
+            console.log("hiii");
             return res.status(200).json({
-                enrolledCources:enrolledIn
+                enrolledCourses:enrolledIn
             })
         }
         else{

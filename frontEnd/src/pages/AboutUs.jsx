@@ -33,9 +33,9 @@ const AboutUs = () => {
       })
   }
   return (
-    <div className='bg-richblack-900'>
+    <div className='bg-richblack-900 hideScrollBars '>
       {/* section 1 */}
-      <div className='pt-[5rem] max-tablet:pt-[1rem] bg-richblack-800 mx-auto w-screen'>
+      <div className='pt-[5rem] hideScrollBars max-tablet:pt-[1rem] bg-richblack-800 mx-auto w-screen'>
         <div className='w-[60%] mx-auto'>
           <h1 className='text-white text-4xl text-center font-[500] max-tablet:text-base'>Driving Innovation in Online Education for a <br/> <CyanColoredText>Brighter Future</CyanColoredText></h1>
           <p className='text-richblack-300 text-center mt-4 max-tablet:text-xs font-[500]'>Studynotion is at the forefront of driving innovation in online education. We're passionate about creating a brighter future by offering cutting-edge courses, leveraging emerging technologies, and nurturing a vibrant learning community.</p>

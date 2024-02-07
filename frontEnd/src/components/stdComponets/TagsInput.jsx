@@ -40,8 +40,8 @@ export const TagsInput = ({setTags,tags,required,placeholder,label}) => {
             {label}{required?<span className='text-pink-200 pl-[0.3rem]'>*</span>:""}
         </div>
         <div className='w-[100%] flex justify-start flex-wrap'>
-            {tags.map((tag)=>{
-                return <div className='px-2 py-1 mr-2 mt-2 bg-yellow-300 text-white rounded-full w-fit flex items-center space-x-2'><span>{tag}</span><FaXmark tag={tag} onClick={removeTag}/></div>
+            {tags?.map((tag,i)=>{
+                return <div key={i} className='px-2 py-1 mr-2 mt-2 bg-yellow-300 text-white rounded-full w-fit flex items-center space-x-2'><span>{tag}</span><FaXmark tag={tag} onClick={removeTag}/></div>
             })}
         </div>
         <input onKeyDown={keyDownHandler} placeholder={placeholder} value={val} className='w-[100%] bg-richblack-700 mt-2 p-3 text-md text-whtie outline-none rounded-lg border-b-richblack-200 border-b-[1px]'/>

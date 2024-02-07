@@ -1,6 +1,6 @@
 import toast from "react-hot-toast";
 import { apiConnector } from "../apiConnection";
-import { setUserType } from "../../redux/slices/UserDataSlice";
+import { updateUserType } from "../../redux/slices/UserDataSlice";
 import { useDispatch } from "react-redux";
 import {store} from "../../main";
 export const loginAPI = async ({email,password})=>{
@@ -20,13 +20,13 @@ export const loginAPI = async ({email,password})=>{
         toast.dismiss();
         localStorage.removeItem("userType");
         localStorage.setItem("userType",`${data.user}`);
-        store.dispatch(setUserType(data.user))
+        store.dispatch(updateUserType(data.user))
         toast.success("User logged in");
         return data;
     } catch (error) {
         console.log(error);
         toast.dismiss();
         toast.error(error.response.data.message);
-        setUserType(null);
+        updateUserType(null);
     }
 }
