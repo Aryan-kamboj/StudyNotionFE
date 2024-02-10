@@ -119,7 +119,7 @@ exports.buyCourse = async (req,res)=>{
         const {course,paymentId,orderId} = req.body;
         const {email,userType} = req.locals;
         if(email&&userType==="student"){
-            const user = await STUDENT.findOne({email:email},"enrolledCources");
+            const user = await STUDENT.findOne({email:email},"enrolledCourses");
             const courseCheck = await COURSE.findById(course,{_id:1});
             if(user&&courseCheck)
             {       
@@ -130,8 +130,8 @@ exports.buyCourse = async (req,res)=>{
                     contentConsumed:[],
                 }
                 console.log(user);
-                user.enrolledCources.push(enrollmentObj);
-                await STUDENT.updateOne({email:email},{enrolledCources:user.enrolledCources});
+                user.enrolledCourses.push(enrollmentObj);
+                await STUDENT.updateOne({email:email},{enrolledCourses:user.enrolledCourses});
                 await COURSE.updateOne({_id:course},{ $inc: { enrolled: 1 }});
                 return res.status(200).json({
                     message:"Course bought successfully"
@@ -164,16 +164,16 @@ exports.contentWatched = async (req,res)=>{
         const {email,userType} = req.locals;
         const {courseId,contentId} = req.body;
         if(email&&userType==="student"&&courseId&&contentId){
-            const student = await STUDENT.findOne({email:email},"enrolledCources");
-            const courseIdx = student.enrolledCources.findIndex((course)=>{
+            const student = await STUDENT.findOne({email:email},"enrolledCourses");
+            const courseIdx = student.enrolledCourses.findIndex((course)=>{
                 const id = String(course.courseId)
                 console.log(id , courseId);
                 return (id === courseId)
             });
-            student.enrolledCources[courseIdx].contentConsumed.push(contentId);
-            await STUDENT.findOneAndUpdate({email:email},{enrolledCources:student.enrolledCources});
-            const {enrolledCources} = await STUDENT.findOne({email:email},"enrolledCources")
-            return res.status(200).json(enrolledCources[courseIdx]);
+            student.enrolledCourses[courseIdx].contentConsumed.push(contentId);
+            const {enrolledCourses} = await STUDENT.findOneAndUpdate({email:email},{enrolledCourses:student.enrolledCourses},{new:true},"enrolledCourses");
+            return res.status(200).json(enrolledCourses[courseIdx]?.contentConsumed);
+            // return res.status(200).json(enrolledCourses[courseIdx]);
         }
     } catch (error) {
         return res.status(500).json({
@@ -181,7 +181,7 @@ exports.contentWatched = async (req,res)=>{
         })
     }
 }
-exports.enrolledCources = async (req,res) =>{
+exports.enrolledCourses = async (req,res) =>{
     try {
         const {email,userType} = req.locals;
         if(email&&userType==="student"&&userType){
@@ -200,6 +200,7 @@ exports.enrolledCources = async (req,res) =>{
                         return acc+section.lectures.length;
                     },0);
                     const lengthConsumed = course.contentConsumed.length;
+                    console.log("total ",totalLectures," ,, length consumed ",lengthConsumed);
                     const progress = Math.floor((lengthConsumed/totalLectures)*100);
                     enrolledIn.push({
                         courseName:courseName,
@@ -207,7 +208,9 @@ exports.enrolledCources = async (req,res) =>{
                         desc:courseDesc,
                         courseId:_id,
                         duration:duration,
-                        progress:progress
+                        progress:progress,
+                        contentConsumed:course.contentConsumed,
+                        totalLectures:totalLectures,
                     })
                 }
             }

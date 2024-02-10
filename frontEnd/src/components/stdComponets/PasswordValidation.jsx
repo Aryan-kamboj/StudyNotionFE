@@ -28,19 +28,21 @@ export const PasswordValidation = ({password,cnfPassword,setLock}) => {
         })
         if(array.length >= 8)
             setCheckMinChars(true);
-        if(password===cnfPassword)
+        if(password===cnfPassword){
+            console.log("cnfPass checked and seted to true")
             cnfCheck = true;
+        }
         else
             cnfCheck = false;
         if(checkMinChars&&checkSpecial&&checkNumber&&checkUpper&&checkLower&&cnfCheck){
             console.log("Pass= "+password+" cnfPass = "+cnfPassword);
             if(setLock!==undefined){
-                setLock(false);
+                setLock(true);
             }
         }  
         else
         if(setLock){
-            setLock(true);
+            setLock(false);
         } 
     }
    

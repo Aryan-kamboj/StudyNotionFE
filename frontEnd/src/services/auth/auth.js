@@ -1,8 +1,8 @@
 import toast from "react-hot-toast";
 import { apiConnector } from "../apiConnection";
 import { updateUserType } from "../../redux/slices/UserDataSlice";
-import { useDispatch } from "react-redux";
 import {store} from "../../main";
+const login = document.cookie.split("=")[1];
 export const loginAPI = async ({email,password})=>{
     try {
         const bodyData={
@@ -28,5 +28,32 @@ export const loginAPI = async ({email,password})=>{
         toast.dismiss();
         toast.error(error.response.data.message);
         updateUserType(null);
+    }
+}
+export const changePasswordApi = async (oldPass,newPass,cnfPass)=>{
+    try {
+        const bodyData = {
+            oldPassword:oldPass,
+            password:newPass,
+            cnfPassword:cnfPass
+        }
+        const request = {
+            method:"POST",
+            bodyData:bodyData,
+            url:"http://localhost:4002/api/auth/changePass",
+            creds:true,
+            headers:{
+                'Authorization':`Bearer ${login}`,
+            }
+        }
+        toast.loading("Changing user password");
+        await apiConnector(request);
+        console.log("change password running")
+        toast.dismiss();
+        toast.success("Password changed ");
+    } catch (error) {
+        toast.dismiss();
+        toast.error("Could not update password");
+        console.log(error);
     }
 }

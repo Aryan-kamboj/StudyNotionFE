@@ -27,17 +27,25 @@ export const MyDashboard = ({setTab}) => {
       else 
         setMyCources(data);
       const courseNames = [];
+      let revenueSum = 0;
       const revenueData = data.map((course)=>{
         courseNames.push(course.courseName);
-        const revenue = course.coursePrice*course.enrolled;
-        setRevenue(totalRevenue+revenue);
+        let revenue=0;
+        console.log(course.enrolled)
+        if(course.enrolled!==0){
+          revenue = course.coursePrice*course.enrolled;
+        }
+        revenueSum+=revenue;
         return (revenue);
-       });
+      });
+      setRevenue(revenueSum);
       setCourses(courseNames.length);
+      let students=0;
       const enrolledData = data.map((course)=>{
-        setStudents(totalStudents+course.enrolled);
+        students+=course.enrolled;
         return (course.enrolled);
       });
+      setStudents(students);
       console.log(revenueData,enrolledData)
       enrolledDataSetter({
         datasets:[

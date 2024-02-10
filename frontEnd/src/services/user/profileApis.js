@@ -9,7 +9,7 @@ export const getProfileApi = async ()=>{
             creds:true,
             headers:{
                 'Authorization':`Bearer ${login}`,
-                'Content-Type': 'multipart/form-data'}
+            }
         }
         toast.loading("Getting profile details");
         const {data} = await apiConnector(request);
@@ -19,5 +19,30 @@ export const getProfileApi = async ()=>{
     } catch (error) {
         toast.dismiss();
         toast.error("Could not get profile details");
+    }
+}
+export const updateProfileApi = async (phoneNo,fname,lname,bio,DOB,gender,countryCode)=>{
+    try {
+        const bodyData = {
+            phoneNo,fname,lname,bio,DOB,gender,countryCode
+        }
+        const request = {
+            method:"POST",
+            url:"http://localhost:4002/api/user/updateProfile",
+            creds:true,
+            headers:{
+                'Authorization':`Bearer ${login}`
+            },
+            bodyData:bodyData
+        }
+        toast.loading("Updating user profile");
+        const {data} = await apiConnector(request);
+        toast.dismiss();
+        toast.success("Profile data updated ");
+        return data;
+    } catch (error) {
+        toast.dismiss();
+        toast.error("Could not update profile");
+        console.log(error);
     }
 }

@@ -6,11 +6,14 @@ import {PiTriangleFill} from "react-icons/pi";
 import {Link} from "react-router-dom"
 import { NavbarLinks } from '../data/NavbarData';
 import { FaSortDown } from "react-icons/fa";
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import Cookies from 'js-cookie';
-import { updateUserType } from '../redux/slices/UserDataSlice';
+import { setProfileData, updateUserType } from '../redux/slices/UserDataSlice';
+import { getCategories } from '../services/open/categoryAPIs';
+import { setCategories } from '../redux/slices/UI_slice';
+import { getProfileApi } from '../services/user/profileApis';
 function Headder() {
     const dispatcher = useDispatch();
     function closeProfileListner () { 
@@ -26,6 +29,14 @@ function Headder() {
     const uiCategories = useSelector(({rootReducer})=>{
         return rootReducer.UI_slice.categories;
     });
+    useEffect(()=>{
+        (async()=>{
+            const data = await getCategories();
+            dispatcher(setCategories(data));
+            const profileData = document.cookie.length!==0?await getProfileApi():null; 
+            dispatcher(setProfileData(profileData));
+        })()
+    },[])
     const [categoriesVisible,setVisible] = useState(false);
     const makeVisible = (e)=>{
         setVisible(true);

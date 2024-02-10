@@ -16,11 +16,14 @@ export const EnrolledCourses = () => {
     // iifc-> Immediately Invoked Function Expression invokes itself as soon as it lodes 
     (async ()=>{
       try {
-        dispatcher(setLoading(true));
-        const data = await getEnorlledCourses();
-        console.log(data);
-        dispatcher(setEnrolledCourses(data));
-        dispatcher(setLoading(false));
+        if(EnrolledCoursesData.length<1)
+          {     
+            dispatcher(setLoading(true));
+            const data = await getEnorlledCourses();
+            console.log(data);
+            dispatcher(setEnrolledCourses(data));
+            dispatcher(setLoading(false));
+          }
       } catch (error) {
         console.log(error);
       }

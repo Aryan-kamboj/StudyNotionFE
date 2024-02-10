@@ -4,20 +4,27 @@ const fileUpload = require("../utilityFunctions/fileUpload");
 exports.updateProfile = async (req,res)=>{
     try {
         const {email} = req.locals;
-        const {phoneNo,fname,lname,bio,DOB,gender} = req.body;
+        const {phoneNo,fname,lname,bio,DOB,gender,countryCode} = req.body;
+        let dobParsed;
+        if(DOB)
+            dobParsed = Date.parse(DOB)
+        // console.log(Date.parse(DOB));
         if(email){
             const oldUser = await USER.findOne({email:email},"phoneNo fname lname bio gender DOB");
             const newUser = {
                 phoneNo:phoneNo?phoneNo:oldUser.phoneNo,
+                countryCode:countryCode?countryCode:oldUser.countryCode,
                 fname:fname?fname:oldUser.fname,
                 lname:lname?lname:oldUser.lname,
                 bio:bio?bio:oldUser.bio,
                 gender:gender?gender:oldUser.gender,
-                DOB:DOB?DOB:oldUser.DOB
+                DOB:dobParsed?dobParsed:oldUser.DOB
             }
-            await USER.updateOne({email:email},newUser);
+            let updatedUser = await USER.findOneAndUpdate({email:email},newUser,{new:true,fields:{_id:0,__v:0,password:0}});
+            updatedUser = {...updatedUser._doc,fullName: `${updatedUser.fname} ${updatedUser.lname}`,email:email};
+            updatedUser.DOB=Date.parse(updatedUser.DOB);
             return res.status(200).json({
-                message:"User update successfull"
+                updatedUser
             })
         }
         else{
@@ -80,7 +87,7 @@ exports.myProfile = async (req,res)=>{
                 fname:fname,
                 lname:lname,
                 phoneNo:phoneNo,
-                DOB:DOB,
+                DOB:Date.parse(DOB),
                 gender:gender,
                 bio:bio
             }) 

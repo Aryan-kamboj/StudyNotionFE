@@ -1,5 +1,4 @@
 import { useState }  from 'react';
-import {testUserProfile} from "../../data/tempData";
 import {StdButton} from "../stdComponets/StdButton";
 import {FaEdit} from "react-icons/fa"
 import { EditProfilePage } from './EditProfilePage';
@@ -8,11 +7,12 @@ import { useSelector } from 'react-redux';
 export const MyProfile = () => {
   const profileData =  useSelector(({rootReducer})=>{return rootReducer.UserDataSlice?.profileData});  
   const [showEditPage,setEditPage] = useState(false);
+  let dateOfBirth = new Date(profileData?.DOB).toDateString();
   return (
       <div className=' pt-14 max-tablet:pt-0 overflow-auto hideScrollBars h-fit'>
         <div className=' mx-auto pb-14'>
         {showEditPage?
-        <EditProfilePage profileInfo={testUserProfile} setEditPage={setEditPage}/>
+        <EditProfilePage profileInfo={profileData} setEditPage={setEditPage}/>
         :<div>
           <div className='text-sm m-8 space-y-4 max-tablet:space-y-2'>
             <span className='text-richblack-300'>Home / Dashboard /</span>
@@ -66,7 +66,7 @@ export const MyProfile = () => {
                 </div>
                 <div className='flex flex-col '>
                   <span className='text-richblack-600'>Date Of Birth</span>
-                  {profileData?.DOB}
+                  {dateOfBirth}
                 </div>
               </div>
             </div>

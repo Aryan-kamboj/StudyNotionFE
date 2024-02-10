@@ -260,7 +260,9 @@ exports.newPassword = async (req,res)=>{
 }
 exports.changePassword = async (req,res)=>{
    try {
-        const {oldPassword,password,cnfPassword,email} = req.body;
+        const {email} = req.locals;
+        const {oldPassword,password,cnfPassword} = req.body;
+        console.log(email,oldPassword,password,cnfPassword)
         if(!oldPassword||!password||!cnfPassword||!email){
             return res.status(400).json({
                 message:"all fields mandatory"

@@ -42,7 +42,7 @@ export const CourseBuilder = ({submitHandler,backHandler}) => {
       <button onClick={addSectionHandler} className=' p-3 flex items-center justify-evenly w-[11rem] outline-none border-solid border-[1px] rounded-lg border-yellow-50 text-yellow-50'>Create Section<AiFillPlusCircle/></button>
 
       <div className='bg-richblack-700 text-richblack-400 border-[1px] rounded-xl border-richblack-600'>
-      {sections.map((section,i)=>{
+      {sections?.map((section,i)=>{
         return <SectionDropdown key={i} courseId={courseDetails?._id} sectionIdx={i} deleteSectionHandler={deleteSectionHandler} sectionData={section} />
       })}
       </div>

@@ -1,7 +1,8 @@
 import { createSlice } from "@reduxjs/toolkit";
 import { getProfileApi } from "../../services/user/profileApis";
 const initialState = {
-    profileData:document.cookie.length!==0?await getProfileApi():null,
+    // profileData:document.cookie.length!==0?await getProfileApi():null,
+    profileData:null,
     userType:document.cookie.length!==0?localStorage.getItem("userType"):null,
     enrolledCourses:[],
     cart:[],
@@ -25,10 +26,13 @@ const initialState = {
         state.userType = action.payload;
       },
       setProfileData: (state,action) => {
-        state.fname= action.payload;
+        state.profileData= action.payload;
       },
       setEnrolledCourses:(state,action)=>{
         state.enrolledCourses = action.payload;
+      },
+      updateContentConsumed:(state,action)=>{
+        state.enrolledCourses[action.payload.idx].contentConsumed=action.payload.contentConsumed;
       },
       setMessage: (state,action) => {
         state.message = action.payload;
@@ -36,6 +40,6 @@ const initialState = {
     }
   })
   // Action creators are generated for each case reducer function
-  export const {setEnrolledCourses,setCourseDetails,updateUserType,setMessage,updateCart,updateMyCources,setProfileData } = UserDataSlice.actions;
+  export const {setEnrolledCourses,updateContentConsumed,setCourseDetails,updateUserType,setMessage,updateCart,updateMyCources,setProfileData } = UserDataSlice.actions;
   
   export default UserDataSlice;

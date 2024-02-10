@@ -35,7 +35,7 @@ exports.createCourse = async (req,res)=>{
                         rating:0.0,
                         reviewCount:0
                     });
-                    const instructorUpdated = await INSTRUCTOR.updateOne({email:email},{$push: {myCources:newCourse._id}});
+                    const instructorUpdated = await INSTRUCTOR.updateOne({email:email},{$push: {myCourses:newCourse._id}});
                     if(newCourse&&instructorUpdated){
                         return res.status(200).json({
                             // courseName:courseName,courseDesc:courseDesc,coursePrice:coursePrice,courseCategory:courseCategory,tags_parsed:tags_parsed,thumbnail:thumbnail,benifits:benifits,requirements_parsed:requirements_parsed
@@ -173,8 +173,9 @@ exports.addSection = async (req,res)=>{
         const {email,userType} = req.locals;
         const {sectionName,courseId} = req.body;
         if(email&&userType==="instructor"&&userType&&sectionName&&courseId){
-            const instructor = await INSTRUCTOR.findOne({email:email},"myCources");
-            if(instructor.myCources.includes(courseId)){
+            const instructor = await INSTRUCTOR.findOne({email:email},"myCourses");
+            if(instructor.myCourses.includes(courseId)){
+                console.log(email,userType,sectionName,courseId)
                 const updatedCourse = await COURSE.findByIdAndUpdate({_id:courseId},{$push: {sections:{sectionName:sectionName,lectures:[]}}},{new:true});
                 if(updatedCourse){
                     return res.status(200).json({
@@ -208,8 +209,8 @@ exports.editSectionName = async (req,res)=>{
         const {email,userType} = req.locals;
         const {courseId,editedSectionName,sectionIdx} = req.body; 
         if(email&&userType==="instructor"&&userType&&editedSectionName&&sectionIdx&&courseId){
-            const instructor = await INSTRUCTOR.findOne({email:email},"myCources");
-            if(instructor.myCources.includes(courseId)){
+            const instructor = await INSTRUCTOR.findOne({email:email},"myCourses");
+            if(instructor.myCourses.includes(courseId)){
                 const {sections}= await COURSE.findById(courseId,"sections");
                 sections[sectionIdx].sectionName = editedSectionName;
                 const updatedCourse = await COURSE.findByIdAndUpdate(courseId,{sections},{new:true});
@@ -295,8 +296,8 @@ exports.addLecture = async (req,res)=>{
         const sectionIdx_parsed = Number(sectionIdx);
         console.log(userType==="instructor"&&userType&&email&&courseId&&sectionIdx.length&&lectureTitle&&lectureDesc&&lectureFile);
         if(userType==="instructor"&&userType&&email&&courseId&&sectionIdx.length&&lectureTitle&&lectureDesc&&lectureFile){
-            const {myCources} = await INSTRUCTOR.findOne({email:email},"myCources");
-            if(myCources.includes(courseId)){
+            const {myCourses} = await INSTRUCTOR.findOne({email:email},"myCourses");
+            if(myCourses.includes(courseId)){
                 const response = await fileUpload(lectureFile);
                 if(response){
                     const {sections} = await COURSE.findById(courseId,"sections");

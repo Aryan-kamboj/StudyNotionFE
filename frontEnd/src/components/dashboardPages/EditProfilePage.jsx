@@ -1,26 +1,31 @@
-import React, { useState } from 'react'
+import { useState } from 'react'
 import {IoIosArrowBack} from "react-icons/io"
 import {FiTrash2,FiCheck} from 'react-icons/fi'
 import { StdButton } from '../stdComponets/StdButton'
 import { InputField } from "../stdComponets/InputField"
 import {PhoneNumberInput} from "../stdComponets/PhoneNumberInput"
 import {PasswordValidation} from "../stdComponets/PasswordValidation"
+import { changePasswordApi } from '../../services/auth/auth'
+import { updateProfileApi } from '../../services/user/profileApis'
+import { useDispatch } from 'react-redux'
+import { setProfileData } from '../../redux/slices/UserDataSlice'
 export const EditProfilePage = ({setEditPage,profileInfo}) => {
     const [checked,setChecked] = useState(false);
-    // const [profileData,setProfileData] = useState(profileInfo);
-    // let profilePhoto,fname,lname,email,phoneNo,gender,bio,DOB;
     const[fname,setfname]=useState(profileInfo.fname);
     const[profilePhoto,setprofilePhoto]=useState(profileInfo.profilePhoto);
     const[lname,setlname]=useState(profileInfo.lname);
     const[phoneNo,setphoneNo]=useState(profileInfo.phoneNo);
+    const[countryCode,setCountryCode] = useState(profileInfo.countryCode);
     const[gender,setgender]=useState(profileInfo.gender);
     const[bio,setbio]=useState(profileInfo.bio);
-    const[DOB,setDOB] =useState( profileInfo.DOB); 
+    const dateUnix = new Date(profileInfo?.DOB);
+    console.log(dateUnix.getMonth())
+    const[DOB,setDOB] =useState(`${dateUnix.getFullYear()}-${dateUnix.getMonth()+1<10?'0'+Number(dateUnix.getMonth()+1):Number(dateUnix.getMonth()+1)}-${dateUnix.getDate()}`); 
     const [today,setToday] = useState(new Date().toLocaleDateString('fr-ca'));
     const [oldPass,setOldPass] = useState("");
     const [newPass,setNewPass] = useState("");
     const [cnfNewPass,setCnfNewPass] = useState("");
-    const [passChangeAllowed,setLock] = useState(false);
+    const [passChangeAllow,setPassChangeAllow] = useState(true);
 
     // setToday needs to be removed
 
@@ -29,11 +34,23 @@ export const EditProfilePage = ({setEditPage,profileInfo}) => {
         image?setprofilePhoto(URL.createObjectURL(image)):
         console.log("image not found");
     }
-    const uploadHandler = (e)=>{
-
+    const uploadHandler = async (e)=>{
+        e.preventDefault();
     }
-    const submitHandler = (e)=>{
+    const changePassHandler = async (e)=>{
+        e.preventDefault();
+        console.log(passChangeAllow)
+        if(passChangeAllow)
+        await changePasswordApi(oldPass,newPass,cnfNewPass)
+    }
+    const dispatcher = useDispatch();
+    const submitHandler = async (e)=>{
+        e.preventDefault()
         // next line setToday needs to be removed but build fas jati hai toh abhi nahi kiya
+        const updatedUser = await updateProfileApi(phoneNo,fname,lname,bio,DOB,gender,countryCode);
+        // console.log(phoneNo,fname,lname,bio,DOB,gender,countryCode);
+        console.log(updatedUser);
+        dispatcher(setProfileData(updatedUser));
         setToday(today);
     }
     const deleteAccountHandler = () =>{
@@ -69,8 +86,8 @@ export const EditProfilePage = ({setEditPage,profileInfo}) => {
                 <div className="text-richblack-25 font-[500] text-lg">Change Profile Information</div>
                 <form onSubmit={submitHandler}>
                     <div className='grid grid-cols-2 max-tablet:grid-cols-1 gap-4 relative'>
-                        <InputField required={true} placeholder={fname} setterFn={setfname} label="First name" type="text"/>
-                        <InputField required={true} placeholder={lname} setterFn={setlname} label="Last name" type="text"/>
+                        <InputField required={true} value={fname} setterFn={setfname} label="First name" type="text"/>
+                        <InputField required={true} value={lname} setterFn={setlname} label="Last name" type="text"/>
                         <div className='space-y-1'>
                             <label className='text-sm '>Gender</label>
                             <select onChange={(e)=>setgender(e.target.value)} className='p-3 text-xl w-[100%] border-b-[1px] border-richblack-300 outline-none bg-richblack-700 text-white rounded-lg'>
@@ -85,12 +102,9 @@ export const EditProfilePage = ({setEditPage,profileInfo}) => {
                                 </option>
                             </select>
                         </div>
-                        <InputField width={100} placeholder={DOB} setterFn={setDOB} max={today} label={"Date of birth"} type="date"/>
-                        <PhoneNumberInput required={true} setterFnNumber={setphoneNo} countryCode={phoneNo.countryCode} phoneNo={phoneNo.number} label={"Phone Number"}/>
-                        <InputField placeholder={bio} setterFn={setbio} label={"About"} type={"textarea"}/>
-                        {/* <InputField setterFn={setgender} label="Gender" name="gender" type="radio" value={"Male"}/>
-                            <InputField setterFn={setgender} name="gender" type="radio" value={"Female"}/>
-                            <InputField setterFn={setgender} name="gender" type="radio" value={"Other"}/> */}
+                        <InputField width={100} value={DOB} setterFn={setDOB} max={today} label={"Date of birth"} type="date"/>
+                        <PhoneNumberInput required={true} setterFnNumber={setphoneNo} setterFnCountryCode={setCountryCode} countryCode={countryCode} phoneNo={phoneNo} label={"Phone Number"}/>
+                        <InputField value={bio} setterFn={setbio} label={"About"} type={"textarea"}/>
                         <div className="max-tablet:static max-tablet:w-[100%] absolute bottom-20 w-[49%]"><StdButton width={100} color={"yellow"}>Update</StdButton></div>
                     </div>
                 </form>
@@ -104,9 +118,9 @@ export const EditProfilePage = ({setEditPage,profileInfo}) => {
                         <InputField setterFn={setNewPass} placeholder={"New Password"} label="New password" type={"password"}/>
                         <InputField setterFn={setCnfNewPass} placeholder={"Confirm New Password"} label="Confirm New password" type={"password"}/>
                     </div>
-                    <StdButton disabled={passChangeAllowed?true:false} color="yellow">Change password</StdButton>
+                    <StdButton disabled={passChangeAllow?false:true} handler={changePassHandler} color="yellow">Change password</StdButton>
                 </form>
-                <PasswordValidation setLock={setLock} password={newPass} cnfPassword={cnfNewPass}/>
+                <PasswordValidation setLock={setPassChangeAllow} password={newPass} cnfPassword={cnfNewPass}/>
             </div>
 
             {/* DELETE ACCOUNT */}
