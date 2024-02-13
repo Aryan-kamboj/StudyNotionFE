@@ -1,20 +1,28 @@
 import { InputField } from '../components/stdComponets/InputField'
 import { StdButton } from '../components/stdComponets/StdButton'
 import {useState} from "react";
-import { Link } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
 import loginPhoto from "../assets/Images/login.webp";
 import frame from "../assets/Images/frame.png"
 import { loginAPI } from '../services/auth/auth';
+import { getProfileApi } from '../services/user/profileApis';
+import { useDispatch } from 'react-redux';
+import { setProfileData } from '../redux/slices/UserDataSlice';
 
 export const LogIn = () => {
+    const navigator = useNavigate();
     const [password,set_pass_ui] = useState();
     const [email,set_email_ui] = useState();
+    const dispatcher = useDispatch()
     const submitHandler = async (e)=>{
         e.preventDefault();
           await loginAPI({
             email:email,
             password:password,
         });
+        const profileData = await getProfileApi();
+        dispatcher(setProfileData(profileData));
+        navigator("/")
     }
   return (
     <div className='h-fit flex pt-16 max-tablet:flex-col max-tablet:h-[116vh] '>

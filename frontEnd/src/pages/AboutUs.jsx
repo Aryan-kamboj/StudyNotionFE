@@ -1,4 +1,3 @@
-import React from 'react';
 import { CyanColoredText } from '../components/stdComponets/CyanColoredText';
 import { OrangeColoredText } from "../components/stdComponets/OrangeColoredText";
 import { YellowColoredText } from '../components/stdComponets/YellowColoredText';
@@ -14,6 +13,7 @@ import { useState } from 'react';
 import { PhoneNumberInput } from '../components/stdComponets/PhoneNumberInput';
 import { StdButton } from '../components/stdComponets/StdButton';
 import { Footer } from '../components/Footer';
+import { contactUsApi } from '../services/open/contactUsApis';
 const AboutUs = () => {
   const [fName , set_ui_fname] = useState("");
   const [lName , set_ui_lname] = useState("");
@@ -21,16 +21,9 @@ const AboutUs = () => {
   const [phoneNo,set_ui_phoneNo] = useState("");
   const [countryCode,set_ui_countryCode] = useState("+91-India")
   const [message,set_ui_message] = useState("");
-  const submitHandler = (e)=>{
+  const submitHandler = async (e)=>{
     e.preventDefault();
-      console.log({
-        fName : fName,
-        lName : lName,
-        email : email,
-        phoneNo : phoneNo,
-        countryCode : countryCode,
-        message : message,
-      })
+    await contactUsApi(fName,lName,email,phoneNo,countryCode,message)
   }
   return (
     <div className='bg-richblack-900 hideScrollBars '>

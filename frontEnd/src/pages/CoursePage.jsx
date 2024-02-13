@@ -9,10 +9,11 @@ import {CopyToClipboard} from "react-copy-to-clipboard"
 import {GoDotFill} from "react-icons/go"
 import toast from "react-hot-toast"
 import { updateCart } from '../redux/slices/UserDataSlice';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { Footer } from '../components/Footer';
 import { getCourse , addToCart } from '../services/open/courseAPIs';
 import { setLoading } from '../redux/slices/UI_slice';
+import { useSearchParams } from 'react-router-dom';
 export const CoursePage = () => {
     const courseId = document.location.pathname.split("/")[2];
     const [courseDetails,setDetails] = useState({});
@@ -37,7 +38,6 @@ export const CoursePage = () => {
     const notify = () => {
         return toast.success('Copied to clip board');
     }
-    
     const courseLink = document.URL;
     const months= ["January","February","March","April","May","June","July",
     "August","September","October","November","December"];

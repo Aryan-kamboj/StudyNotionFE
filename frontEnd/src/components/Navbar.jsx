@@ -10,10 +10,11 @@ import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import Cookies from 'js-cookie';
-import { setProfileData, updateUserType } from '../redux/slices/UserDataSlice';
+import { setProfileData, updateCart, updateUserType } from '../redux/slices/UserDataSlice';
 import { getCategories } from '../services/open/categoryAPIs';
 import { setCategories } from '../redux/slices/UI_slice';
 import { getProfileApi } from '../services/user/profileApis';
+import { getCart } from '../services/open/courseAPIs';
 function Headder() {
     const dispatcher = useDispatch();
     function closeProfileListner () { 
@@ -24,7 +25,6 @@ function Headder() {
         )}
     const [profileOptions,setShowProfileOptions] = useState(false);
     const profilePhoto = useSelector(({rootReducer})=>rootReducer.UserDataSlice?.profileData?.profilePhoto);
-    // console.log(profilePhoto);
     const userType = useSelector(({rootReducer})=>rootReducer.UserDataSlice.userType);
     const uiCategories = useSelector(({rootReducer})=>{
         return rootReducer.UI_slice.categories;
@@ -35,8 +35,12 @@ function Headder() {
             dispatcher(setCategories(data));
             const profileData = document.cookie.length!==0?await getProfileApi():null; 
             dispatcher(setProfileData(profileData));
+            if(userType==="student"){
+                const cartData = await getCart();
+                dispatcher(updateCart(cartData));
+            }
         })()
-    },[])
+    },[]);
     const [categoriesVisible,setVisible] = useState(false);
     const makeVisible = (e)=>{
         setVisible(true);
@@ -45,6 +49,7 @@ function Headder() {
         setVisible(false);
     }
     const navigator = useNavigate();
+    const cartCount = useSelector(({rootReducer})=>rootReducer.UserDataSlice.cart.length); 
     return (
       <div className="h-14 fixed z-[100] w-[100vw] bg-richblack-900 text-rich-black-25  border-solid border-b-[1px] border-richblack-700">
             {categoriesVisible?<div onMouseEnter={makeVisible} onMouseLeave={hide} className='rounded-2xl p-3 bg-richblack-5 absolute top-[48px] z-[10000] right-[45%] w-[15%] flex flex-col text-richblack-5 '><PiTriangleFill className="text-2xl absolute -top-[18px] right-[41%]" />
@@ -69,7 +74,10 @@ function Headder() {
                 <div className='flex w-[22%] text-2xl text-white justify-evenly  max-tablet:w-[50%] pr-0'>
                     {userType?userType==="student"?
                     <div className='flex space-x-4' >
-                        <div onClick={()=>navigator("dashboard/cart")}><LuShoppingCart/></div>
+                        <div className='relative' onClick={()=>navigator("dashboard/cart")}>
+                            {cartCount!==0?<div className='bg-[rgb(70,211,197)] h-[1rem] text-richblack-900 font-[500] w-[1rem] rounded-full text-sm flex absolute -right-2 -top-1 items-center justify-center'>{cartCount}</div>:''}
+                            <LuShoppingCart/>
+                        </div>
                         <div onClick={(e)=>{e.stopPropagation();console.log("profileeee");setShowProfileOptions(true);closeProfileListner()}}>
                             {profilePhoto?<div className=' rounded-full overflow-hidden'>
                                             <img className='object-cover h-[2rem] w-[2rem]' src={profilePhoto}/>

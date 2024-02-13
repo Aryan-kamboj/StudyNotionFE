@@ -1,5 +1,4 @@
 import { createSlice } from "@reduxjs/toolkit";
-import { getProfileApi } from "../../services/user/profileApis";
 const initialState = {
     // profileData:document.cookie.length!==0?await getProfileApi():null,
     profileData:null,

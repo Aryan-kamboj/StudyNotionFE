@@ -5,18 +5,12 @@ import { StdButton } from '../components/stdComponets/StdButton';
 import { PhoneNumberInput } from '../components/stdComponets/PhoneNumberInput';
 import { IoChatbubbles,IoEarthSharp,IoCall } from "react-icons/io5"
 import { Footer } from '../components/Footer';
+import { contactUsApi } from '../services/open/contactUsApis';
 const ContactUs = () => {
 
-  const submitHandler = (e)=>{
+  const submitHandler = async  (e)=>{
     e.preventDefault();
-      console.log({
-        fName : fName,
-        lName : lName,
-        email : email,
-        phoneNo : phoneNo,
-        countryCode : countryCode,
-        message : message,
-      })
+    await contactUsApi(fName,lName,email,phoneNo,countryCode,message)
   }
 
   const [fName , set_ui_fname] = useState("");
@@ -65,7 +59,7 @@ const ContactUs = () => {
                 <InputField label={"Last Name"} required={true} type={"text"} placeholder={"Last Name"} value={lName} setterFn={set_ui_lname}/>
               </div>
               <InputField label={"Email"}  required={true} type={"email"} placeholder={"Email"} value={email} setterFn={set_ui_email}/>
-              <PhoneNumberInput required={true} phoneNo={phoneNo} label={"Phone number"} setterFnNumber={set_ui_phoneNo} set_ui_countryCode={set_ui_countryCode} />
+              <PhoneNumberInput required={true} phoneNo={phoneNo} countryCode={countryCode} label={"Phone number"} setterFnNumber={set_ui_phoneNo} set_ui_countryCode={set_ui_countryCode} />
               <InputField value={message} setterFn={set_ui_message} required={true} type={"textarea"} label={"Message"} placeholder={"Enter your message here"}/>
               <StdButton width={100} color={"yellow"} type='submit' >Send Message</StdButton>
             </form>

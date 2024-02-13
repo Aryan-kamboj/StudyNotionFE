@@ -1,5 +1,8 @@
+const mailSender = require("../config/mailingService");
 const CATEGORIES = require("../models/categories");
 const COURSE = require("../models/course");
+const contactUsEmail = require("../templets/contactUsEmail");
+const contactUsReply = require("../templets/contactUsReply");
 exports.getCategories = async (req,res)=>{
     try {
         const categories = await CATEGORIES.find({},{_id:0,__v:0}) ;
@@ -55,7 +58,7 @@ exports.getCategoryData = async (req,res)=>{
         console.log(category);
         const categories = await CATEGORIES.find({});
         // console.log(categories);
-        const data = await COURSE.find({courseCategory:category},"thumbnail courseName coursePrice rating reviewCount");
+        const data = await COURSE.find({courseCategory:category,isPublic:true},"thumbnail courseName coursePrice rating reviewCount");
         let randomCategory = categories[Math.floor(Math.random()*1000)%categories.length].categoryName;
         while(randomCategory===category){
             randomCategory = categories[Math.floor(Math.random()*1000)%categories.length].categoryName;
@@ -65,6 +68,36 @@ exports.getCategoryData = async (req,res)=>{
             data:data,
             randomData:randomCatData,
         })
+    } catch (error) {
+        return res.status(500).json({
+            error:error
+        })
+    }
+}
+exports.contactUs = async (req,res)=>{
+    const StudyNotionEmail = process.env.STUDYNOTION_EMAIL;
+    console.log(typeof StudyNotionEmail);
+    try {
+        const {fname,lname,email,phoneNo,countryCode,message}=req.body;
+        if(!fname||!lname||!email||!phoneNo||!countryCode||!message){
+            return res.staus(400).json({
+                message:"All fields required"
+            })
+        } 
+        else{
+            const response = await mailSender(StudyNotionEmail,contactUsEmail(fname,lname,email,phoneNo,countryCode,message))
+            if(response.accepted.length>0){
+                await mailSender(email,contactUsReply(fname,lname));
+                return res.status(200).json({
+                    message:"email sent"
+                })
+            }
+            else{
+                return res.status(500).json({
+                    message:"Could not send message to team StudyNotion"
+                })
+            }
+        }
     } catch (error) {
         return res.status(500).json({
             error:error

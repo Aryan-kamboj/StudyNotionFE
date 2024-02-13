@@ -26,6 +26,7 @@ const sendVerificationEmail = async (email,otp) =>{
 
 OTPschema.pre("save",async function (next){
     if(this.isNew){
+        console.log(this.email,this.otp)
 		console.log(await sendVerificationEmail(this.email, this.otp));
         next();
     }
