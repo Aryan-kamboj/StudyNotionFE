@@ -15,6 +15,8 @@ import { getCategories } from '../services/open/categoryAPIs';
 import { setCategories } from '../redux/slices/UI_slice';
 import { getProfileApi } from '../services/user/profileApis';
 import { getCart } from '../services/open/courseAPIs';
+import { LogOutModal } from './logOutModal';
+import { setDashTab } from '../redux/slices/UI_slice';
 function Headder() {
     const dispatcher = useDispatch();
     function closeProfileListner () { 
@@ -23,6 +25,7 @@ function Headder() {
             setShowProfileOptions(false);
         }
         )}
+    const [showLogOutModal,setLogOutModal] = useState(false);
     const [profileOptions,setShowProfileOptions] = useState(false);
     const profilePhoto = useSelector(({rootReducer})=>rootReducer.UserDataSlice?.profileData?.profilePhoto);
     const userType = useSelector(({rootReducer})=>rootReducer.UserDataSlice.userType);
@@ -51,7 +54,9 @@ function Headder() {
     const navigator = useNavigate();
     const cartCount = useSelector(({rootReducer})=>rootReducer.UserDataSlice.cart.length); 
     return (
-      <div className="h-14 fixed z-[100] w-[100vw] bg-richblack-900 text-rich-black-25  border-solid border-b-[1px] border-richblack-700">
+      <div className=" fixed z-[100] w-[100vw] bg-richblack-900 text-rich-black-25  border-solid border-b-[1px] border-richblack-700">
+            {showLogOutModal?<LogOutModal setModal={setLogOutModal}/>
+            :<div className='h-14'>
             {categoriesVisible?<div onMouseEnter={makeVisible} onMouseLeave={hide} className='rounded-2xl p-3 bg-richblack-5 absolute top-[48px] z-[10000] right-[45%] w-[15%] flex flex-col text-richblack-5 '><PiTriangleFill className="text-2xl absolute -top-[18px] right-[41%]" />
             {uiCategories.map(({categoryName},i)=>{
                 return <Link key={i} to={`catalog/${categoryName}`}className='text-black font-[500] text-lg p-4 text-center hover:bg-richblack-100 rounded-2xl'>{categoryName}</Link>
@@ -74,7 +79,7 @@ function Headder() {
                 <div className='flex w-[22%] text-2xl text-white justify-evenly  max-tablet:w-[50%] pr-0'>
                     {userType?userType==="student"?
                     <div className='flex space-x-4' >
-                        <div className='relative' onClick={()=>navigator("dashboard/cart")}>
+                        <div className='relative' onClick={()=>{navigator("dashboard/cart");dispatcher(setDashTab("cart"))}}>
                             {cartCount!==0?<div className='bg-[rgb(70,211,197)] h-[1rem] text-richblack-900 font-[500] w-[1rem] rounded-full text-sm flex absolute -right-2 -top-1 items-center justify-center'>{cartCount}</div>:''}
                             <LuShoppingCart/>
                         </div>
@@ -86,8 +91,8 @@ function Headder() {
                         </div>
                         {profileOptions?
                         <div className='text-lg border-[1px] text-richblack-300 cursor-pointer border-richblack-700 rounded-lg bg-richblack-800 absolute mt-[2.5rem] right-[4rem]'>
-                            <div onClick={()=>{navigator("/dashboard/my-profile")}} className='border-b-[1px] text-center border-b-richblack-700 p-2'>Dashboard</div>
-                            <div onClick={()=>{Cookies.remove('login',{ path: '/' });dispatcher(updateUserType(null));navigator("/")}} className='p-2 text-center'>Log out</div>
+                            <div onClick={()=>{navigator("/dashboard/my-profile");dispatcher(setDashTab("my-profile"))}} className='border-b-[1px] text-center border-b-richblack-700 p-2'>Dashboard</div>
+                            <div onClick={(e)=>{e.stopPropagation();setLogOutModal(true)}} className='p-2 text-center'>Log out</div>
                         </div>
                         :""}
                     </div>
@@ -108,7 +113,7 @@ function Headder() {
                     </div>}
                 </div>
             </div>
-            
+        </div>}
       </div>
       
     )

@@ -9,7 +9,10 @@ export const StdButton = ({color,children,linkTo,width,type,disabled,handler,tex
         css += ` bg-richblack-700 text-richblack-5 hover:scale-100 hover:shadow-solid `
     }
     else if(color==="grey"){
-        css += ` bg-richblack-800 text-richblack-5 `
+         if(!disabled)
+        css += `hover:scale-95 bg-richblack-800 text-richblack-5 `
+        else
+        css += ` bg-richblack-800 text-richblack-500 hover:scale-100 hover:shadow-solid `
     }
     else {
         css += ` bg-${color} text-${textColor}  `

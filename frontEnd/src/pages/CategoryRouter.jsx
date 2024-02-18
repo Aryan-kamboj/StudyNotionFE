@@ -1,8 +1,5 @@
-import React, { useEffect, useState } from 'react'
+import  { useState } from 'react'
 import { mostPopularCourses } from '../data/tempData';
-import { CourseCard } from '../components/stdComponets/CourseCard';
-import { Footer } from '../components/Footer';
-// import { getCategoryData } from '../services/open/categoryAPIs';
 import { useSelector } from 'react-redux';
 import { Route, Routes } from 'react-router-dom';
 import {CategoryPage} from "./CategoryPage";

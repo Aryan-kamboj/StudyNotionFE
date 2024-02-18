@@ -8,19 +8,15 @@ import {FaXmark} from "react-icons/fa6"
 import { useNavigate } from 'react-router'
 import { useDispatch } from 'react-redux'
 import { setCourseInfo, setCurrentlyEditing } from '../../redux/slices/instructorSlice'
-import Cookies from "js-cookie"
-import { updateUserType } from '../../redux/slices/UserDataSlice'
+import { LogOutModal } from '../logOutModal'
 // eslint-disable-next-line react/prop-types
-export const DashboardNav = ({setTab,userType,setUserType,tab}) => {
-    // const currentTab = document.URL.split("/").slice(-1)[0];
-    // console.log(currentTab);
+export const DashboardNav = ({setTab,userType,tab}) => {
     const [showTabs,setShowTabs] = useState(false);
     const navigator = useNavigate();
     const dispatcher = useDispatch();
     const clickHandler = (e)=>{
       setShowTabs(false);
       e.stopPropagation();
-      // console.log(e.currentTarget.attributes.id.value);
       if(e.currentTarget.attributes.id.value==="add-course"){
         dispatcher(setCurrentlyEditing(""));
         dispatcher(setCourseInfo({}));
@@ -28,25 +24,12 @@ export const DashboardNav = ({setTab,userType,setUserType,tab}) => {
       navigator(`${e.currentTarget.attributes.id.value}`);
       setTab(e.currentTarget.attributes.id.value);
     }
-    const logoutHandler = (e)=>{
-      e.stopPropagation();
-      Cookies.remove('login',{ path: '/' });
-      dispatcher(updateUserType(null));
-    }
-    const handleUserType = ()=>
-    {
-      if(userType==="student"){
-        // console.log("hii");
-        setUserType("instructor");
-      }
-      else if(userType==="instructor"){
-        setUserType("student");
-        // console.log("hii2")
-      }
-    }
     const selectedCSS = "bg-yellow-800 text-yellow-50 border-yellow-50 "
+    const [showLogOut,setLogOutModal] = useState(false);
   return (
-        <div className={`overflow-hidden transition-all duration-1000 max-tablet:w-[100%] w-[18%] top-14 text-richblack-300  border-b-[1px] ${showTabs?" space-y-2 max-tablet:h-[25rem] ":" max-tablet:h-[6rem] "} min-h-full font-[500] pt-28 max-tablet:pt-12  text-md bg-richblack-800 border-x-[1px] border-richblack-700 `}>
+    <div className={`overflow-hidden transition-all duration-1000 max-tablet:w-[100%] w-[18%] top-14 text-richblack-300  border-b-[1px] ${showTabs?" space-y-2 max-tablet:h-[25rem] ":" max-tablet:h-[6rem] "} min-h-full font-[500] pt-28 max-tablet:pt-12  text-md bg-richblack-800 border-x-[1px] border-richblack-700 `}>
+      {showLogOut?<LogOutModal setModal = {setLogOutModal} />:
+      <div>
         {/* <div className='absolute z-[1000] top-[5rem]'>Under developemnt so <br/> to see tabs use - <button className='bg-pink-100 text-black' onClick={handleUserType}>{userType} Tabs</button></div> */}
         <div className='fixed max-tablet:static top-21 max-tablet:w-[100%] w-[18%]'>
           <div className={`pt-2 ${showTabs?" max-tablet:space-y-2 ":""}`}>
@@ -174,7 +157,7 @@ export const DashboardNav = ({setTab,userType,setUserType,tab}) => {
                 {showTabs?<FaXmark onClick={()=>{setShowTabs(false)}}/>:<FaGripLines onClick={(e)=>{e.stopPropagation();setShowTabs(true)}}/>}
               </div>
             </div>
-            <div onClick={logoutHandler} id="logout"  className={`duration-500 border-l-4 ${(tab==="logout")?selectedCSS: `border-richblack-800 ${(showTabs)?"":"max-tablet:hidden"}`} flex items-center justify-between pr-6`}>
+            <div onClick={(e)=>{e.stopPropagation();setLogOutModal(true)}} id="logout"  className={`duration-500 border-l-4 ${(tab==="logout")?selectedCSS: `border-richblack-800 ${(showTabs)?"":"max-tablet:hidden"}`} flex items-center justify-between pr-6`}>
               <div className='flex cursor-pointer items-center space-x-2 px-6 py-2'>
                 <CgLogOut/>
                 <span>
@@ -188,5 +171,7 @@ export const DashboardNav = ({setTab,userType,setUserType,tab}) => {
           </div>
           </div>
       </div>
+    }
+    </div>
   )
 }

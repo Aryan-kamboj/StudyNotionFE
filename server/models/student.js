@@ -18,10 +18,6 @@ const studentSchema = new mongoose.Schema({
                     required:true,
                 }
             ],
-            orderId:{
-                type:String,
-                required:true
-            },
             paymentId:{
                 type:String,
                 required:true,

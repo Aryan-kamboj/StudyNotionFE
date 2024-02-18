@@ -4,6 +4,7 @@ import { getCategories } from '../../services/open/categoryAPIs';
 const initialState = {
   loading:false,
   // categories:await getCategories(),
+  dashboardTab:"my-profile",
   categories:[],
   homePageNavbarSelected: HomePageExplore[0].tag,
   homePageCardsData:HomePageExplore[0].courses,
@@ -13,6 +14,9 @@ const UI_slice = createSlice({
   name: 'UI_slice',
   initialState,
   reducers: {
+    setDashTab:(state,action)=>{
+      state.dashboardTab=action.payload;
+    },
     setCategories:(state,action)=>{
       // console.log(action.payload);
       state.categories = action.payload;
@@ -31,6 +35,6 @@ const UI_slice = createSlice({
   }
 })
 // Action creators are generated for each case reducer function
-export const { setHomePageNavFilter,setHomePageCardSelected,setLoading,setCategories } = UI_slice.actions;
+export const { setHomePageNavFilter,setHomePageCardSelected,setLoading,setCategories,setDashTab } = UI_slice.actions;
 
 export default UI_slice;

@@ -1,5 +1,6 @@
 import toast from "react-hot-toast"
 import { apiConnector } from "../apiConnection";
+// import { taskCancelled } from "@reduxjs/toolkit/dist/listenerMiddleware/exceptions";
 const login = document.cookie.split("=")[1];
 export const newContentWatched =  async (courseId,contentId)=>{
     try {
@@ -23,5 +24,79 @@ export const newContentWatched =  async (courseId,contentId)=>{
         toast.dismiss();
         toast.error("Could not update watched content");
         console.log(error);
+    }
+}
+export const createOrderIdApi = async (courseId)=>{
+    try {
+       const bodyData = {
+            courseId
+       } 
+       const request = {
+        bodyData,
+        method:"POST",
+        url:"http://localhost:4002/api/student/createOrderId",
+        creds:true,
+        headers:{
+            'Authorization':`Bearer ${login}`}
+        }
+        toast.loading("Creating Order");
+        const {data} = await apiConnector(request);
+        toast.dismiss();
+        toast.success("Order created proceding to pyament");
+        return data;
+    } catch (error) {
+        toast.dismiss();
+        toast.error("Could not create order id");
+        console.log(error)
+    }
+}
+export const paymentValidationApi = async (paymentObject)=>{
+    try {
+        const bodyData={
+            ...paymentObject
+        }
+        const request = {
+            bodyData,
+            url:"http://localhost:4002/api/student/validatePayment",
+            method:"POST",
+            creds:true,
+            headers:{
+               'Authorization':`Bearer ${login}`
+            }
+        }
+        toast.loading("Validating your payment")
+        const {data} = await apiConnector(request)
+        toast.dismiss();
+        toast.success("Payment validated")
+        return data;
+    } catch (error) {
+        toast.dismiss()
+        toast.error("Could not validate your payment please take note of transation id and contact our support team at support@studynotion.com")
+        console.log(error);
+    }
+}
+export const createOrderIdForMultipleApi = async (courseIds)=>{
+    try {
+        const bodyData = {
+            courseIds
+        } 
+        const request = {
+            method:"POST",
+            url:"http://localhost:4002/api/student/orderIdForMultiple",
+            bodyData,
+            creds:true,
+            headers:{
+                'Authorization':`Bearer ${login}`
+            }
+        }
+        toast.loading("Creating order id for cart");
+        const {data} = await apiConnector(request);
+        toast.dismiss();
+        toast.success("Orde id created");
+        return data;
+    } catch (error) {
+        toast.dismiss();
+        toast.error("Could not create order id for cart");
+        console.log(error)
     }
 }

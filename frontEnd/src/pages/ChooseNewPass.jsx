@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import { useState } from 'react'
 import { InputField } from '../components/stdComponets/InputField'
 import { PasswordValidation } from '../components/stdComponets/PasswordValidation'
 import { StdButton } from '../components/stdComponets/StdButton';

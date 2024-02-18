@@ -6,6 +6,9 @@ import { updateCart } from '../../../redux/slices/UserDataSlice'
 import {FiTrash2} from 'react-icons/fi'
 import { Link } from 'react-router-dom'
 import { removeFromeCart } from '../../../services/open/courseAPIs'
+import { createOrderIdForMultipleApi } from '../../../services/student/courseApis'
+import { setEnrolledCourses } from '../../../redux/slices/UserDataSlice'
+import { paymentValidationApi } from '../../../services/student/courseApis'
 export const Cart = () => {
   const dispatcher = useDispatch();
     const removeHandler = async (e)=>{
@@ -20,10 +23,57 @@ export const Cart = () => {
     const total = cart.reduce((acc,course)=>{
       return acc+course.coursePrice;
     },0) 
-    const buyNowHandler = (e)=>{
-        console.log("buy nowwwwww");
+    function loadScript(src) {
+      return new Promise((resolve) => {
+        const script = document.createElement('script')
+        script.src = src
+        script.onload = () => {
+          resolve(true)
+        }
+        script.onerror = () => {
+          resolve(false)
+        }
+        document.body.appendChild(script)
+      })
     }
-    // console.log(cart);
+    const buyNowHandler = async (e)=>{
+      e.preventDefault();
+      const courseIds = cart.map((course)=>course._id);
+      const {orderId,amount} = await createOrderIdForMultipleApi(courseIds);
+      const res = await loadScript('https://checkout.razorpay.com/v1/checkout.js')  
+      if (!res){
+          alert('Razropay failed to load!!')
+          return 
+      }
+      var options = {
+          "key": "rzp_test_DUDUdqHJzPBUbY", // Enter the Key ID generated from the Dashboard
+          "amount": amount, // Amount is in currency subunits. Default currency is INR. Hence, 50000 refers to 50000 paise
+          "currency": "INR",
+          "name": "StudyNotion", //your business name
+          "description": "Test Transaction",
+          "image": "https://example.com/your_logo",
+          "order_id": orderId,///This is a sample Order ID. Pass the `id` obtained in the response of Step 1
+          "handler": async function (response){
+              const {enrolledCources} = await paymentValidationApi(response);
+              dispatcher(setEnrolledCourses(enrolledCources));
+              dispatcher(updateCart([]));
+              // console.log(enrolledCources);
+          },
+          "prefill": { //We recommend using the prefill parameter to auto-fill customer's contact information, especially their phone number
+              "name": "Gaurav Kumar", //your customer's name
+              "email": "gaurav.kumar@example.com", 
+              "contact": "9000090000"  //Provide the customer's phone number for better conversion rates 
+          },
+          "notes": {
+              "address": "Razorpay Corporate Office"
+          },
+          "theme": {
+              "color": "#3399cc"
+          }
+      };
+      const paymentObject = new window.Razorpay(options); 
+      paymentObject.open();
+      }
   return (
     <div className='h-fit  '>
           <div className='ml-8 max-tablet:mx-2 mt-8 max-tablet:mt-1 '>

@@ -1,3 +1,4 @@
+import { paymentValidationApi } from '../services/student/courseApis';
 import { useEffect, useState } from 'react'
 import { RatingStars } from '../components/stdComponets/RatingStars';
 import {AiOutlineInfoCircle,AiOutlineShareAlt} from 'react-icons/ai'
@@ -8,12 +9,12 @@ import { StdButton } from '../components/stdComponets/StdButton';
 import {CopyToClipboard} from "react-copy-to-clipboard"
 import {GoDotFill} from "react-icons/go"
 import toast from "react-hot-toast"
-import { updateCart } from '../redux/slices/UserDataSlice';
+import { setEnrolledCourses, updateCart } from '../redux/slices/UserDataSlice';
 import { useDispatch, useSelector } from 'react-redux';
 import { Footer } from '../components/Footer';
 import { getCourse , addToCart } from '../services/open/courseAPIs';
 import { setLoading } from '../redux/slices/UI_slice';
-import { useSearchParams } from 'react-router-dom';
+import { createOrderIdApi } from '../services/student/courseApis';
 export const CoursePage = () => {
     const courseId = document.location.pathname.split("/")[2];
     const [courseDetails,setDetails] = useState({});
@@ -38,6 +39,7 @@ export const CoursePage = () => {
     const notify = () => {
         return toast.success('Copied to clip board');
     }
+    const userType = useSelector(({rootReducer})=>rootReducer.UserDataSlice.userType)
     const courseLink = document.URL;
     const months= ["January","February","March","April","May","June","July",
     "August","September","October","November","December"];
@@ -69,6 +71,58 @@ export const CoursePage = () => {
     const collapseAll = ()=>{
         setSecFolded(!sectionFolded);
     }
+
+
+    // razorpay 
+function loadScript(src) {
+    return new Promise((resolve) => {
+      const script = document.createElement('script')
+      script.src = src
+      script.onload = () => {
+        resolve(true)
+      }
+      script.onerror = () => {
+        resolve(false)
+      }
+      document.body.appendChild(script)
+    })
+  }
+  async function buyNowHandler(e) {
+    e.preventDefault();
+    const order = await createOrderIdApi(courseId);
+    const res = await loadScript('https://checkout.razorpay.com/v1/checkout.js')  
+    if (!res){
+        alert('Razropay failed to load!!')
+        return 
+    }
+    var options = {
+        "key": "rzp_test_DUDUdqHJzPBUbY", // Enter the Key ID generated from the Dashboard
+        "amount": order.amount, // Amount is in currency subunits. Default currency is INR. Hence, 50000 refers to 50000 paise
+        "currency": "INR",
+        "name": "StudyNotion", //your business name
+        "description": "Test Transaction",
+        "image": "https://example.com/your_logo",
+        "order_id": order.orderId,///This is a sample Order ID. Pass the `id` obtained in the response of Step 1
+        "handler": async function (response){
+            const {enrolledCources} = await paymentValidationApi(response);
+            dispatcher(setEnrolledCourses(enrolledCources))
+            console.log(enrolledCources);
+        },
+        "prefill": { //We recommend using the prefill parameter to auto-fill customer's contact information, especially their phone number
+            "name": "Gaurav Kumar", //your customer's name
+            "email": "gaurav.kumar@example.com", 
+            "contact": "9000090000"  //Provide the customer's phone number for better conversion rates 
+        },
+        "notes": {
+            "address": "Razorpay Corporate Office"
+        },
+        "theme": {
+            "color": "#3399cc"
+        }
+    };
+    const paymentObject = new window.Razorpay(options); 
+    paymentObject.open();
+    }
   return (
     <div className='overflow-hidden'>
         <div className='text-white bg-richblack-800 flex flex-col'>
@@ -90,12 +144,20 @@ export const CoursePage = () => {
                 <img className="rounded-lg h-[22rem] w-full object-cover" src={thumbnail} alt={courseName}/>
                 <div className='space-y-4 pt-4'>
                     <p className='text-3xl font-[500]'>Rs. {coursePrice}</p>
-                    <StdButton width={100} color="yellow">Buy Now</StdButton>
-                    <StdButton handler={addToCartHandler} width={100} color="grey">Add to Cart</StdButton>
+                    {userType==="student"?<div className='space-y-4'>
+                        <StdButton width={100} handler={buyNowHandler} color="yellow">Buy Now</StdButton>
+                        <StdButton handler={addToCartHandler} width={100} color="grey">Add to Cart</StdButton>
+                    </div>
+                    :<div className=''>
+                        <StdButton width={100} disabled={true} color="grey">
+                            Instructors can't buy a course
+                        </StdButton>
+                    </div>
+                    }
                     <p className='text-center text-sm text-richblack-200 '>30-Day Money-Back Guarantee</p>
                     <div className='space-y-2 '>
                         <h1 className='text-xl'>This Course Requires:</h1>
-                        <div>
+                        <div className='max-h-[3.5rem] flex flex-col flex-wrap'>
                             {requirements?requirements.map((requirement,i)=>{
                                 return <div key={i} className='flex text-caribbeangreen-100 text-sm items-start space-x-2 px-4 '><BiSolidRightArrow className='min-w-[1rem] mt-1'/> <p>{requirement}</p></div>
                             }):""}

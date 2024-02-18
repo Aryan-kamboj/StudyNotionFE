@@ -1,11 +1,14 @@
 const express = require("express")
 const router = express.Router();
 
-const {getCart, addToCart, removeFromCart,buyCourse,contentWatched,enrolledCourses,createReview} = require("../controllers/studentController");
+const {getCart, addToCart, removeFromCart,contentWatched,enrolledCourses,createReview, createOrderId, validatePayment, buyCart, orderIdForMultiple} = require("../controllers/studentController");
 router.get("/getCart",getCart);
 router.post("/addToCart",addToCart);
 router.post("/removeFromCart",removeFromCart);
-router.post("/buy",buyCourse);
+router.post("/orderIdForMultiple",orderIdForMultiple);
+router.post("/buyCart",buyCart);
+router.post("/createOrderId",createOrderId);
+router.post("/validatePayment",validatePayment)
 router.post("/contentWatched",contentWatched);
 router.get("/enrolledCources",enrolledCourses);
 router.post("/createReview",createReview);

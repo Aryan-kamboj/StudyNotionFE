@@ -8,13 +8,18 @@ import { Settings } from '../dashboardPages/Settings'
 import {AddCourse} from "../dashboardPages/InstructorTabs/AddCourse";
 import { MyCourses } from '../dashboardPages/InstructorTabs/MyCourses'
 import { DashboardNav } from '../dashboardPages/DashboardNav';
-import { useSelector } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
 import { useNavigate } from 'react-router'
 import { MyDashboard } from './InstructorTabs/MyDashboard'
+import { setDashTab } from '../../redux/slices/UI_slice'
 export const Dashboard = () => {
     const path = document.URL.split("/").slice(-1)[0];
     const navigator = useNavigate();
-    const [tab,setTab]=useState(path);
+    const dispatcher = useDispatch();
+    const tab=useSelector(({rootReducer})=>rootReducer.UI_slice.dashboardTab);
+    const setTab = (tab)=>{
+      dispatcher(setDashTab(tab))
+    }
     const [userType,setUserType] = useState(useSelector(({rootReducer})=>{
         return (rootReducer.UserDataSlice.userType);
     }));

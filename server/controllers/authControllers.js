@@ -2,6 +2,7 @@ const OTP = require("../models/otp");
 const USER = require("../models/user");
 const STUDENT = require("../models/student");
 const INSTRUCTOR = require("../models/instructor");
+const TEST = require("../models/test");
 const bcrypt = require('bcrypt');
 const dotenv = require("dotenv");
 const jwt = require("jsonwebtoken");
@@ -12,19 +13,19 @@ dotenv.config();
 exports.authTokenCheck = async (req,res,next)=>{
     try {
         const {login} = req.cookies;
-        console.log(req.cookies);
+        // console.log(req.cookies);
         if(login){
             const verify = jwt.verify(login,process.env.JWT_SECRET);
             const {email,userType} = verify;
             const check = await USER.findOne({email:email},"userType");
-            console.log(check.userType,verify)
+            // console.log(check.userType,verify)
             if(check.userType===userType){
                 req.locals = {email,userType}
             }
             else{
                 throw ("There has been some error please log in again ");
             }
-            console.log("token check ho gya bhai")
+            // console.log("token check ho gya bhai")
         }
         next();
     } catch (error) {
@@ -337,10 +338,18 @@ exports.generateOtp = async (req,res)=>{
 }
 
 // test controller
-exports.hello = async (req,res)=>{
-    return res.status(200).json({
-        response:"hellloooooo",
-    })
-}
+// exports.hello = async (req,res)=>{
+//     // await TEST.create({
+//     //     testField:"random",
+//     //     testArr:["random"]
+//     // })
+//     const updateArr = [
+//         "random2","random3","random2","random3","random2","random3","random2","random3",
+//     ]
+//     const updatedTest = await TEST.updateOne({testField:"random"},{$push:{testArr:{$each:updateArr}}},{new:true});
+//     return res.status(200).json({
+//         response:updatedTest,
+//     })
+// }
 
 

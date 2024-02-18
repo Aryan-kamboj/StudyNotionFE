@@ -1,4 +1,3 @@
-import React from 'react'
 import { useState } from 'react';
 import { InputField } from '../components/stdComponets/InputField';
 import { StdButton } from '../components/stdComponets/StdButton';

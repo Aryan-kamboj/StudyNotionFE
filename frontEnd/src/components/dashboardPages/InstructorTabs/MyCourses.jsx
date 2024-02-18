@@ -9,7 +9,7 @@ import { deleteCourseApi, getMyCoursesApi } from '../../../services/instructor/C
 import { updateMyCources } from '../../../redux/slices/UserDataSlice'
 import { useEffect, useState } from 'react'
 import { setCurrentlyEditing } from '../../../redux/slices/instructorSlice'
-import { DeleteCourseConfirmationModal } from '../../stdComponets/instructionComponents/deleteCourseConfirmationModal'
+import { DeleteCourseConfirmationModal } from '../../stdComponets/instructorComponents/deleteCourseConfirmationModal'
 export const MyCourses = ({setTab}) => {
   const dispatcher = useDispatch();
   const myCoursesData = useSelector(({rootReducer})=>rootReducer.UserDataSlice.myCourses);

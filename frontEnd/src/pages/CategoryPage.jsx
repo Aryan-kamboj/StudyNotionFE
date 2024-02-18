@@ -1,6 +1,5 @@
 import { CourseCard } from '../components/stdComponets/CourseCard';
 import { useEffect, useState } from 'react';
-import { mostPopularCourses } from '../data/tempData';
 import { Footer } from '../components/Footer';
 import { useLocation } from 'react-router-dom';
 import { getCategoryData } from '../services/open/categoryAPIs';

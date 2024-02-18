@@ -78,7 +78,7 @@ exports.myProfile = async (req,res)=>{
         const {email} = req.locals;
         if(email){
             const {bio,fname,lname,phoneNo,DOB,gender,profilePhoto,countryCode} = await USER.findOne({email:email},"bio countryCode fname lname phoneNo DOB gender profilePhoto");
-            console.log(bio,fname,lname,phoneNo,DOB,gender,profilePhoto,countryCode);
+            // console.log(bio,fname,lname,phoneNo,DOB,gender,profilePhoto,countryCode);
             return res.status(200).json({
                 fullName:fname+" "+lname,
                 email:email,
