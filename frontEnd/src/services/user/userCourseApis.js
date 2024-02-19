@@ -1,11 +1,12 @@
 import {apiConnector} from "../apiConnection"
 import toast from "react-hot-toast";
 const login = document.cookie.split("=")[1];
+const baseUrl = import.meta.env.BACKEND_BASE_URL;
 export const getCourseInfo = async (course)=>{
     try {
         const request = {
             method:"POST",
-            url:"http://localhost:4002/api/user/getCourseInfo",
+            url:`${baseUrl}api/user/getCourseInfo`,
             bodyData:{
                 course:course
             },

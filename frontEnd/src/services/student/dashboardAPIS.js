@@ -1,12 +1,13 @@
 import toast from 'react-hot-toast';
 import { apiConnector } from '../../services/apiConnection'
 const login = document.cookie.split("=")[1];
+const baseUrl = import.meta.env.BACKEND_BASE_URL;
 export const getEnorlledCourses = async ()=>{
     try {
         console.log("enrolled courses chla")
         const request = {
             method:"GET",
-            url:"http://localhost:4002/api/student/enrolledCources",
+            url:`${baseUrl}api/student/enrolledCources`,
             creds:true,
             headers:{
                 'Authorization':`Bearer ${login}`}

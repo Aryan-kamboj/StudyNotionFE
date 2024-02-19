@@ -1,9 +1,10 @@
 import { apiConnector } from "../apiConnection";
+const baseUrl = import.meta.env.BACKEND_BASE_URL;
 export const getCategories = async ()=>{
     try {
         const request = {
             method:"GET",
-            url:"http://localhost:4002/api/open/getCategories",
+            url:`${baseUrl}api/open/getCategories`,
         }
         const {data} = await apiConnector(request);
         return data.categories;
@@ -18,7 +19,7 @@ export const getCategoryData = async (category)=>{
     try {
         const request = {
             method:"GET",
-            url:"http://localhost:4002/api/open/getCategoryData",
+            url:`${baseUrl}api/open/getCategoryData`,
             params:parameter
         }
         const data = await apiConnector(request);

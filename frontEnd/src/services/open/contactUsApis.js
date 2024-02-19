@@ -1,13 +1,13 @@
 import toast from "react-hot-toast"
 import {apiConnector} from "../apiConnection";
-
+const baseUrl = import.meta.env.BACKEND_BASE_URL;
 export const contactUsApi = async (fname,lname,email,phoneNo,countryCode,message)=>{
     try {
         const bodyData = {
             fname,lname,email,phoneNo,countryCode,message
         }
         const request = {
-            url:"http://localhost:4002/api/open/contactUs",
+            url:`${baseUrl}api/open/contactUs`,
             method:"POST",
             bodyData
         }

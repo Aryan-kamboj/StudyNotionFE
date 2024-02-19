@@ -1,11 +1,12 @@
 import { toast } from "react-hot-toast";
 import { apiConnector } from "../apiConnection";
 const login = document.cookie.split("=")[1];
+const baseUrl = import.meta.env.BACKEND_BASE_URL;
 export const getProfileApi = async ()=>{
     try {
         const request = {
             method:"GET",
-            url:"http://localhost:4002/api/user/myProfile",
+            url:`${baseUrl}api/user/myProfile`,
             creds:true,
             headers:{
                 'Authorization':`Bearer ${login}`,
@@ -28,7 +29,7 @@ export const updateProfileApi = async (phoneNo,fname,lname,bio,DOB,gender,countr
         }
         const request = {
             method:"POST",
-            url:"http://localhost:4002/api/user/updateProfile",
+            url:`${baseUrl}api/user/updateProfile`,
             creds:true,
             headers:{
                 'Authorization':`Bearer ${login}`

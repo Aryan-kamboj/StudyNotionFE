@@ -3,12 +3,13 @@ import { apiConnector } from "../apiConnection";
 import { updateUserType } from "../../redux/slices/UserDataSlice";
 import {store} from "../../main";
 const login = document.cookie.split("=")[1];
+const baseUrl = import.meta.env.BACKEND_BASE_URL;
 export const generateOTP = async (email)=>{
     try {
         const bodyData = {email};
         const request = {
             method:"POST",
-            url:"http://localhost:4002/api/auth/generateOTP",
+            url:`${baseUrl}api/auth/generateOTP`,
             bodyData
         }
         toast.loading("Sending a OTP to your email");
@@ -28,7 +29,7 @@ export const signUpApi = async (userData)=>{
         }
         const request = {
             bodyData,
-            url:"http://localhost:4002/api/auth/signup",
+            url:`${baseUrl}api/auth/signup`,
             method:"POST",
             creds:true,
             headers:{
@@ -53,7 +54,7 @@ export const loginAPI = async ({email,password})=>{
         }
         const request = {
             method:"post",
-            url:"http://localhost:4002/api/auth/login",
+            url:`${baseUrl}api/auth/login`,
             bodyData:bodyData,
             creds:true,
         }
@@ -82,7 +83,7 @@ export const changePasswordApi = async (oldPass,newPass,cnfPass)=>{
         const request = {
             method:"POST",
             bodyData:bodyData,
-            url:"http://localhost:4002/api/auth/changePass",
+            url:`${baseUrl}api/auth/changePass`,
             creds:true,
             headers:{
                 'Authorization':`Bearer ${login}`,

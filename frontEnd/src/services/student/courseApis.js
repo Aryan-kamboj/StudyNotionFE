@@ -1,6 +1,7 @@
 import toast from "react-hot-toast"
 import { apiConnector } from "../apiConnection";
 // import { taskCancelled } from "@reduxjs/toolkit/dist/listenerMiddleware/exceptions";
+const baseUrl = import.meta.env.BACKEND_BASE_URL;
 const login = document.cookie.split("=")[1];
 export const newContentWatched =  async (courseId,contentId)=>{
     try {
@@ -9,7 +10,7 @@ export const newContentWatched =  async (courseId,contentId)=>{
         }
         const request = {
             method:"POST",
-            url:"http://localhost:4002/api/student/contentWatched",
+            url:`${baseUrl}api/student/contentWatched`,
             bodyData:bodyData,
             creds:true,
             headers:{
@@ -34,7 +35,7 @@ export const createOrderIdApi = async (courseId)=>{
        const request = {
         bodyData,
         method:"POST",
-        url:"http://localhost:4002/api/student/createOrderId",
+        url:`${baseUrl}api/student/createOrderId`,
         creds:true,
         headers:{
             'Authorization':`Bearer ${login}`}
@@ -57,7 +58,7 @@ export const saveReviewApi = async (courseId,rating,review)=>{
         }
         const request = {
             method:"POST",
-            url:"http://localhost:4002/api/student/createReview",
+            url:`${baseUrl}api/student/createReview`,
             bodyData,
             creds:true,
             headers:{
@@ -79,7 +80,7 @@ export const paymentValidationApi = async (paymentObject)=>{
         }
         const request = {
             bodyData,
-            url:"http://localhost:4002/api/student/validatePayment",
+            url:`${baseUrl}api/student/validatePayment`,
             method:"POST",
             creds:true,
             headers:{
@@ -104,7 +105,7 @@ export const createOrderIdForMultipleApi = async (courseIds)=>{
         } 
         const request = {
             method:"POST",
-            url:"http://localhost:4002/api/student/orderIdForMultiple",
+            url:`${baseUrl}api/student/orderIdForMultiple`,
             bodyData,
             creds:true,
             headers:{

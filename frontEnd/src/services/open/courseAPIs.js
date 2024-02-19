@@ -1,6 +1,6 @@
 import { apiConnector } from "../apiConnection"
 import toast from "react-hot-toast"
-
+const baseUrl = import.meta.env.BACKEND_BASE_URL;
 const login = document.cookie.split("=")[1];
 export const addToCart = async (course)=>{
     try {
@@ -9,7 +9,7 @@ export const addToCart = async (course)=>{
         }
         const request = {
             method:"POST",
-            url:"http://localhost:4002/api/student/addToCart",
+            url:`${baseUrl}api/student/addToCart`,
             bodyData:bodyData,
             creds:true,
             headers:{
@@ -34,7 +34,7 @@ export const removeFromeCart = async (course)=>{
         }
         const request = {
             method:"POST",
-            url:"http://localhost:4002/api/student/removeFromCart",
+            url:`${baseUrl}api/student/removeFromCart`,
             bodyData:bodyData,
             creds:true,
             headers:{
@@ -58,7 +58,7 @@ export const getCart = async ()=>{
     try {
         const request = {
             method:"GET",
-            url:"http://localhost:4002/api/student/getCart",
+            url:`${baseUrl}api/student/getCart`,
             creds:true,
             headers:{
                 'Authorization':`Bearer ${login}`}
@@ -83,7 +83,7 @@ export const getCourse = async (course)=>{
         }
         const request = {
             method:"GET",
-            url:"http://localhost:4002/api/open/getCourse",
+            url:`${baseUrl}api/open/getCourse`,
             params:bodyData
         }
         const data = await apiConnector(request);

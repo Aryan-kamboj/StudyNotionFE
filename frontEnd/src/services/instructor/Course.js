@@ -1,6 +1,7 @@
 import toast from "react-hot-toast";
 import { apiConnector } from "../apiConnection";
 const login = document.cookie.split("=")[1];
+const baseUrl = import.meta.env.BACKEND_BASE_URL;
 export const createCourse = async (courseDetails)=>{
     try {
         const formData = new FormData();
@@ -11,7 +12,7 @@ export const createCourse = async (courseDetails)=>{
         console.log("form data",formData);
         const request = {
             method:"POST",
-            url:"http://localhost:4002/api/instructor/createCourse",
+            url:`${baseUrl}api/instructor/createCourse`,
             bodyData:formData,
             creds:true,
             headers:{
@@ -34,7 +35,7 @@ export const deleteCourseApi = async (courseId)=>{
         }
         const request = {
             method:"POST",
-            url:"http://localhost:4002/api/instructor/deleteCourse",
+            url:`${baseUrl}api/instructor/deleteCourse`,
             bodyData:bodyData,
             creds:true,
             headers:{
@@ -61,7 +62,7 @@ export const editCourse = async (courseDetails,id) =>{
         const request = {
             method:"POST",
             bodyData:formData,
-            url:"http://localhost:4002/api/instructor/updateCourse",
+            url:`${baseUrl}api/instructor/updateCourse`,
             creds:true,
             headers:{
                 'Authorization':`Bearer ${login}`,
@@ -83,7 +84,7 @@ export const addSectionApi = async (section,id)=>{
         const request = {
             method:"POST",
             bodyData:bodyData,
-            url:"http://localhost:4002/api/instructor/addSection",
+            url:`${baseUrl}api/instructor/addSection`,
             creds:true,
             headers:{
                 'Authorization':`Bearer ${login}`,
@@ -107,7 +108,7 @@ export const editSectionNameApi = async (courseId,editedSectionName,sectionIdx)=
         }
         const request = {
             method:"POST",
-            url:"http://localhost:4002/api/instructor/editSectionName",
+            url:`${baseUrl}api/instructor/editSectionName`,
             bodyData:bodyData,
             creds:true,
             headers:{
@@ -134,7 +135,7 @@ export const deleteSectionApi = async (index,id)=>{
         }
         const request = {
             method:"POST",
-            url:"http://localhost:4002/api/instructor/removeSection",
+            url:`${baseUrl}api/instructor/removeSection`,
             bodyData,
             creds:true,
             headers:{
@@ -163,7 +164,7 @@ export const addLecture = async (lectureDetails)=>{
         console.log(formData);
         const request = {
             method:"POST",
-            url:"http://localhost:4002/api/instructor/addLecture",
+            url:`${baseUrl}api/instructor/addLecture`,
             bodyData:formData,
             creds:true,
             headers:{
@@ -190,7 +191,7 @@ export const editLectureApi = async (lectureDetails)=>{
             formData.append(key,value);
         })
         const request = {
-            url:"http://localhost:4002/api/instructor/editLecture",
+            url:`${baseUrl}api/instructor/editLecture`,
             bodyData:formData,
             creds:true,
             headers:{
@@ -217,7 +218,7 @@ export const deleteLectureApi = async (lectureIdx,sectionIdx,courseId)=>{
         const request = {
             bodyData,
             method:"POST",
-            url:"http://localhost:4002/api/instructor/removeLecture",
+            url:`${baseUrl}api/instructor/removeLecture`,
             creds:true,
             headers:{
                 'Authorization':`Bearer ${login}`,
@@ -243,7 +244,7 @@ export const makeCoursePublicApi = async (courseId,makePublic)=>{
         }
         const request = {
             method:"POST",
-            url:"http://localhost:4002/api/instructor/setPublic",
+            url:`${baseUrl}api/instructor/setPublic`,
             bodyData:bodyData,
             creds:true,
             headers:{
@@ -266,7 +267,7 @@ export const getMyCoursesApi = async ()=>{
     try {
         const request = {
             method:"GET",
-            url:"http://localhost:4002/api/instructor/myCourses",
+            url:`${baseUrl}api/instructor/myCourses`,
             creds:true,
             headers:{
                 'Authorization':`Bearer ${login}`,
