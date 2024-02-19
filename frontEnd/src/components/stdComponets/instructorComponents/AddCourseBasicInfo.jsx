@@ -2,12 +2,12 @@
 import { useEffect, useState } from 'react'
 import { InputField } from '../InputField';
 import { StdButton } from '../StdButton';
-import { TagsInput } from '../TagsInput';
-import {RequirementInput} from "../RequirementInput";
+import { TagsInput } from './TagsInput';
+import {RequirementInput} from "./RequirementInput";
 import {FiUploadCloud} from "react-icons/fi"
 import {IoIosArrowForward} from "react-icons/io"
 import { useDropzone } from 'react-dropzone';
-import { FieldRequiredText } from './FieldRequiredText';
+import { FieldRequiredText } from '../FieldRequiredText';
 import { useDispatch, useSelector } from 'react-redux';
 import { createCourse, editCourse } from '../../../services/instructor/Course';
 import { setCourseInfo, setCurrentlyEditing } from '../../../redux/slices/instructorSlice';

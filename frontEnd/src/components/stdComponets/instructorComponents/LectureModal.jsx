@@ -4,7 +4,7 @@ import {FiUploadCloud} from "react-icons/fi";
 import { useDropzone } from 'react-dropzone';
 import { InputField } from '../InputField';
 import { StdButton } from '../StdButton';
-import { FieldRequiredText } from './FieldRequiredText';
+import { FieldRequiredText } from '../FieldRequiredText';
 export const LectureModal = ({closeModal,data,modalType,saveHandlerFn}) => {
     // console.log(data);
     const [lectureFileUrl,setLectureFileUrl] = useState();

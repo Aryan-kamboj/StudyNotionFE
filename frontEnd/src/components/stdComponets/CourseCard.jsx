@@ -7,13 +7,13 @@ export const CourseCard = ({thumbnail,title,rating,price,reviewCount,id}) => {
     <Link to={`/cources/${id}`} className='w-[25rem] relative space-y-2'>
         <img src={thumbnail} alt={"Thumbnail"} className='rounded-2xl w-[25rem] h-[18rem] object-cover '/>
         <p className='text-xl'>{title}</p>
-        <p className=' flex items-center space-x-3'>
+        <div className=' flex items-center space-x-3'>
             <span className='text-yellow-100'>{rating}</span>
             <div>
                 <RatingStars rating={rating}/>
             </div>
             <span className='text-richblack-300'>{reviewCount} Ratings</span>
-        </p>
+        </div>
         <p className='text-lg'>Rs. {price}</p>
     </Link>
   )

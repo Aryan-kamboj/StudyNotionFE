@@ -12,6 +12,9 @@ const initialState = {
     name: 'UserDataSlice',
     initialState,
     reducers: {
+      setUserData:(state,action)=>{
+        state.userData = action.payload;
+      },
       setCourseDetails:(state,action)=>{
         state.courseDetails=action.payload;
       },
@@ -39,6 +42,6 @@ const initialState = {
     }
   })
   // Action creators are generated for each case reducer function
-  export const {setEnrolledCourses,updateContentConsumed,setCourseDetails,updateUserType,setMessage,updateCart,updateMyCources,setProfileData } = UserDataSlice.actions;
+  export const {setEnrolledCourses,setUserData,updateContentConsumed,setCourseDetails,updateUserType,setMessage,updateCart,updateMyCources,setProfileData } = UserDataSlice.actions;
   
   export default UserDataSlice;

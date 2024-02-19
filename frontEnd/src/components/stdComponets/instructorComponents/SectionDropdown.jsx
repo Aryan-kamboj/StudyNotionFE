@@ -10,7 +10,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import {  addLecture, editSectionNameApi,editLectureApi } from '../../../services/instructor/Course';
 import { InputField } from '../InputField';
 import { StdButton } from '../StdButton';
-import { FieldRequiredText } from './FieldRequiredText';
+import { FieldRequiredText } from '../FieldRequiredText';
 export const SectionDropdown = ({deleteSectionHandler,courseId,sectionIdx}) => {
     const [showLec,setshowLec] = useState(true);
     const [addLectureModal,setAddLectureModal] = useState(false);

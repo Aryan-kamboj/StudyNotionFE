@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import { useEffect, useState } from 'react'
 import {AiOutlineDown,AiOutlineUp,AiFillVideoCamera} from "react-icons/ai"
 export const SectionDropdown = ({collapseAll,section}) => {
     const [showLec,setShowLec]=useState(false);

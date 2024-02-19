@@ -1,4 +1,3 @@
-import React from 'react'
 import { Link } from 'react-router-dom'
 export const StdButton = ({color,children,linkTo,width,type,disabled,handler,textColor,form}) => {
     let css = ` flex justify-center gap-2 items-center font-medium rounded-md py-3 px-6 shadow-solid hover:shadow-none transition-all duration-200 max-laptop:text-xs  `;
@@ -9,8 +8,8 @@ export const StdButton = ({color,children,linkTo,width,type,disabled,handler,tex
         css += ` bg-richblack-700 text-richblack-5 hover:scale-100 hover:shadow-solid `
     }
     else if(color==="grey"){
-         if(!disabled)
-        css += `hover:scale-95 bg-richblack-800 text-richblack-5 `
+        if(!disabled)
+        css += `hover:scale-95 bg-richblack-700 text-richblack-5 `
         else
         css += ` bg-richblack-800 text-richblack-500 hover:scale-100 hover:shadow-solid `
     }

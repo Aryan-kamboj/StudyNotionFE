@@ -3,6 +3,48 @@ import { apiConnector } from "../apiConnection";
 import { updateUserType } from "../../redux/slices/UserDataSlice";
 import {store} from "../../main";
 const login = document.cookie.split("=")[1];
+export const generateOTP = async (email)=>{
+    try {
+        const bodyData = {email};
+        const request = {
+            method:"POST",
+            url:"http://localhost:4002/api/auth/generateOTP",
+            bodyData
+        }
+        toast.loading("Sending a OTP to your email");
+        await apiConnector(request);
+        toast.dismiss();
+        toast.success("OTP sent to your email");
+    } catch (error) {
+        toast.dismiss();
+        toast.error("Could not generate OTP");
+        console.log(error)
+    }
+}
+export const signUpApi = async (userData)=>{
+    try {
+        const bodyData={
+            ...userData
+        }
+        const request = {
+            bodyData,
+            url:"http://localhost:4002/api/auth/signup",
+            method:"POST",
+            creds:true,
+            headers:{
+                'Authorization':`Bearer ${login}`}
+        }
+        toast.loading("Signing you up");
+        const {data} = await apiConnector(request);
+        toast.dismiss();
+        toast.success("Signed up successfully")
+        return data;
+    } catch (error) {
+        toast.dismiss();
+        toast.error(error?.response?.data?.message);
+        console.log(error)
+    }
+}
 export const loginAPI = async ({email,password})=>{
     try {
         const bodyData={

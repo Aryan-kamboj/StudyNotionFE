@@ -50,6 +50,28 @@ export const createOrderIdApi = async (courseId)=>{
         console.log(error)
     }
 }
+export const saveReviewApi = async (courseId,rating,review)=>{
+    try {
+        const bodyData = {
+            courseId,rating,review
+        }
+        const request = {
+            method:"POST",
+            url:"http://localhost:4002/api/student/createReview",
+            bodyData,
+            creds:true,
+            headers:{
+            'Authorization':`Bearer ${login}`}
+        }          
+        toast.loading("Saving review");
+        await apiConnector(request);
+        toast.dismiss();
+        toast.success("Review saved");
+    } catch (error) {
+        toast.dismiss();
+        toast.error("Could not save review");
+    }
+}
 export const paymentValidationApi = async (paymentObject)=>{
     try {
         const bodyData={

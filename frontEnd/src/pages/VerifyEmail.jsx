@@ -1,17 +1,29 @@
 import { useState } from 'react'
 import { StdButton } from '../components/stdComponets/StdButton';
 import {FaUndoAlt,FaLongArrowAltLeft} from "react-icons/fa"
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { OtpInput } from '../components/stdComponets/OtpInput';
+import { generateOTP, signUpApi } from '../services/auth/auth';
+import { useSelector } from 'react-redux';
 export const VerifyEmail = () => {
     const [otp,setOtp]=useState();
-    const resendOtp = (e)=>{
-        // resend otp backend call
+    const userData = useSelector(({rootReducer})=>rootReducer.UserDataSlice.userData);
+    const navigator = useNavigate();
+    const resendOtp = async ()=>{
+        await generateOTP(userData?.email);
     }
-    const submitHandler = (e)=>{
+    const submitHandler = async (e)=>{
         e.preventDefault();
-        // ssubmit otp backend call
-        console.log(otp);
+        if(userData){
+            const data = {...userData,otp};
+            const response = await signUpApi(data);
+            if(response){
+                navigator("/login")
+            }
+        }
+        else{
+            navigator("/signUp")
+        }
     }
   return (
     <div className='h-[93vh] max-tablet:h-[79vh] flex justify-center items-center'>

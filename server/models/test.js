@@ -4,6 +4,10 @@ const test = new mongoose.Schema({
         type:String,
         required:true
     },
+    testField2:{
+        type:String,
+        required:true
+    },
     testArr:[{
         type:String,
         required:true

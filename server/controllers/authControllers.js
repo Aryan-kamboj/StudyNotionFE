@@ -41,6 +41,7 @@ exports.signup = async (req,res)=>{
 
         // all fields avilable
         if(!email||!fname||!lname||!phoneNo||!password||!otp||!userType||!countryCode){
+            console.log(email,fname,lname,phoneNo,countryCode,password,cnfPassword,otp,userType)
             return res.status(403).json({
                 success:false,
                 message:"All fields required",
@@ -73,7 +74,7 @@ exports.signup = async (req,res)=>{
                 if(query.attempts>0&&query.expiresAt>Date.now()){
                     if(query.otp===otp){
                         console.log(process.env.SALT_ROUNDS);
-                        await OTP.deleteMany({email:email});
+                        // await OTP.deleteMany({email:email});
                         const saltRounds  = Number(process.env.SALT_ROUNDS);
                         const hashedPass = await bcrypt.hash(password,saltRounds);
 
@@ -93,12 +94,12 @@ exports.signup = async (req,res)=>{
                         }
                         let newUserEntry = null;
                         newUserEntry = await USER.create(newUser);
-    
                         let newEntry = null;
+                        console.log(userType);
                         if(userType==="student"){
                             const newStudent = {
                                 email:email,
-                                enrolledCources:[],
+                                enrolledCourses:[],
                                 cart:[]
                             };
                             newEntry = await STUDENT.create(newStudent);
@@ -129,14 +130,14 @@ exports.signup = async (req,res)=>{
                     else{
                         await OTP.updateOne({email:email},{attempts:(query.attempts-1)});
                         return res.status(401).json({
-                            response:"Wrong otp Entered"
+                            message:"Wrong otp Entered"
                         })
                     }
                 }
                 else{
                     await OTP.deleteOne({email:email});
                     return res.status(401).json({
-                        response:"OTP expired please make a new one"
+                        message:"OTP expired please make a new one"
                     })
                 }
             }
@@ -149,7 +150,7 @@ exports.signup = async (req,res)=>{
     catch (error) {
         console.error(error);
         return res.status(500).json({
-            error:error
+            message:error
         })
     }
 }
@@ -338,18 +339,25 @@ exports.generateOtp = async (req,res)=>{
 }
 
 // test controller
-// exports.hello = async (req,res)=>{
-//     // await TEST.create({
-//     //     testField:"random",
-//     //     testArr:["random"]
-//     // })
-//     const updateArr = [
-//         "random2","random3","random2","random3","random2","random3","random2","random3",
-//     ]
-//     const updatedTest = await TEST.updateOne({testField:"random"},{$push:{testArr:{$each:updateArr}}},{new:true});
-//     return res.status(200).json({
-//         response:updatedTest,
-//     })
-// }
+exports.hello = async (req,res)=>{
+    await TEST.create({
+        testField:"random",
+        testField2:"random2",
+        testArr:["random"]
+    })
+    const updateArr = [
+        "random2","random3","random2","random3","random2","random3","random2","random3",
+    ]
+    
+    const updatedTest = await TEST.findOne({testField:"kuch",testField2:"random2"});
+    const updatedTest2 = await TEST.findOne({testField:"random",testField2:"random2"});
+    // if(updatedTest){
+        // console.log("hiii");
+    // }
+    return res.status(200).json({
+        response:updatedTest,
+        r2:updatedTest2
+    })
+}
 
 

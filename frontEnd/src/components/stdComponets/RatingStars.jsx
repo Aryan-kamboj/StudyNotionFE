@@ -1,4 +1,3 @@
-import React from 'react'
 import {PiStar,PiStarFill,PiStarHalfFill} from "react-icons/pi"
 export const RatingStars = ({rating,space}) => {
   return (

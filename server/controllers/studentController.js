@@ -116,7 +116,7 @@ const {razorpay_instance} = require("../config/razorpay");
 const PMNT_RCPT = require("../models/payment_recipts");
 const crypto  = require("crypto");
 // special treatment ..... abhi rhta hai ye
-exports.buyCart = async (req,res)=>{
+// exports.buyCart = async (req,res)=>{
     // try {
     //     const {course,paymentId} = req.body;
     //     const {email,userType} = req.locals;
@@ -186,7 +186,7 @@ exports.buyCart = async (req,res)=>{
     // const secret = process.env.RAZORPAY_SECRET;
     // var { validatePaymentVerification, validateWebhookSignature } = require('./dist/utils/razorpay-utils');
     // console.log(validatePaymentVerification({"order_id":razorpay_order_id , "payment_id": razorpay_payment_id}, validateWebhookSignature, secret));
-}
+// }
 exports.createOrderId = async (req,res)=>{
     try {
         const {email} = req.locals;
@@ -484,26 +484,42 @@ exports.enrolledCourses = async (req,res) =>{
 exports.createReview = async (req,res) =>{
     try { 
         const {email,userType} = req.locals;
-        const {review,rating,course} = req.body;
-        if(review&&rating&&course&&email&&userType==="student"){
-            const {enrolledCourses} = await STUDENT.findOne({email:email},"enrolledCourses.courseId");
+        const {review,rating,courseId} = req.body;
+        if(review&&rating&&courseId&&email&&userType==="student"){
+            const {enrolledCourses} = await STUDENT.findOne({email:email},"enrolledCourses");
             // checking if the user is enrolled in the course they are creating a review in
-            if(enrolledCourses.reduce((acc,enrolledCourse)=>{
-                if(course===enrolledCourse.courseId.toString())return acc+1 
-            },0)){
-                const newReview = await REVIEW.create({
-                    review:review,
-                    rating:rating,
-                    user:email,
-                    course:course
-                });
-                // console.log(newReview);
-                if(newReview)
-                return res.status(200).json({
-                    message:"Review created succesfully"
-                })
-                else
-                throw("There has been some error in creating the review try again");
+            const course = enrolledCourses.filter((course)=>courseId===course.courseId.toString())[0];
+            if(course){
+                const {sections} = await COURSE.findById(courseId,"sections");
+                // checking if user completed 65% course 
+                const totalLectures = sections.reduce((acc,section)=>{
+                    return acc+section.lectures.length;
+                },0);
+                const lengthConsumed = course.contentConsumed.length;
+                const progress = Math.floor((lengthConsumed/totalLectures)*100);
+                if(progress>65){
+                    const reviewAvilable = await REVIEW.findOne({user:email,course:courseId});
+                    // console.log(reviewAvilable)
+                    if(reviewAvilable){
+                        await REVIEW.updateOne({user:email,course:courseId},{rating,review:review.trim()});
+                    }
+                    else{
+                        await REVIEW.create({
+                            review:review.trim(),
+                            rating:rating,
+                            user:email,
+                            course:courseId
+                        });
+                    }
+                    return res.status(200).json({
+                        message:"Review created succesfully"
+                    })
+                }
+                else{
+                    return res.status(400).json({
+                        message:"Course not completed enough to give review "
+                    })
+                }
             }
             else{
                 return res.status(400).json({
