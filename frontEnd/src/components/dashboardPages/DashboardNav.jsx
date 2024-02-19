@@ -8,7 +8,7 @@ import {FaXmark} from "react-icons/fa6"
 import { useNavigate } from 'react-router'
 import { useDispatch } from 'react-redux'
 import { setCourseInfo, setCurrentlyEditing } from '../../redux/slices/instructorSlice'
-import { LogOutModal } from '../logOutModal'
+import { LogOutModal } from '../LogOutModal'
 // eslint-disable-next-line react/prop-types
 export const DashboardNav = ({setTab,userType,tab}) => {
     const [showTabs,setShowTabs] = useState(false);
