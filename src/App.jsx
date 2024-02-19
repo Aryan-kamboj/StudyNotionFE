@@ -14,6 +14,7 @@ import { Dashboard } from './components/dashboardPages/Dashboard';
 import { ViewCourse } from './components/viewCourse/ViewCourse';
 import { LoadingScreen } from './components/LoadingScreen';
 import { useSelector } from 'react-redux';
+// import 'vite/modulepreload-polyfill'
 import { useEffect } from 'react';
 function App() {
   useEffect(()=>{

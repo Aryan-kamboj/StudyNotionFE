@@ -3,7 +3,7 @@ import { apiConnector } from "../apiConnection";
 import { updateUserType } from "../../redux/slices/UserDataSlice";
 import {store} from "../../main";
 const login = document.cookie.split("=")[1];
-const baseUrl = import.meta.env.BACKEND_BASE_URL;
+const baseUrl = import.meta.env.VITE_APP_BACKEND_BASE_URL;
 export const generateOTP = async (email)=>{
     try {
         const bodyData = {email};

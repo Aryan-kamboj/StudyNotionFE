@@ -1,7 +1,7 @@
 import { toast } from "react-hot-toast";
 import { apiConnector } from "../apiConnection";
 const login = document.cookie.split("=")[1];
-const baseUrl = import.meta.env.BACKEND_BASE_URL;
+const baseUrl = import.meta.env.VITE_APP_BACKEND_BASE_URL;
 export const getProfileApi = async ()=>{
     try {
         const request = {

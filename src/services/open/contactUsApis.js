@@ -1,6 +1,6 @@
 import toast from "react-hot-toast"
 import {apiConnector} from "../apiConnection";
-const baseUrl = import.meta.env.BACKEND_BASE_URL;
+const baseUrl = import.meta.env.VITE_APP_BACKEND_BASE_URL;
 export const contactUsApi = async (fname,lname,email,phoneNo,countryCode,message)=>{
     try {
         const bodyData = {

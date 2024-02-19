@@ -1,6 +1,6 @@
 import { apiConnector } from "../apiConnection"
 import toast from "react-hot-toast"
-const baseUrl = import.meta.env.BACKEND_BASE_URL;
+const baseUrl = import.meta.env.VITE_APP_BACKEND_BASE_URL;
 const login = document.cookie.split("=")[1];
 export const addToCart = async (course)=>{
     try {

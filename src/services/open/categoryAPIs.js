@@ -1,5 +1,5 @@
 import { apiConnector } from "../apiConnection";
-const baseUrl = import.meta.env.BACKEND_BASE_URL;
+const baseUrl = import.meta.env.VITE_APP_BACKEND_BASE_URL;
 export const getCategories = async ()=>{
     try {
         const request = {
