@@ -15,7 +15,7 @@ import { getCategories } from '../services/open/categoryAPIs';
 import { setCategories } from '../redux/slices/UI_slice';
 import { getProfileApi } from '../services/user/profileApis';
 import { getCart } from '../services/open/courseAPIs';
-import { LogOutModal } from './logOutModal';
+import { LogOutModal } from './LogOutModal';
 import { setDashTab } from '../redux/slices/UI_slice';
 function Headder() {
     const dispatcher = useDispatch();
