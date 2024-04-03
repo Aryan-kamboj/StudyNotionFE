@@ -1,6 +1,8 @@
 import toast from 'react-hot-toast';
 import { apiConnector } from '../../services/apiConnection'
-const login = document.cookie.split("=")[1];
+import { PiLockLaminated } from 'react-icons/pi';
+//const login = document.cookie.split("=")[1];
+const login = localStorage.getItem("token") 
 const baseUrl = import.meta.env.VITE_APP_BACKEND_BASE_URL;
 export const getEnorlledCourses = async ()=>{
     try {

@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useRef, useState } from 'react'
 import {IoIosArrowBack} from "react-icons/io"
 import {FiTrash2,FiCheck} from 'react-icons/fi'
 import { StdButton } from '../stdComponets/StdButton'
@@ -6,7 +6,7 @@ import { InputField } from "../stdComponets/InputField"
 import {PhoneNumberInput} from "../stdComponets/PhoneNumberInput"
 import {PasswordValidation} from "../stdComponets/PasswordValidation"
 import { changePasswordApi } from '../../services/auth/auth'
-import { updateProfileApi } from '../../services/user/profileApis'
+import { updatePorfilePhotoApi, updateProfileApi } from '../../services/user/profileApis'
 import { useDispatch } from 'react-redux'
 import { setProfileData } from '../../redux/slices/UserDataSlice'
 export const EditProfilePage = ({setEditPage,profileInfo}) => {
@@ -19,7 +19,7 @@ export const EditProfilePage = ({setEditPage,profileInfo}) => {
     const[gender,setgender]=useState(profileInfo.gender);
     const[bio,setbio]=useState(profileInfo.bio);
     const dateUnix = new Date(profileInfo?.DOB);
-    console.log(dateUnix.getMonth())
+    // console.log(dateUnix.getMonth())
     const[DOB,setDOB] =useState(`${dateUnix.getFullYear()}-${dateUnix.getMonth()+1<10?'0'+Number(dateUnix.getMonth()+1):Number(dateUnix.getMonth()+1)}-${dateUnix.getDate()}`); 
     const [today,setToday] = useState(new Date().toLocaleDateString('fr-ca'));
     const [oldPass,setOldPass] = useState("");
@@ -28,14 +28,17 @@ export const EditProfilePage = ({setEditPage,profileInfo}) => {
     const [passChangeAllow,setPassChangeAllow] = useState(true);
 
     // setToday needs to be removed
-
+    const imgRef = useRef()
     const imageChangeHandler = (e) => {
-        const image = e.target.files[0];
-        image?setprofilePhoto(URL.createObjectURL(image)):
+        imgRef.current = e.target.files[0];
+        console.log(imgRef.current)
+        imgRef.current?setprofilePhoto(URL.createObjectURL(imgRef.current)):
         console.log("image not found");
     }
     const uploadHandler = async (e)=>{
         e.preventDefault();
+        const {updatedProfile} = await updatePorfilePhotoApi(imgRef.current);
+        dispatcher(setProfileData(updatedProfile))
     }
     const changePassHandler = async (e)=>{
         e.preventDefault();
@@ -74,7 +77,7 @@ export const EditProfilePage = ({setEditPage,profileInfo}) => {
                     <h3 className="text-richblack-25 font-[500] text-lg">Change Profile Picture</h3>
                     <div className = "flex space-x-4">
                         <label className=' flex justify-center gap-2 items-center font-medium rounded-md py-3 px-6 shadow-solid hover:shadow-none hover:scale-95 transition-all duration-200 max-laptop:text-xs bg-richblack-700 text-richblack-5'>
-                            <input onChange={imageChangeHandler} type="file" accept=".jpg, .jpeg, .png" className='hidden'/>
+                            <input ref = {imgRef} onChange={imageChangeHandler} type="file" accept=".jpg, .jpeg, .png" className='hidden'/>
                             Change
                         </label>
                         <StdButton handler={uploadHandler} color="yellow">Upload</StdButton>

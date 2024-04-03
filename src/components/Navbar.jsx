@@ -36,7 +36,8 @@ function Headder() {
         (async()=>{
             const data = await getCategories();
             dispatcher(setCategories(data));
-            const profileData = document.cookie.length!==0?await getProfileApi():null; 
+            console.log(localStorage.getItem("token"))
+            const profileData = localStorage?.getItem("token")?.length!==0?await getProfileApi():null; 
             dispatcher(setProfileData(profileData));
             if(userType==="student"){
                 const cartData = await getCart();
@@ -52,7 +53,7 @@ function Headder() {
         setVisible(false);
     }
     const navigator = useNavigate();
-    const cartCount = useSelector(({rootReducer})=>rootReducer.UserDataSlice.cart.length); 
+    const cartCount = useSelector(({rootReducer})=>rootReducer?.UserDataSlice?.cart?.length); 
     return (
       <div className=" fixed z-[100] w-[100vw] bg-richblack-900 text-rich-black-25  border-solid border-b-[1px] border-richblack-700">
             {showLogOutModal?<LogOutModal setModal={setLogOutModal}/>

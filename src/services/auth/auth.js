@@ -2,7 +2,8 @@ import toast from "react-hot-toast";
 import { apiConnector } from "../apiConnection";
 import { updateUserType } from "../../redux/slices/UserDataSlice";
 import {store} from "../../main";
-const login = document.cookie.split("=")[1];
+//const login = document.cookie.split("=")[1];
+const login = localStorage.getItem("login")
 const baseUrl = import.meta.env.VITE_APP_BACKEND_BASE_URL;
 export const generateOTP = async (email)=>{
     try {
@@ -62,9 +63,13 @@ export const loginAPI = async ({email,password})=>{
         const {data} = await apiConnector(request);
         toast.dismiss();
         localStorage.removeItem("userType");
+        localStorage.removeItem("token");
+        console.log(localStorage);
         localStorage.setItem("userType",`${data.user}`);
+        localStorage.setItem("token",`${data.token}`)
         store.dispatch(updateUserType(data.user))
         toast.success("User logged in");
+        window.location.href="/";
         return data;
     } catch (error) {
         console.log(error);

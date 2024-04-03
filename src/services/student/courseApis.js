@@ -2,7 +2,8 @@ import toast from "react-hot-toast"
 import { apiConnector } from "../apiConnection";
 // import { taskCancelled } from "@reduxjs/toolkit/dist/listenerMiddleware/exceptions";
 const baseUrl = import.meta.env.VITE_APP_BACKEND_BASE_URL;
-const login = document.cookie.split("=")[1];
+//const login = document.cookie.split("=")[1];
+const login = localStorage.getItem("login")
 export const newContentWatched =  async (courseId,contentId)=>{
     try {
         const bodyData = {

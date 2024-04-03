@@ -12,7 +12,8 @@ export const LogOutModal = ({setModal}) => {
     })
     const logoutHandler = (e)=>{
         e.stopPropagation();
-        Cookies.remove('login',{ path: '/' });
+        //Cookies.remove('login',{ path: '/' });
+        localStorage.removeItem("token")
         dispatcher(updateUserType(null));
         setModal(false);
       }

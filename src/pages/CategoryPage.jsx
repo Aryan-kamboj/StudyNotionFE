@@ -13,7 +13,7 @@ export const CategoryPage = () => {
     (async()=>{
       const {data} = await getCategoryData(category);
       setCategoryData({
-      categoryName:`${category}`,
+      categoryName:`${decodeURIComponent(category)}`,
       categoryDescription:"Description",
       mostPopularCourses:data?.data,
       randomSuggestionCources:[],});
@@ -39,6 +39,7 @@ export const CategoryPage = () => {
       if(e.target.innerHTML==="Most Populer"&&!mostPopulerFilter)
         setFilter(!mostPopulerFilter);
     }
+    console.log(categoryData.categoryName)
     return (
       <div className='text-white'>
               <div className='bg-richblack-800 text-richblack-400 p-20 space-y-4'>

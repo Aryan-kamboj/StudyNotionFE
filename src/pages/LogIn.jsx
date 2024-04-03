@@ -20,9 +20,10 @@ export const LogIn = () => {
             email:email,
             password:password,
         });
-        const profileData = await getProfileApi();
-        dispatcher(setProfileData(profileData));
-        navigator("/")
+        // console.log("hillooooo")
+        // const profileData = await getProfileApi();
+        // dispatcher(setProfileData(profileData));
+        // navigator("/")
     }
   return (
     <div className='h-fit flex pt-16 max-tablet:flex-col max-tablet:h-[116vh] '>

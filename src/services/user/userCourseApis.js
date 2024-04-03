@@ -1,6 +1,7 @@
 import {apiConnector} from "../apiConnection"
 import toast from "react-hot-toast";
-const login = document.cookie.split("=")[1];
+//const login = document.cookie.split("=")[1];
+const login = localStorage.getItem("token") 
 const baseUrl = import.meta.env.VITE_APP_BACKEND_BASE_URL;
 export const getCourseInfo = async (course)=>{
     try {

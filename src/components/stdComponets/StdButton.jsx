@@ -9,9 +9,9 @@ export const StdButton = ({color,children,linkTo,width,type,disabled,handler,tex
     }
     else if(color==="grey"){
         if(!disabled)
-        css += `hover:scale-95 bg-richblack-700 text-richblack-5 `
+        css += `hover:scale-95 bg-richblack-800 text-richblack-5 `
         else
-        css += ` bg-richblack-800 text-richblack-500 hover:scale-100 hover:shadow-solid `
+        css += ` bg-richblack-700 text-richblack-500 hover:scale-100 hover:shadow-solid `
     }
     else {
         css += ` bg-${color} text-${textColor}  `
