@@ -1,7 +1,7 @@
 import { useDispatch } from "react-redux";
 import { StdButton } from "./stdComponets/StdButton"
 import Cookies from "js-cookie"
-import { updateUserType } from "../redux/slices/UserDataSlice";
+import { setUserData, setUserDataSlice, updateUserType } from "../redux/slices/UserDataSlice";
 export const LogOutModal = ({setModal}) => {
     const dispatcher = useDispatch();
     document.addEventListener("keydown",(e)=>{
@@ -14,7 +14,9 @@ export const LogOutModal = ({setModal}) => {
         e.stopPropagation();
         //Cookies.remove('login',{ path: '/' });
         localStorage.removeItem("token")
+        dispatcher(setUserDataSlice(undefined))
         dispatcher(updateUserType(null));
+        dispatcher(setUserData(undefined))
         setModal(false);
       }
   return (

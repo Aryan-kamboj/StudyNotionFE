@@ -40,7 +40,7 @@ export const ForgotPassword = () => {
             <p className='text-richblack-100 font-[500] mb-6'>Have no fear. We'll email you instructions to reset your password. If you don't have access to your email we can try account recovery. </p>
         </div>
         <form onSubmit={submitHandler} className=" space-y-8 ">
-          <InputField  required={true} type={"email"} value={email} uiFn={set_email_ui} label={"Email Address"} placeholder={"Enter your email here"} />
+          <InputField  required={true} type={"email"} value={email} setterFn={set_email_ui} label={"Email Address"} placeholder={"Enter your email here"} />
           <StdButton width={100} color={"yellow"} >Reset Password</StdButton>
         </form>
         </div>}

@@ -2,16 +2,19 @@ import { createSlice } from "@reduxjs/toolkit";
 const initialState = {
     // profileData:document.cookie.length!==0?await getProfileApi():null,
     profileData:null,
-    userType:document.cookie.length!==0?localStorage.getItem("userType"):null,
+    userType:localStorage.getItem("token")?localStorage.getItem("userType"):null,
     enrolledCourses:[],
     cart:[],
     myCourses:[],
   }
-
+  console.log(localStorage.getItem("token"))
   const UserDataSlice = createSlice({
     name: 'UserDataSlice',
     initialState,
     reducers: {
+      setUserDataSlice:(state,action)=>{
+        state = action.payload;
+      },
       setUserData:(state,action)=>{
         state.userData = action.payload;
       },
@@ -42,6 +45,6 @@ const initialState = {
     }
   })
   // Action creators are generated for each case reducer function
-  export const {setEnrolledCourses,setUserData,updateContentConsumed,setCourseDetails,updateUserType,setMessage,updateCart,updateMyCources,setProfileData } = UserDataSlice.actions;
+  export const {setUserDataSlice,setEnrolledCourses,setUserData,updateContentConsumed,setCourseDetails,updateUserType,setMessage,updateCart,updateMyCources,setProfileData } = UserDataSlice.actions;
   
   export default UserDataSlice;

@@ -37,7 +37,7 @@ function Headder() {
             const data = await getCategories();
             dispatcher(setCategories(data));
             console.log(localStorage.getItem("token"))
-            const profileData = localStorage?.getItem("token")?.length!==0?await getProfileApi():null; 
+            const profileData = localStorage?.getItem("token")?await getProfileApi():null; 
             dispatcher(setProfileData(profileData));
             if(userType==="student"){
                 const cartData = await getCart();
@@ -103,7 +103,7 @@ function Headder() {
                         {profileOptions?
                         <div className='text-lg border-[1px] text-richblack-300 border-richblack-700 rounded-lg bg-richblack-800  absolute mt-[2.5rem] right-[4rem]'>
                             <div onClick={()=>{navigator("/dashboard/dashboard")}} className='border-b-2 text-center border-b-richblack-700 p-2'>Dashboard</div>
-                            <div onClick={()=>{Cookies.remove('login',{ path: '/' });dispatcher(updateUserType(null));navigator("/")}} className='p-2 text-center'>Log out</div>
+                            <div onClick={(e)=>{e.stopPropagation();setLogOutModal(true)}} className='p-2 text-center'>Log out</div>
                         </div>
                         :""}
                     </div>

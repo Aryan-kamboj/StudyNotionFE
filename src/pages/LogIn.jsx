@@ -37,7 +37,7 @@ export const LogIn = () => {
             <form onSubmit={submitHandler} className='space-y-6'>
                 <InputField label={"Email Address"} value={email} setterFn={set_email_ui} type={"email"} placeholder={"Enter your email here"}/>
                 <InputField label={"Password"} value={password} setterFn={set_pass_ui}  type={"password"} placeholder={"Enter your password here"} />
-                <Link to="/forgot_password"><div className='text-blue-100 text-sm text-right'>Forgot Password</div></Link>
+                <Link to="/forgotPassword"><div className='text-blue-100 text-sm text-right'>Forgot Password</div></Link>
                 <StdButton color={"yellow"} width={100}>Log In</StdButton>
             </form>
         </div>
