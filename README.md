@@ -3,6 +3,7 @@
 Running at -> https://studynotionkamboj.netlify.app/
 
 Backend code can be found here -> https://github.com/Aryan-kamboj/StudyNotionBE
+
 Frontened code can be found here -> https://github.com/Aryan-kamboj/StudyNotionFE
 
 This is the final project of Love Babbar's Web Dev Course 
